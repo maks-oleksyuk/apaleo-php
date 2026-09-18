@@ -12,18 +12,18 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-final class ClientCredentialsTokenProvider implements TokenProvider
+final readonly class ClientCredentialsTokenProvider implements TokenProvider
 {
-    private const CACHE_KEY_PREFIX = 'apaleo_token_';
+    private const string CACHE_KEY_PREFIX = 'apaleo_token_';
 
     public function __construct(
-        private readonly ClientInterface $httpClient,
-        private readonly RequestFactoryInterface $requestFactory,
-        private readonly StreamFactoryInterface $streamFactory,
-        private readonly string $clientId,
-        private readonly string $clientSecret,
-        private readonly TokenCache $cache = new InMemoryTokenCache(),
-        private readonly string $identityBaseUri = 'https://identity.apaleo.com',
+        private ClientInterface $httpClient,
+        private RequestFactoryInterface $requestFactory,
+        private StreamFactoryInterface $streamFactory,
+        private string $clientId,
+        private string $clientSecret,
+        private TokenCache $cache = new InMemoryTokenCache(),
+        private string $identityBaseUri = 'https://identity.apaleo.com',
     ) {
     }
 
@@ -32,7 +32,7 @@ final class ClientCredentialsTokenProvider implements TokenProvider
         $cacheKey = self::CACHE_KEY_PREFIX.$this->clientId;
 
         $cached = $this->cache->get($cacheKey);
-        if ($cached !== null && !$cached->isExpired()) {
+        if ($cached instanceof AccessToken && !$cached->isExpired()) {
             return $cached;
         }
 
@@ -50,22 +50,24 @@ final class ClientCredentialsTokenProvider implements TokenProvider
             ->createRequest('POST', $this->identityBaseUri.'/connect/token')
             ->withHeader('Content-Type', 'application/x-www-form-urlencoded')
             ->withHeader('Authorization', 'Basic '.base64_encode($this->clientId.':'.$this->clientSecret))
-            ->withBody($body);
+            ->withBody($body)
+        ;
 
         try {
             $response = $this->httpClient->sendRequest($request);
-        } catch (ClientExceptionInterface $e) {
-            throw new ApaleoTransportException('Failed to reach Apaleo identity server: '.$e->getMessage(), previous: $e);
+        } catch (ClientExceptionInterface $clientException) {
+            throw new ApaleoTransportException('Failed to reach Apaleo identity server: '.$clientException->getMessage(), $clientException->getCode(), previous: $clientException);
         }
 
         $decoded = json_decode((string) $response->getBody(), true);
+
         /** @var array<string, mixed> $data */
-        $data = is_array($decoded) ? $decoded : [];
+        $data = \is_array($decoded) ? $decoded : [];
 
         if ($response->getStatusCode() >= 400) {
-            $errorType = is_string($data['error'] ?? null) ? $data['error'] : null;
+            $errorType = \is_string($data['error'] ?? null) ? $data['error'] : null;
             $description = $data['error_description'] ?? null;
-            $message = is_string($description) ? $description : ('Failed to obtain Apaleo access token'.($errorType !== null ? ": {$errorType}" : ''));
+            $message = \is_string($description) ? $description : ('Failed to obtain Apaleo access token'.($errorType !== null ? ": {$errorType}" : ''));
 
             throw new ApaleoAuthException(
                 message: $message,

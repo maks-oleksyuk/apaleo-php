@@ -8,6 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 final class RequestTest extends TestCase
 {
     public function testMethodThrowsClearErrorWhenNotDeclared(): void

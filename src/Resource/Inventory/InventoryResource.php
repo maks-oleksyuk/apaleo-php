@@ -8,10 +8,10 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\PropertyResource;
 
 /** Aggregates the Inventory API's sub-resources (properties, units, unit groups, ...). */
-final class InventoryResource
+final readonly class InventoryResource
 {
     public function __construct(
-        private readonly RequestPipeline $pipeline,
+        private RequestPipeline $pipeline,
     ) {
     }
 

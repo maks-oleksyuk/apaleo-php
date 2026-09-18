@@ -9,10 +9,10 @@ use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\Property;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\GetPropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ListPropertiesRequest;
 
-final class PropertyResource
+final readonly class PropertyResource
 {
     public function __construct(
-        private readonly RequestPipeline $pipeline,
+        private RequestPipeline $pipeline,
     ) {
     }
 
@@ -29,13 +29,13 @@ final class PropertyResource
     public function list(): array
     {
         $data = $this->pipeline->send(new ListPropertiesRequest());
-        $items = is_array($data['properties'] ?? null) ? $data['properties'] : [];
+        $items = \is_array($data['properties'] ?? null) ? $data['properties'] : [];
 
         return array_values(array_map(
             /** @param mixed $item */
             static function ($item): Property {
                 /** @var array<string, mixed> $itemData */
-                $itemData = is_array($item) ? $item : [];
+                $itemData = \is_array($item) ? $item : [];
 
                 return Property::fromArray($itemData);
             },

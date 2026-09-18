@@ -7,21 +7,21 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Property\DTO;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final class Property
+final readonly class Property
 {
     /**
      * @param array<string, string> $name localized name, keyed by language code
      */
     public function __construct(
-        public readonly string $id,
-        public readonly string $code,
-        public readonly array $name,
-        public readonly string $timeZone,
-        public readonly string $currencyCode,
-        public readonly PropertyStatus $status,
-        public readonly string $rawStatus,
-        public readonly bool $isArchived,
-        public readonly \DateTimeImmutable $created,
+        public string $id,
+        public string $code,
+        public array $name,
+        public string $timeZone,
+        public string $currencyCode,
+        public PropertyStatus $status,
+        public string $rawStatus,
+        public bool $isArchived,
+        public \DateTimeImmutable $created,
     ) {
     }
 
@@ -31,8 +31,9 @@ final class Property
     public static function fromArray(array $data): self
     {
         $status = ResponseData::string($data, 'status');
+
         /** @var array<string, string> $name */
-        $name = is_array($data['name'] ?? null) ? $data['name'] : [];
+        $name = \is_array($data['name'] ?? null) ? $data['name'] : [];
 
         return new self(
             id: ResponseData::string($data, 'id'),

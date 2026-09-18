@@ -18,14 +18,14 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
 /** Sends a resource request: adds auth, executes it, maps errors, decodes JSON. */
-final class RequestPipeline
+final readonly class RequestPipeline
 {
     public function __construct(
-        private readonly ClientInterface $httpClient,
-        private readonly RequestFactoryInterface $requestFactory,
-        private readonly StreamFactoryInterface $streamFactory,
-        private readonly TokenProvider $tokenProvider,
-        private readonly string $baseUri = 'https://api.apaleo.com',
+        private ClientInterface $httpClient,
+        private RequestFactoryInterface $requestFactory,
+        private StreamFactoryInterface $streamFactory,
+        private TokenProvider $tokenProvider,
+        private string $baseUri = 'https://api.apaleo.com',
     ) {
     }
 
@@ -43,26 +43,29 @@ final class RequestPipeline
         $psrRequest = $this->requestFactory
             ->createRequest($apaleoRequest->method()->value, $uri)
             ->withHeader('Authorization', 'Bearer '.$this->tokenProvider->getToken()->value)
-            ->withHeader('Accept', 'application/json');
+            ->withHeader('Accept', 'application/json')
+        ;
 
         $body = $apaleoRequest->body();
         if ($body !== null) {
             $psrRequest = $psrRequest
                 ->withHeader('Content-Type', 'application/json')
-                ->withBody($this->streamFactory->createStream(json_encode($body, \JSON_THROW_ON_ERROR)));
+                ->withBody($this->streamFactory->createStream(json_encode($body, JSON_THROW_ON_ERROR)))
+            ;
         }
 
         try {
             $response = $this->httpClient->sendRequest($psrRequest);
-        } catch (ClientExceptionInterface $e) {
-            throw new ApaleoTransportException('Failed to reach Apaleo API: '.$e->getMessage(), previous: $e);
+        } catch (ClientExceptionInterface $clientException) {
+            throw new ApaleoTransportException('Failed to reach Apaleo API: '.$clientException->getMessage(), $clientException->getCode(), previous: $clientException);
         }
 
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
         $decoded = $body === '' ? [] : json_decode($body, true);
+
         /** @var array<string, mixed> $data */
-        $data = is_array($decoded) ? $decoded : [];
+        $data = \is_array($decoded) ? $decoded : [];
 
         if ($status >= 400) {
             throw $this->mapError($status, $data, $response->getHeaderLine('Retry-After'));
@@ -77,8 +80,8 @@ final class RequestPipeline
     private function mapError(int $status, array $data, string $retryAfter): ApaleoClientException|ApaleoServerException
     {
         $detail = $data['detail'] ?? $data['title'] ?? null;
-        $message = is_string($detail) ? $detail : "Apaleo API error (HTTP {$status})";
-        $type = is_string($data['type'] ?? null) ? $data['type'] : null;
+        $message = \is_string($detail) ? $detail : "Apaleo API error (HTTP {$status})";
+        $type = \is_string($data['type'] ?? null) ? $data['type'] : null;
 
         return match (true) {
             $status === 404 => new ApaleoNotFoundException($message, $status, $type, $data),

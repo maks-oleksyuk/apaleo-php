@@ -13,7 +13,7 @@ final class ResponseData
     public static function string(array $data, string $key): string
     {
         $value = $data[$key] ?? null;
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             throw new \UnexpectedValueException("Expected string for field \"{$key}\" in Apaleo API response.");
         }
 
@@ -26,7 +26,7 @@ final class ResponseData
     public static function int(array $data, string $key): int
     {
         $value = $data[$key] ?? null;
-        if (!is_int($value) && !is_string($value)) {
+        if (!\is_int($value) && !\is_string($value)) {
             throw new \UnexpectedValueException("Expected int for field \"{$key}\" in Apaleo API response.");
         }
 
@@ -40,6 +40,6 @@ final class ResponseData
     {
         $value = $data[$key] ?? $default;
 
-        return is_bool($value) ? $value : $default;
+        return \is_bool($value) ? $value : $default;
     }
 }

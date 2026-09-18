@@ -15,9 +15,15 @@ use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\PropertyResource;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 final class PropertyResourceTest extends TestCase
 {
     private MockClient $httpClient;
+
     private PropertyResource $properties;
 
     protected function setUp(): void

@@ -15,7 +15,7 @@ abstract class Request
     public function method(): Method
     {
         if (!isset($this->method)) {
-            throw new \LogicException(sprintf(
+            throw new \LogicException(\sprintf(
                 '%s is missing an HTTP method. Declare it as [protected Method $method = Method::GET;].',
                 static::class,
             ));
@@ -30,7 +30,7 @@ abstract class Request
         return [];
     }
 
-    /** @return array<string, mixed>|null */
+    /** @return null|array<string, mixed> */
     public function body(): ?array
     {
         return null;

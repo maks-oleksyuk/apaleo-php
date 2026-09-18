@@ -11,9 +11,9 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-final class ApaleoClient
+final readonly class ApaleoClient
 {
-    private readonly RequestPipeline $pipeline;
+    private RequestPipeline $pipeline;
 
     public function __construct(
         ClientInterface $httpClient,

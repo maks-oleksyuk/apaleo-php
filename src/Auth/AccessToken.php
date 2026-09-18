@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Auth;
 
-final class AccessToken
+final readonly class AccessToken
 {
     public function __construct(
-        public readonly string $value,
-        public readonly \DateTimeImmutable $expiresAt,
+        public string $value,
+        public \DateTimeImmutable $expiresAt,
     ) {
     }
 
