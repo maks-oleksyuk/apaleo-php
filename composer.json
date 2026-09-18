@@ -1,0 +1,30 @@
+{
+    "name": "oleksyuk/apaleo-php",
+    "description": "Framework-agnostic PHP SDK for the Apaleo hotel PMS API",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.1",
+        "psr/http-message": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.3",
+        "phpstan/phpstan": "^2.2",
+        "php-http/mock-client": "^1.6",
+        "nyholm/psr7": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Oleksyuk\\Apaleo\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Oleksyuk\\Apaleo\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
