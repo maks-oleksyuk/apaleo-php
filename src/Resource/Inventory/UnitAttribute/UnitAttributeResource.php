@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute;
+
+use Oleksyuk\Apaleo\Http\JsonPatch;
+use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\DTO\CreateUnitAttributeDefinition;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\DTO\UnitAttributeDefinition;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\CreateUnitAttributeRequest;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\DeleteUnitAttributeRequest;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\GetUnitAttributeRequest;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\ListUnitAttributesRequest;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\UpdateUnitAttributeRequest;
+use Oleksyuk\Apaleo\Support\ResponseData;
+
+final readonly class UnitAttributeResource
+{
+    public function __construct(
+        private RequestPipeline $pipeline,
+    ) {
+    }
+
+    public function get(string $unitAttributeId): UnitAttributeDefinition
+    {
+        $data = $this->pipeline->send(new GetUnitAttributeRequest($unitAttributeId));
+
+        return UnitAttributeDefinition::fromArray($data);
+    }
+
+    /**
+     * @return list<UnitAttributeDefinition>
+     */
+    public function list(?int $pageNumber = null, ?int $pageSize = null): array
+    {
+        $data = $this->pipeline->send(new ListUnitAttributesRequest($pageNumber, $pageSize));
+
+        return array_map(
+            UnitAttributeDefinition::fromArray(...),
+            ResponseData::nestedList($data, 'unitAttributes'),
+        );
+    }
+
+    /**
+     * @return string the id of the created unit attribute definition
+     */
+    public function create(CreateUnitAttributeDefinition $data): string
+    {
+        $response = $this->pipeline->send(new CreateUnitAttributeRequest($data));
+
+        return ResponseData::string($response, 'id');
+    }
+
+    public function update(string $unitAttributeId, JsonPatch $patch): void
+    {
+        $this->pipeline->send(new UpdateUnitAttributeRequest($unitAttributeId, $patch));
+    }
+
+    public function delete(string $unitAttributeId): void
+    {
+        $this->pipeline->send(new DeleteUnitAttributeRequest($unitAttributeId));
+    }
+}

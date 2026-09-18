@@ -10,12 +10,24 @@ use Oleksyuk\Apaleo\Support\ResponseData;
 final readonly class Property
 {
     /**
-     * @param array<string, string> $name localized name, keyed by language code
+     * @param array<string, string> $name localized, or ['default' => ...] when the endpoint returns a plain string
+     * @param array<string, string> $description
+     * @param array<string, string> $paymentTerms
      */
     public function __construct(
         public string $id,
         public string $code,
+        public ?string $propertyTemplateId,
+        public bool $isTemplate,
         public array $name,
+        public array $description,
+        public string $companyName,
+        public ?string $managingDirectors,
+        public string $commercialRegisterEntry,
+        public string $taxId,
+        public Address $location,
+        public ?BankAccount $bankAccount,
+        public array $paymentTerms,
         public string $timeZone,
         public string $currencyCode,
         public PropertyStatus $status,
@@ -31,14 +43,22 @@ final readonly class Property
     public static function fromArray(array $data): self
     {
         $status = ResponseData::string($data, 'status');
-
-        /** @var array<string, string> $name */
-        $name = \is_array($data['name'] ?? null) ? $data['name'] : [];
+        $bankAccount = ResponseData::nested($data, 'bankAccount');
 
         return new self(
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
-            name: $name,
+            propertyTemplateId: ResponseData::nullableString($data, 'propertyTemplateId'),
+            isTemplate: ResponseData::bool($data, 'isTemplate'),
+            name: ResponseData::localizedText($data, 'name'),
+            description: ResponseData::localizedText($data, 'description'),
+            companyName: ResponseData::string($data, 'companyName'),
+            managingDirectors: ResponseData::nullableString($data, 'managingDirectors'),
+            commercialRegisterEntry: ResponseData::string($data, 'commercialRegisterEntry'),
+            taxId: ResponseData::string($data, 'taxId'),
+            location: Address::fromArray(ResponseData::nested($data, 'location')),
+            bankAccount: $bankAccount !== [] ? BankAccount::fromArray($bankAccount) : null,
+            paymentTerms: ResponseData::localizedText($data, 'paymentTerms'),
             timeZone: ResponseData::string($data, 'timeZone'),
             currencyCode: ResponseData::string($data, 'currencyCode'),
             status: PropertyStatus::fromApi($status),

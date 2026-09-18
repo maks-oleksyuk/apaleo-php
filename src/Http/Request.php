@@ -30,7 +30,7 @@ abstract class Request
         return [];
     }
 
-    /** @return null|array<string, mixed> */
+    /** @return null|array<array-key, mixed> */
     public function body(): ?array
     {
         return null;
