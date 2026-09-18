@@ -26,8 +26,7 @@ final readonly class UnitResource
 {
     public function __construct(
         private RequestPipeline $pipeline,
-    ) {
-    }
+    ) {}
 
     public function get(string $unitId): Unit
     {

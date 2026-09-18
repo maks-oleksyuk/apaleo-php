@@ -13,11 +13,10 @@ final class DeleteUnitAttributeRequest extends Request
 
     public function __construct(
         private readonly string $unitAttributeId,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/unit-attributes/{$this->unitAttributeId}";
+        return '/inventory/v1/unit-attributes/'.rawurlencode($this->unitAttributeId);
     }
 }

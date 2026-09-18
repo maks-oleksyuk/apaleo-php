@@ -15,12 +15,11 @@ final class ReplaceUnitGroupRequest extends Request
     public function __construct(
         private readonly string $unitGroupId,
         private readonly ReplaceUnitGroup $data,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/unit-groups/{$this->unitGroupId}";
+        return '/inventory/v1/unit-groups/'.rawurlencode($this->unitGroupId);
     }
 
     public function body(): array

@@ -6,5 +6,5 @@ namespace Oleksyuk\Apaleo\Auth;
 
 interface TokenProvider
 {
-    public function getToken(): AccessToken;
+    public function getToken(bool $forceRefresh = false): AccessToken;
 }

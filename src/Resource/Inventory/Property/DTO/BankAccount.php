@@ -12,8 +12,7 @@ final readonly class BankAccount
         public ?string $iban,
         public ?string $bic,
         public ?string $bank,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data

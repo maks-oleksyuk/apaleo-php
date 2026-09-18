@@ -13,11 +13,10 @@ final class DeleteUnitGroupRequest extends Request
 
     public function __construct(
         private readonly string $unitGroupId,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/unit-groups/{$this->unitGroupId}";
+        return '/inventory/v1/unit-groups/'.rawurlencode($this->unitGroupId);
     }
 }

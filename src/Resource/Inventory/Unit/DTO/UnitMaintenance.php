@@ -16,8 +16,7 @@ final readonly class UnitMaintenance
         public UnitMaintenanceType $type,
         public string $rawType,
         public ?string $description,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data
@@ -28,8 +27,8 @@ final readonly class UnitMaintenance
 
         return new self(
             id: ResponseData::string($data, 'id'),
-            from: new \DateTimeImmutable(ResponseData::string($data, 'from')),
-            to: new \DateTimeImmutable(ResponseData::string($data, 'to')),
+            from: ResponseData::dateTime($data, 'from'),
+            to: ResponseData::dateTime($data, 'to'),
             type: UnitMaintenanceType::fromApi($type),
             rawType: $type,
             description: ResponseData::nullableString($data, 'description'),

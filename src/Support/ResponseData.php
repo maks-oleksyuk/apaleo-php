@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Support;
 
+use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
+
 /** Strict field extraction from decoded JSON API responses (untrusted, typed as mixed). */
 final class ResponseData
 {
@@ -14,7 +16,7 @@ final class ResponseData
     {
         $value = $data[$key] ?? null;
         if (!\is_string($value)) {
-            throw new \UnexpectedValueException("Expected string for field \"{$key}\" in Apaleo API response.");
+            throw new ApaleoUnexpectedResponseException("Expected string for field \"{$key}\" in Apaleo API response.");
         }
 
         return $value;
@@ -26,11 +28,43 @@ final class ResponseData
     public static function int(array $data, string $key): int
     {
         $value = $data[$key] ?? null;
-        if (!\is_int($value) && !\is_string($value)) {
-            throw new \UnexpectedValueException("Expected int for field \"{$key}\" in Apaleo API response.");
+        $filtered = \is_int($value) || \is_string($value) ? filter_var($value, FILTER_VALIDATE_INT) : false;
+        if ($filtered === false) {
+            throw new ApaleoUnexpectedResponseException("Expected int for field \"{$key}\" in Apaleo API response.");
         }
 
-        return (int) $value;
+        return $filtered;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function dateTime(array $data, string $key): \DateTimeImmutable
+    {
+        $value = self::string($data, $key);
+
+        try {
+            return new \DateTimeImmutable($value);
+        } catch (\Exception $exception) {
+            throw new ApaleoUnexpectedResponseException("Invalid date-time for field \"{$key}\" in Apaleo API response: \"{$value}\".", $exception->getCode(), previous: $exception);
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function nullableDateTime(array $data, string $key): ?\DateTimeImmutable
+    {
+        $value = $data[$key] ?? null;
+        if (!\is_string($value)) {
+            return null;
+        }
+
+        try {
+            return new \DateTimeImmutable($value);
+        } catch (\Exception $exception) {
+            throw new ApaleoUnexpectedResponseException("Invalid date-time for field \"{$key}\" in Apaleo API response: \"{$value}\".", $exception->getCode(), previous: $exception);
+        }
     }
 
     /**
@@ -59,8 +93,16 @@ final class ResponseData
     public static function nullableInt(array $data, string $key): ?int
     {
         $value = $data[$key] ?? null;
+        if ($value === null) {
+            return null;
+        }
 
-        return (\is_int($value) || \is_string($value)) ? (int) $value : null;
+        $filtered = \is_int($value) || \is_string($value) ? filter_var($value, FILTER_VALIDATE_INT) : false;
+        if ($filtered === false) {
+            throw new ApaleoUnexpectedResponseException("Expected int for field \"{$key}\" in Apaleo API response.");
+        }
+
+        return $filtered;
     }
 
     /**
@@ -102,8 +144,11 @@ final class ResponseData
     }
 
     /**
-     * Apaleo returns some text fields as a plain string, others as a language-keyed map
-     * (e.g. {"en": "..."}) depending on the endpoint. Normalizes both into a map.
+     * Apaleo's single-GET endpoints (property/unit/unit-group) return a language-keyed map
+     * (e.g. {"en": "...", "de": "..."}) and respect `?languages=`, which the corresponding
+     * Get*Request classes pin to "all" for a deterministic full map. List endpoints always
+     * return a plain string instead, regardless of `languages` — verified live, not
+     * configurable — so those are normalized here into a single-entry {"default": ...} map.
      *
      * @param array<string, mixed> $data
      *

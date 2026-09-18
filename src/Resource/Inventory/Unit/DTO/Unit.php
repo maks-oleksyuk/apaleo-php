@@ -31,8 +31,7 @@ final readonly class Unit
         public array $attributes,
         public array $connectedUnits,
         public \DateTimeImmutable $created,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data
@@ -44,7 +43,7 @@ final readonly class Unit
         $unitGroup = ResponseData::nested($data, 'unitGroup');
         $connectingUnit = ResponseData::nested($data, 'connectingUnit');
         $maintenance = ResponseData::nested($status, 'maintenance');
-        $archived = ResponseData::nullableString($data, 'archived');
+        $archived = ResponseData::nullableDateTime($data, 'archived');
 
         $condition = ResponseData::string($status, 'condition');
 
@@ -61,7 +60,7 @@ final readonly class Unit
             isOccupied: ResponseData::bool($status, 'isOccupied'),
             maintenance: $maintenance !== [] ? UnitMaintenance::fromArray($maintenance) : null,
             isArchived: ResponseData::bool($data, 'isArchived'),
-            archived: $archived !== null ? new \DateTimeImmutable($archived) : null,
+            archived: $archived,
             attributes: array_map(
                 UnitAttribute::fromArray(...),
                 ResponseData::nestedList($data, 'attributes'),
@@ -70,7 +69,7 @@ final readonly class Unit
                 ConnectedUnit::fromArray(...),
                 ResponseData::nestedList($data, 'connectedUnits'),
             ),
-            created: new \DateTimeImmutable(ResponseData::string($data, 'created')),
+            created: ResponseData::dateTime($data, 'created'),
         );
     }
 }

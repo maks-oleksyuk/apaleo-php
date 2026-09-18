@@ -25,8 +25,7 @@ final readonly class PropertyResource
 {
     public function __construct(
         private RequestPipeline $pipeline,
-    ) {
-    }
+    ) {}
 
     public function get(string $propertyId): Property
     {

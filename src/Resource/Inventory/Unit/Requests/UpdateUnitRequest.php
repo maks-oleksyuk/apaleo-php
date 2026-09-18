@@ -15,12 +15,11 @@ final class UpdateUnitRequest extends Request
     public function __construct(
         private readonly string $unitId,
         private readonly JsonPatch $patch,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/units/{$this->unitId}";
+        return '/inventory/v1/units/'.rawurlencode($this->unitId);
     }
 
     public function body(): array

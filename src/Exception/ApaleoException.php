@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Exception;
 
-abstract class ApaleoException extends \RuntimeException
+abstract class ApaleoException extends \RuntimeException implements ApaleoExceptionInterface
 {
     /**
      * @param array<string, mixed> $rawResponse

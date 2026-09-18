@@ -17,8 +17,7 @@ final readonly class ConnectedUnit
         public UnitCondition $condition,
         public string $rawCondition,
         public int $maxPersons,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data

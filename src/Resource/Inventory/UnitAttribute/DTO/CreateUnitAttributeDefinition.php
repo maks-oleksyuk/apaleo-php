@@ -9,8 +9,7 @@ final readonly class CreateUnitAttributeDefinition
     public function __construct(
         public string $name,
         public ?string $description = null,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>

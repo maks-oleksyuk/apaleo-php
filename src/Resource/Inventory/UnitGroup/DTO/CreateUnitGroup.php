@@ -20,8 +20,7 @@ final readonly class CreateUnitGroup
         public int $maxPersons,
         public ?int $rank = null,
         public ?UnitGroupType $type = null,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>

@@ -26,8 +26,7 @@ final readonly class UnitGroup
         public UnitGroupType $type,
         public string $rawType,
         public array $connectedUnitGroups,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data

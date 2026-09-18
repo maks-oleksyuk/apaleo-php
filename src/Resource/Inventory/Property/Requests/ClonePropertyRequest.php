@@ -15,12 +15,11 @@ final class ClonePropertyRequest extends Request
     public function __construct(
         private readonly string $propertyId,
         private readonly CreateProperty $overrides,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/property-actions/{$this->propertyId}/clone";
+        return '/inventory/v1/property-actions/'.rawurlencode($this->propertyId).'/clone';
     }
 
     public function body(): array

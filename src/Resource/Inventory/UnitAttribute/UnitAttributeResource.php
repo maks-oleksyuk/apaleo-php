@@ -19,8 +19,7 @@ final readonly class UnitAttributeResource
 {
     public function __construct(
         private RequestPipeline $pipeline,
-    ) {
-    }
+    ) {}
 
     public function get(string $unitAttributeId): UnitAttributeDefinition
     {

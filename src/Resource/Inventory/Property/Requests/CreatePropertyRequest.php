@@ -14,8 +14,7 @@ final class CreatePropertyRequest extends Request
 
     public function __construct(
         private readonly CreateProperty $data,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {

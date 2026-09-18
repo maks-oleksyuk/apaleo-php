@@ -32,8 +32,7 @@ final class ListUnitsRequest extends Request
         private readonly ?int $pageNumber = null,
         private readonly ?int $pageSize = null,
         private readonly array $expand = [],
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {

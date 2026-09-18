@@ -27,8 +27,7 @@ final readonly class CreateProperty
         public ?string $managingDirectors = null,
         public ?array $description = null,
         public ?BankAccount $bankAccount = null,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>

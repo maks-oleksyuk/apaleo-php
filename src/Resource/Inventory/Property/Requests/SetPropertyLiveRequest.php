@@ -13,11 +13,10 @@ final class SetPropertyLiveRequest extends Request
 
     public function __construct(
         private readonly string $propertyId,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/property-actions/{$this->propertyId}/set-live";
+        return '/inventory/v1/property-actions/'.rawurlencode($this->propertyId).'/set-live';
     }
 }

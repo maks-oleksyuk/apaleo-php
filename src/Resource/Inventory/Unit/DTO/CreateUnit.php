@@ -22,8 +22,7 @@ final readonly class CreateUnit
         public ?UnitCondition $condition = null,
         public array $attributeIds = [],
         public array $connectedUnitIds = [],
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>

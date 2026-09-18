@@ -28,8 +28,7 @@ final class CountUnitsRequest extends Request
         private readonly ?UnitCondition $condition = null,
         private readonly ?string $textSearch = null,
         private readonly ?UnitArchiveFilter $status = null,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {

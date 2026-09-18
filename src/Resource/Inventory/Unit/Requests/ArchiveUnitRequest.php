@@ -13,11 +13,10 @@ final class ArchiveUnitRequest extends Request
 
     public function __construct(
         private readonly string $unitId,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/unit-actions/{$this->unitId}/archive";
+        return '/inventory/v1/unit-actions/'.rawurlencode($this->unitId).'/archive';
     }
 }

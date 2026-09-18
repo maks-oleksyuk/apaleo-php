@@ -15,12 +15,11 @@ final class UpdatePropertyRequest extends Request
     public function __construct(
         private readonly string $propertyId,
         private readonly JsonPatch $patch,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/properties/{$this->propertyId}";
+        return '/inventory/v1/properties/'.rawurlencode($this->propertyId);
     }
 
     public function body(): array

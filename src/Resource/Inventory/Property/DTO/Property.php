@@ -34,8 +34,7 @@ final readonly class Property
         public string $rawStatus,
         public bool $isArchived,
         public \DateTimeImmutable $created,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data
@@ -64,7 +63,7 @@ final readonly class Property
             status: PropertyStatus::fromApi($status),
             rawStatus: $status,
             isArchived: ResponseData::bool($data, 'isArchived'),
-            created: new \DateTimeImmutable(ResponseData::string($data, 'created')),
+            created: ResponseData::dateTime($data, 'created'),
         );
     }
 }

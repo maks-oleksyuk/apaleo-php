@@ -18,8 +18,7 @@ final readonly class ReplaceUnitGroup
         public ?int $maxPersons = null,
         public ?int $rank = null,
         public array $connectedUnitGroups = [],
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>

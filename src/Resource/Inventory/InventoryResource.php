@@ -16,8 +16,7 @@ final readonly class InventoryResource
 {
     public function __construct(
         private RequestPipeline $pipeline,
-    ) {
-    }
+    ) {}
 
     public function properties(): PropertyResource
     {

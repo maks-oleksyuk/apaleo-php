@@ -14,8 +14,7 @@ final class CreateUnitAttributeRequest extends Request
 
     public function __construct(
         private readonly CreateUnitAttributeDefinition $data,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {

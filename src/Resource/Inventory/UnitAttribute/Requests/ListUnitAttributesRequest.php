@@ -14,8 +14,7 @@ final class ListUnitAttributesRequest extends Request
     public function __construct(
         private readonly ?int $pageNumber = null,
         private readonly ?int $pageSize = null,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {

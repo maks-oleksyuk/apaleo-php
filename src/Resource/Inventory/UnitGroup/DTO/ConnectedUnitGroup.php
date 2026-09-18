@@ -14,8 +14,7 @@ final readonly class ConnectedUnitGroup
         public string $description,
         public int $memberCount,
         public ?int $maxPersons,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data

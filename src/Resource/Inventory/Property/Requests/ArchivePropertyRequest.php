@@ -13,11 +13,10 @@ final class ArchivePropertyRequest extends Request
 
     public function __construct(
         private readonly string $propertyId,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/property-actions/{$this->propertyId}/archive";
+        return '/inventory/v1/property-actions/'.rawurlencode($this->propertyId).'/archive';
     }
 }

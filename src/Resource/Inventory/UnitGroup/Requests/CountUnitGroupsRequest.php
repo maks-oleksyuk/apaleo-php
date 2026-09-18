@@ -18,8 +18,7 @@ final class CountUnitGroupsRequest extends Request
     public function __construct(
         private readonly ?string $propertyId = null,
         private readonly array $unitGroupTypes = [],
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {

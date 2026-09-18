@@ -11,8 +11,7 @@ final readonly class CountryResource
 {
     public function __construct(
         private RequestPipeline $pipeline,
-    ) {
-    }
+    ) {}
 
     /**
      * @return list<string> ISO Alpha-2 country codes supported by Apaleo

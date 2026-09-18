@@ -15,8 +15,7 @@ final readonly class Address
         public string $city,
         public ?string $regionCode,
         public string $countryCode,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data

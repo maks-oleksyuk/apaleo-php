@@ -12,8 +12,7 @@ final readonly class UnitAttributeDefinition
         public string $id,
         public string $name,
         public ?string $description,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $data

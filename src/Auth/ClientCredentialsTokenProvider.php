@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Auth;
 
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
+use Oleksyuk\Apaleo\Exception\ApaleoServerException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use Oleksyuk\Apaleo\Support\ResponseData;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -21,19 +22,21 @@ final readonly class ClientCredentialsTokenProvider implements TokenProvider
         private RequestFactoryInterface $requestFactory,
         private StreamFactoryInterface $streamFactory,
         private string $clientId,
+        #[\SensitiveParameter]
         private string $clientSecret,
         private TokenCache $cache = new InMemoryTokenCache(),
         private string $identityBaseUri = 'https://identity.apaleo.com',
-    ) {
-    }
+    ) {}
 
-    public function getToken(): AccessToken
+    public function getToken(bool $forceRefresh = false): AccessToken
     {
         $cacheKey = self::CACHE_KEY_PREFIX.$this->clientId;
 
-        $cached = $this->cache->get($cacheKey);
-        if ($cached instanceof AccessToken && !$cached->isExpired()) {
-            return $cached;
+        if (!$forceRefresh) {
+            $cached = $this->cache->get($cacheKey);
+            if ($cached instanceof AccessToken && !$cached->isExpired()) {
+                return $cached;
+            }
         }
 
         $token = $this->requestToken();
@@ -64,14 +67,17 @@ final readonly class ClientCredentialsTokenProvider implements TokenProvider
         /** @var array<string, mixed> $data */
         $data = \is_array($decoded) ? $decoded : [];
 
-        if ($response->getStatusCode() >= 400) {
+        $status = $response->getStatusCode();
+        if ($status >= 400) {
             $errorType = \is_string($data['error'] ?? null) ? $data['error'] : null;
             $description = $data['error_description'] ?? null;
             $message = \is_string($description) ? $description : ('Failed to obtain Apaleo access token'.($errorType !== null ? ": {$errorType}" : ''));
 
-            throw new ApaleoAuthException(
+            $exceptionClass = $status >= 500 ? ApaleoServerException::class : ApaleoAuthException::class;
+
+            throw new $exceptionClass(
                 message: $message,
-                statusCode: $response->getStatusCode(),
+                statusCode: $status,
                 apaleoErrorType: $errorType,
                 rawResponse: $data,
             );

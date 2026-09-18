@@ -13,11 +13,16 @@ final class GetUnitGroupRequest extends Request
 
     public function __construct(
         private readonly string $unitGroupId,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {
-        return "/inventory/v1/unit-groups/{$this->unitGroupId}";
+        return '/inventory/v1/unit-groups/'.rawurlencode($this->unitGroupId);
+    }
+
+    /** Requests every configured language so localized fields are always a full map, never account-dependent. */
+    public function query(): array
+    {
+        return ['languages' => 'all'];
     }
 }

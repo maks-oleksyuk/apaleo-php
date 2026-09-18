@@ -17,8 +17,7 @@ final class BulkCreateUnitsRequest extends Request
      */
     public function __construct(
         private readonly array $units,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {

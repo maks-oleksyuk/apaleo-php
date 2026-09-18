@@ -18,8 +18,7 @@ final class BulkUpdateUnitsRequest extends Request
     public function __construct(
         private readonly array $unitIds,
         private readonly JsonPatch $patch,
-    ) {
-    }
+    ) {}
 
     public function endpoint(): string
     {

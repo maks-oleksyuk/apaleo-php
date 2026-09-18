@@ -33,7 +33,7 @@ final class UnitAttributeResourceTest extends TestCase
         $factory = new Psr17Factory();
 
         $tokenProvider = new class implements TokenProvider {
-            public function getToken(): AccessToken
+            public function getToken(bool $forceRefresh = false): AccessToken
             {
                 return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
             }
