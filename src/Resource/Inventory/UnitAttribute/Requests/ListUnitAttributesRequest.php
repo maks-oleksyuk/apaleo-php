@@ -9,12 +9,15 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final class ListUnitAttributesRequest extends Request
 {
-    protected Method $method = Method::GET;
-
     public function __construct(
         private readonly ?int $pageNumber = null,
         private readonly ?int $pageSize = null,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

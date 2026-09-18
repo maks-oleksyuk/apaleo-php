@@ -9,11 +9,14 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final class GetUnitRequest extends Request
 {
-    protected Method $method = Method::GET;
-
     public function __construct(
         private readonly string $unitId,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

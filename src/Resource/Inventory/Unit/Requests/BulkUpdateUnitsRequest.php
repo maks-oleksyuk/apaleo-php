@@ -10,8 +10,6 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final class BulkUpdateUnitsRequest extends Request
 {
-    protected Method $method = Method::PATCH;
-
     /**
      * @param list<string> $unitIds
      */
@@ -19,6 +17,11 @@ final class BulkUpdateUnitsRequest extends Request
         private readonly array $unitIds,
         private readonly JsonPatch $patch,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::PATCH;
+    }
 
     public function endpoint(): string
     {

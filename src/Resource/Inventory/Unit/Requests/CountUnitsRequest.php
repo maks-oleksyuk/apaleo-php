@@ -12,8 +12,6 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 
 final class CountUnitsRequest extends Request
 {
-    protected Method $method = Method::GET;
-
     /**
      * @param list<string> $unitGroupIds
      * @param list<string> $unitAttributeIds
@@ -29,6 +27,11 @@ final class CountUnitsRequest extends Request
         private readonly ?string $textSearch = null,
         private readonly ?UnitArchiveFilter $status = null,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

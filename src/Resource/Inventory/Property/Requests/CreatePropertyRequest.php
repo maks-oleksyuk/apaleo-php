@@ -10,11 +10,14 @@ use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\CreateProperty;
 
 final class CreatePropertyRequest extends Request
 {
-    protected Method $method = Method::POST;
-
     public function __construct(
         private readonly CreateProperty $data,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::POST;
+    }
 
     public function endpoint(): string
     {

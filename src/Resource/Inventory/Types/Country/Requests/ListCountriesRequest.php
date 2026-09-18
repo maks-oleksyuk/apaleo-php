@@ -9,7 +9,10 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final class ListCountriesRequest extends Request
 {
-    protected Method $method = Method::GET;
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

@@ -9,11 +9,14 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final class ResetPropertyRequest extends Request
 {
-    protected Method $method = Method::PUT;
-
     public function __construct(
         private readonly string $propertyId,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::PUT;
+    }
 
     public function endpoint(): string
     {

@@ -10,8 +10,6 @@ use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 
 final class ListUnitGroupsRequest extends Request
 {
-    protected Method $method = Method::GET;
-
     /**
      * @param list<UnitGroupType> $unitGroupTypes
      * @param list<string> $expand supported: property, connectedUnitGroups
@@ -23,6 +21,11 @@ final class ListUnitGroupsRequest extends Request
         private readonly ?int $pageSize = null,
         private readonly array $expand = [],
     ) {}
+
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

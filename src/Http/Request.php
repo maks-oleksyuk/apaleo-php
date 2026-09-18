@@ -8,21 +8,9 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 
 abstract class Request
 {
-    protected Method $method;
+    abstract public function method(): Method;
 
     abstract public function endpoint(): string;
-
-    public function method(): Method
-    {
-        if (!isset($this->method)) {
-            throw new \LogicException(\sprintf(
-                '%s is missing an HTTP method. Declare it as [protected Method $method = Method::GET;].',
-                static::class,
-            ));
-        }
-
-        return $this->method;
-    }
 
     /** @return array<string, mixed> */
     public function query(): array

@@ -147,12 +147,15 @@ final class RequestPipelineTest extends TestCase
     private function requestWithQuery(array $query): Request
     {
         return new class($query) extends Request {
-            protected Method $method = Method::GET;
-
             /**
              * @param array<string, mixed> $query
              */
             public function __construct(private readonly array $query) {}
+
+            public function method(): Method
+            {
+                return Method::GET;
+            }
 
             public function endpoint(): string
             {

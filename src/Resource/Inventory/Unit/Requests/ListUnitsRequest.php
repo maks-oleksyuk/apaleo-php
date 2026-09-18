@@ -12,8 +12,6 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 
 final class ListUnitsRequest extends Request
 {
-    protected Method $method = Method::GET;
-
     /**
      * @param list<string> $unitGroupIds
      * @param list<string> $unitAttributeIds
@@ -33,6 +31,11 @@ final class ListUnitsRequest extends Request
         private readonly ?int $pageSize = null,
         private readonly array $expand = [],
     ) {}
+
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

@@ -9,11 +9,14 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final class DeleteUnitRequest extends Request
 {
-    protected Method $method = Method::DELETE;
-
     public function __construct(
         private readonly string $unitId,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::DELETE;
+    }
 
     public function endpoint(): string
     {

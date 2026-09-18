@@ -10,8 +10,6 @@ use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 
 final class ListPropertiesRequest extends Request
 {
-    protected Method $method = Method::GET;
-
     /**
      * @param list<PropertyStatus> $status
      * @param list<string> $countryCode ISO Alpha-2 country codes
@@ -25,6 +23,11 @@ final class ListPropertiesRequest extends Request
         private readonly ?int $pageSize = null,
         private readonly array $expand = [],
     ) {}
+
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

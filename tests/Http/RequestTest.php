@@ -15,25 +15,13 @@ use PHPUnit\Framework\TestCase;
  */
 final class RequestTest extends TestCase
 {
-    public function testMethodThrowsClearErrorWhenNotDeclared(): void
-    {
-        $request = new class extends Request {
-            public function endpoint(): string
-            {
-                return '/x';
-            }
-        };
-
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('is missing an HTTP method');
-
-        $request->method();
-    }
-
     public function testMethodReturnsDeclaredValue(): void
     {
         $request = new class extends Request {
-            protected Method $method = Method::POST;
+            public function method(): Method
+            {
+                return Method::POST;
+            }
 
             public function endpoint(): string
             {

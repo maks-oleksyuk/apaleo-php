@@ -10,12 +10,15 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final class UpdatePropertyRequest extends Request
 {
-    protected Method $method = Method::PATCH;
-
     public function __construct(
         private readonly string $propertyId,
         private readonly JsonPatch $patch,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::PATCH;
+    }
 
     public function endpoint(): string
     {

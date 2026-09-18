@@ -9,11 +9,14 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final class GetPropertyRequest extends Request
 {
-    protected Method $method = Method::GET;
-
     public function __construct(
         private readonly string $propertyId,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

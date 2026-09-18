@@ -10,11 +10,14 @@ use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\DTO\CreateUnitAttributeDefi
 
 final class CreateUnitAttributeRequest extends Request
 {
-    protected Method $method = Method::POST;
-
     public function __construct(
         private readonly CreateUnitAttributeDefinition $data,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::POST;
+    }
 
     public function endpoint(): string
     {

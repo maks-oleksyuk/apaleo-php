@@ -10,8 +10,6 @@ use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 
 final class CountUnitGroupsRequest extends Request
 {
-    protected Method $method = Method::GET;
-
     /**
      * @param list<UnitGroupType> $unitGroupTypes
      */
@@ -19,6 +17,11 @@ final class CountUnitGroupsRequest extends Request
         private readonly ?string $propertyId = null,
         private readonly array $unitGroupTypes = [],
     ) {}
+
+    public function method(): Method
+    {
+        return Method::GET;
+    }
 
     public function endpoint(): string
     {

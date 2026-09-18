@@ -10,11 +10,14 @@ use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\CreateUnitGroup;
 
 final class CreateUnitGroupRequest extends Request
 {
-    protected Method $method = Method::POST;
-
     public function __construct(
         private readonly CreateUnitGroup $data,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::POST;
+    }
 
     public function endpoint(): string
     {

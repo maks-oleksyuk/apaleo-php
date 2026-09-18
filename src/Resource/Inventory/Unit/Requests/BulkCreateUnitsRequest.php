@@ -10,14 +10,17 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\CreateUnit;
 
 final class BulkCreateUnitsRequest extends Request
 {
-    protected Method $method = Method::POST;
-
     /**
      * @param list<CreateUnit> $units
      */
     public function __construct(
         private readonly array $units,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::POST;
+    }
 
     public function endpoint(): string
     {

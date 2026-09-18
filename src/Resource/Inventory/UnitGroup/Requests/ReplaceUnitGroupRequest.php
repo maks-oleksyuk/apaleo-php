@@ -10,12 +10,15 @@ use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\ReplaceUnitGroup;
 
 final class ReplaceUnitGroupRequest extends Request
 {
-    protected Method $method = Method::PUT;
-
     public function __construct(
         private readonly string $unitGroupId,
         private readonly ReplaceUnitGroup $data,
     ) {}
+
+    public function method(): Method
+    {
+        return Method::PUT;
+    }
 
     public function endpoint(): string
     {
