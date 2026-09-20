@@ -36,7 +36,10 @@ final class ListUnitGroupsRequest extends Request
     {
         return array_filter([
             'propertyId' => $this->propertyId,
-            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
+            'unitGroupTypes' => implode(',', array_map(
+                static fn (UnitGroupType $t): string => $t->value,
+                array_filter($this->unitGroupTypes, static fn (UnitGroupType $t): bool => $t !== UnitGroupType::Unknown),
+            )) ?: null,
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
             'expand' => implode(',', $this->expand) ?: null,

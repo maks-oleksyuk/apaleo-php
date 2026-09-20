@@ -37,7 +37,10 @@ final class ListPropertiesRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'status' => implode(',', array_map(static fn (PropertyStatus $s): string => $s->value, $this->status)) ?: null,
+            'status' => implode(',', array_map(
+                static fn (PropertyStatus $s): string => $s->value,
+                array_filter($this->status, static fn (PropertyStatus $s): bool => $s !== PropertyStatus::Unknown),
+            )) ?: null,
             'includeArchived' => $this->includeArchived,
             'countryCode' => implode(',', $this->countryCode) ?: null,
             'pageNumber' => $this->pageNumber,

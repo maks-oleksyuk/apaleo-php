@@ -93,6 +93,38 @@ final class RequestPipelineTest extends TestCase
         }
     }
 
+    public function test429ParsesHttpDateRetryAfter(): void
+    {
+        $httpDate = new \DateTimeImmutable('+2 minutes')->format('D, d M Y H:i:s \G\M\T');
+        $this->httpClient->addResponse(new Response(429, ['Content-Type' => 'application/json', 'Retry-After' => $httpDate], '{}'));
+
+        try {
+            $this->pipeline->send($this->requestWithQuery([]));
+            self::fail('Expected ApaleoRateLimitException');
+        } catch (ApaleoRateLimitException $apaleoRateLimitException) {
+            self::assertGreaterThan(0, $apaleoRateLimitException->retryAfterSeconds);
+            self::assertLessThanOrEqual(120, $apaleoRateLimitException->retryAfterSeconds);
+        }
+    }
+
+    public function testBaseUriTrailingSlashIsStripped(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{}'));
+
+        $factory = new Psr17Factory();
+        $tokenProvider = new class implements TokenProvider {
+            public function getToken(bool $forceRefresh = false): AccessToken
+            {
+                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
+            }
+        };
+        $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider, 'https://api.apaleo.com/');
+
+        $pipeline->send($this->requestWithQuery([]));
+
+        self::assertStringNotContainsString('.com//', (string) $this->lastRequest()->getUri());
+    }
+
     public function test5xxMapsToServerException(): void
     {
         $this->httpClient->addResponse(new Response(503, ['Content-Type' => 'application/json'], '{}'));

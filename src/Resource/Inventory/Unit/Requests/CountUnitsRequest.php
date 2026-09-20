@@ -46,8 +46,8 @@ final class CountUnitsRequest extends Request
             'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
             'unitAttributeIds' => implode(',', $this->unitAttributeIds) ?: null,
             'isOccupied' => $this->isOccupied,
-            'maintenanceType' => $this->maintenanceType?->value,
-            'condition' => $this->condition?->value,
+            'maintenanceType' => $this->maintenanceType !== UnitMaintenanceType::Unknown ? $this->maintenanceType?->value : null,
+            'condition' => $this->condition !== UnitCondition::Unknown ? $this->condition?->value : null,
             'textSearch' => $this->textSearch,
             'status' => $this->status?->value,
         ], static fn (mixed $value): bool => $value !== null);

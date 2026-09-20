@@ -20,7 +20,7 @@ final readonly class ApaleoClient
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
         TokenProvider $tokenProvider,
-        string $baseUri = 'https://api.apaleo.com',
+        string $baseUri = RequestPipeline::DEFAULT_BASE_URI,
     ) {
         $this->pipeline = new RequestPipeline($httpClient, $requestFactory, $streamFactory, $tokenProvider, $baseUri);
     }

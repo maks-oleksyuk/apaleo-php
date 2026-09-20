@@ -127,12 +127,8 @@ final readonly class UnitResource
     public function bulkCreate(array $units): array
     {
         $response = $this->pipeline->send(new BulkCreateUnitsRequest($units));
-        $ids = $response['ids'] ?? null;
-        if (!\is_array($ids)) {
-            return [];
-        }
 
-        return array_values(array_filter($ids, \is_string(...)));
+        return ResponseData::stringList($response, 'ids');
     }
 
     public function update(string $unitId, JsonPatch $patch): void

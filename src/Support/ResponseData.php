@@ -106,6 +106,21 @@ final class ResponseData
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
+     * @return list<string>
+     */
+    public static function stringList(array $data, string $key): array
+    {
+        $value = $data[$key] ?? null;
+        if (!\is_array($value)) {
+            throw new ApaleoUnexpectedResponseException("Expected list for field \"{$key}\" in Apaleo API response.");
+        }
+
+        return array_values(array_filter($value, \is_string(...)));
+    }
+
+    /**
      * Extracts a nested object field as an array; missing or malformed becomes [].
      *
      * @param array<string, mixed> $data

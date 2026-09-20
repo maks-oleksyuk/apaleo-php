@@ -23,13 +23,19 @@ use Psr\Http\Message\StreamFactoryInterface;
 /** Sends a resource request: adds auth, executes it, maps errors, decodes JSON. */
 final readonly class RequestPipeline
 {
+    public const string DEFAULT_BASE_URI = 'https://api.apaleo.com';
+
+    private string $baseUri;
+
     public function __construct(
         private ClientInterface $httpClient,
         private RequestFactoryInterface $requestFactory,
         private StreamFactoryInterface $streamFactory,
         private TokenProvider $tokenProvider,
-        private string $baseUri = 'https://api.apaleo.com',
-    ) {}
+        string $baseUri = self::DEFAULT_BASE_URI,
+    ) {
+        $this->baseUri = rtrim($baseUri, '/');
+    }
 
     /**
      * @return array<string, mixed>
@@ -115,7 +121,7 @@ final readonly class RequestPipeline
             $status === 429 => new ApaleoRateLimitException(
                 message: $message,
                 statusCode: $status,
-                retryAfterSeconds: $retryAfter !== '' ? (int) $retryAfter : null,
+                retryAfterSeconds: $this->parseRetryAfter($retryAfter),
                 apaleoErrorType: $type,
                 rawResponse: $data,
             ),
@@ -124,6 +130,30 @@ final readonly class RequestPipeline
             $status >= 500 => new ApaleoServerException($message, $status, $type, $data),
             default => new ApaleoClientException($message, $status, $type, $data),
         };
+    }
+
+    /**
+     * RFC 7231: Retry-After is either delta-seconds ("120") or an HTTP-date
+     * ("Wed, 21 Oct 2026 07:28:00 GMT") — both appear in the wild.
+     */
+    private function parseRetryAfter(string $retryAfter): ?int
+    {
+        if ($retryAfter === '') {
+            return null;
+        }
+
+        if (filter_var($retryAfter, FILTER_VALIDATE_INT) !== false) {
+            return (int) $retryAfter;
+        }
+
+        // Equivalent to the now-deprecated DateTimeInterface::RFC7231 constant, spelled out
+        // literally so PHP 8.5+ doesn't warn about its GMT-only timezone assumption.
+        $date = \DateTimeImmutable::createFromFormat('D, d M Y H:i:s \G\M\T', $retryAfter);
+        if ($date === false) {
+            return null;
+        }
+
+        return max(0, $date->getTimestamp() - time());
     }
 
     /**

@@ -267,6 +267,17 @@ final class PropertyResourceTest extends TestCase
         self::assertStringContainsString('/property-actions/BER/reset', (string) $request->getUri());
     }
 
+    public function testUnknownStatusIsOmittedFromListQuery(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{"count":0,"properties":[]}'));
+
+        $this->properties->list(status: [PropertyStatus::Unknown, PropertyStatus::Live]);
+
+        $uri = (string) $this->lastRequest()->getUri();
+        self::assertStringContainsString('status=Live', $uri);
+        self::assertStringNotContainsString('__unknown__', $uri);
+    }
+
     private function lastRequest(): RequestInterface
     {
         $request = $this->httpClient->getLastRequest();

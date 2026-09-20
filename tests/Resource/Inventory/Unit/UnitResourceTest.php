@@ -9,6 +9,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
+use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\CreateUnit;
@@ -175,6 +176,15 @@ final class UnitResourceTest extends TestCase
         self::assertSame(['U1', 'U2'], $ids);
     }
 
+    public function testBulkCreateThrowsOnMalformedResponseInsteadOfSilentlyReturningEmpty(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{}'));
+
+        $this->expectException(ApaleoUnexpectedResponseException::class);
+
+        $this->units->bulkCreate([new CreateUnit('BER', '101', ['en' => 'Double Room'], 2, 'DBL')]);
+    }
+
     public function testUpdateSendsPatch(): void
     {
         $this->httpClient->addResponse(new Response(204));
@@ -218,6 +228,17 @@ final class UnitResourceTest extends TestCase
         $request = $this->lastRequest();
         self::assertSame('PUT', $request->getMethod());
         self::assertStringContainsString('/unit-actions/U1/archive', (string) $request->getUri());
+    }
+
+    public function testUnknownConditionAndMaintenanceTypeAreOmittedFromQuery(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{"count":0,"units":[]}'));
+
+        $this->units->list(maintenanceType: UnitMaintenanceType::Unknown, condition: UnitCondition::Unknown);
+
+        $uri = (string) $this->lastRequest()->getUri();
+        self::assertStringNotContainsString('condition=', $uri);
+        self::assertStringNotContainsString('maintenanceType=', $uri);
     }
 
     private function lastRequest(): RequestInterface
