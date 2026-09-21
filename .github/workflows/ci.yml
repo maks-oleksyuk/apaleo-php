@@ -41,13 +41,14 @@ jobs:
         run: task ${{ matrix.command.command }}
 
   test:
-    name: '♻️ Test | PHP ${{ matrix.php }}'
+    name: '♻️ Test | PHP ${{ matrix.php }} | ${{ matrix.deps }} deps'
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         php: ['8.4', '8.5']
+        deps: [highest, lowest]
 
     steps:
       - name: '🛎 Checkout'
@@ -59,6 +60,7 @@ jobs:
         uses: $/.github/actions/setup
         with:
           php: ${{ matrix.php }}
+          prefer-lowest: ${{ matrix.deps == 'lowest' }}
 
       - name: '🔬 Run tests'
         run: task test -- --no-progress
