@@ -20,6 +20,8 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\DeleteUnitRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\GetUnitRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\ListUnitsRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\UpdateUnitRequest;
+use Oleksyuk\Apaleo\Support\PaginatedResult;
+use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class UnitResource
@@ -40,7 +42,7 @@ final readonly class UnitResource
      * @param list<string> $unitAttributeIds
      * @param list<string> $expand supported: property, unitGroup, connectedUnits, actions
      *
-     * @return list<Unit>
+     * @return PaginatedResult<Unit>
      */
     public function list(
         ?string $propertyId = null,
@@ -55,7 +57,9 @@ final readonly class UnitResource
         ?int $pageNumber = null,
         ?int $pageSize = null,
         array $expand = [],
-    ): array {
+    ): PaginatedResult {
+        Pagination::assertValidPageSize($pageSize);
+
         $request = new ListUnitsRequest(
             $propertyId,
             $unitGroupId,
@@ -72,9 +76,9 @@ final readonly class UnitResource
         );
         $data = $this->pipeline->send($request);
 
-        return array_map(
-            Unit::fromArray(...),
-            ResponseData::nestedList($data, 'units'),
+        return new PaginatedResult(
+            items: array_map(Unit::fromArray(...), ResponseData::nestedList($data, 'units')),
+            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }
 

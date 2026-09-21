@@ -134,7 +134,9 @@ final class UnitResourceTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(204));
 
-        self::assertSame([], $this->units->list());
+        $result = $this->units->list();
+        self::assertCount(0, $result);
+        self::assertSame(0, $result->totalCount);
     }
 
     public function testCountReturnsCountValue(): void
@@ -239,6 +241,13 @@ final class UnitResourceTest extends TestCase
         $uri = (string) $this->lastRequest()->getUri();
         self::assertStringNotContainsString('condition=', $uri);
         self::assertStringNotContainsString('maintenanceType=', $uri);
+    }
+
+    public function testListRejectsPageSizeAboveApaleosLimitWithoutSendingARequest(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->units->list(pageSize: 501);
     }
 
     private function lastRequest(): RequestInterface

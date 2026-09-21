@@ -19,6 +19,8 @@ use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ListPropertiesRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ResetPropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\SetPropertyLiveRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\UpdatePropertyRequest;
+use Oleksyuk\Apaleo\Support\PaginatedResult;
+use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class PropertyResource
@@ -39,7 +41,7 @@ final readonly class PropertyResource
      * @param list<string> $countryCode ISO Alpha-2 country codes
      * @param list<string> $expand supported: actions
      *
-     * @return list<Property>
+     * @return PaginatedResult<Property>
      */
     public function list(
         array $status = [],
@@ -48,12 +50,14 @@ final readonly class PropertyResource
         ?int $pageNumber = null,
         ?int $pageSize = null,
         array $expand = [],
-    ): array {
+    ): PaginatedResult {
+        Pagination::assertValidPageSize($pageSize);
+
         $data = $this->pipeline->send(new ListPropertiesRequest($status, $includeArchived, $countryCode, $pageNumber, $pageSize, $expand));
 
-        return array_map(
-            Property::fromArray(...),
-            ResponseData::nestedList($data, 'properties'),
+        return new PaginatedResult(
+            items: array_map(Property::fromArray(...), ResponseData::nestedList($data, 'properties')),
+            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }
 

@@ -80,7 +80,9 @@ final class UnitAttributeResourceTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(204));
 
-        self::assertSame([], $this->unitAttributes->list());
+        $result = $this->unitAttributes->list();
+        self::assertCount(0, $result);
+        self::assertSame(0, $result->totalCount);
     }
 
     public function testCreateReturnsCreatedId(): void

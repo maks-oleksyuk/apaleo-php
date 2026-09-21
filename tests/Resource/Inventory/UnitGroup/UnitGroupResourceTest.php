@@ -104,7 +104,9 @@ final class UnitGroupResourceTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(204));
 
-        self::assertSame([], $this->unitGroups->list());
+        $result = $this->unitGroups->list();
+        self::assertCount(0, $result);
+        self::assertSame(0, $result->totalCount);
     }
 
     public function testCountReturnsCountValue(): void

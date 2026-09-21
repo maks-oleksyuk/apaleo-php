@@ -13,6 +13,8 @@ use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\DeleteUnitAttribut
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\GetUnitAttributeRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\ListUnitAttributesRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\UpdateUnitAttributeRequest;
+use Oleksyuk\Apaleo\Support\PaginatedResult;
+use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class UnitAttributeResource
@@ -29,15 +31,17 @@ final readonly class UnitAttributeResource
     }
 
     /**
-     * @return list<UnitAttributeDefinition>
+     * @return PaginatedResult<UnitAttributeDefinition>
      */
-    public function list(?int $pageNumber = null, ?int $pageSize = null): array
+    public function list(?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
+        Pagination::assertValidPageSize($pageSize);
+
         $data = $this->pipeline->send(new ListUnitAttributesRequest($pageNumber, $pageSize));
 
-        return array_map(
-            UnitAttributeDefinition::fromArray(...),
-            ResponseData::nestedList($data, 'unitAttributes'),
+        return new PaginatedResult(
+            items: array_map(UnitAttributeDefinition::fromArray(...), ResponseData::nestedList($data, 'unitAttributes')),
+            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }
 
