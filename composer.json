@@ -1,8 +1,29 @@
 {
     "name": "oleksyuk/apaleo-php",
     "description": "Framework-agnostic PHP SDK for the Apaleo hotel PMS API",
-    "type": "library",
     "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "apaleo",
+        "apaleo-api",
+        "hotel",
+        "pms",
+        "api-client",
+        "sdk"
+    ],
+    "authors": [
+        {
+            "name": "Maks Oleksyuk",
+            "email": "maksym.oleksyuk@gmail.com",
+            "homepage": "https://github.com/maks-oleksyuk",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/maks-oleksyuk/apaleo-php",
+    "support": {
+        "issues": "https://github.com/maks-oleksyuk/apaleo-php/issues",
+        "source": "https://github.com/maks-oleksyuk/apaleo-php"
+    },
     "require": {
         "php": "^8.4",
         "php-http/discovery": "^1.20",
@@ -12,13 +33,15 @@
         "psr/simple-cache": "^3.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.95.26",
+        "friendsofphp/php-cs-fixer": "^3.95.27",
         "nyholm/psr7": "^1.8.2",
         "php-http/mock-client": "^1.6.1",
         "phpstan/phpstan": "^2.2.14",
         "phpunit/phpunit": "^13.3.4",
         "rector/rector": "^2.6.7"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Oleksyuk\\Apaleo\\": "src/"
@@ -29,12 +52,10 @@
             "Oleksyuk\\Apaleo\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
     "config": {
-        "sort-packages": true,
         "allow-plugins": {
             "php-http/discovery": true
-        }
+        },
+        "sort-packages": true
     }
 }
