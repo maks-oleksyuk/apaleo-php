@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO;
+
+use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationTargetType;
+use Oleksyuk\Apaleo\Support\ResponseData;
+
+/** What a payment authorization is for: a whole booking, or a single reservation within one. */
+final readonly class AuthorizationTarget
+{
+    public function __construct(
+        public AuthorizationTargetType $type,
+        public string $id,
+        public string $propertyId,
+    ) {}
+
+    /** @param array<string, mixed> $data */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            type: AuthorizationTargetType::from(ResponseData::string($data, 'type')),
+            id: ResponseData::string($data, 'id'),
+            propertyId: ResponseData::string($data, 'propertyId'),
+        );
+    }
+
+    /** @return array<string, mixed> */
+    public function toArray(): array
+    {
+        return [
+            'type' => $this->type->value,
+            'id' => $this->id,
+            'propertyId' => $this->propertyId,
+        ];
+    }
+}

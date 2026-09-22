@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Oleksyuk\Apaleo\Resource\Booking\Authorization\Requests;
+
+use Oleksyuk\Apaleo\Http\Enum\Method;
+use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+
+final class CreateAuthorizationByTerminalRequest extends Request
+{
+    public function __construct(
+        private readonly AuthorizationTarget $target,
+        private readonly MonetaryValue $amount,
+        private readonly string $terminalId,
+    ) {}
+
+    public function method(): Method
+    {
+        return Method::POST;
+    }
+
+    public function endpoint(): string
+    {
+        return '/booking/v1/authorizations/by-terminal';
+    }
+
+    public function body(): array
+    {
+        return [
+            'target' => $this->target->toArray(),
+            'amount' => $this->amount->toArray(),
+            'terminalId' => $this->terminalId,
+        ];
+    }
+}

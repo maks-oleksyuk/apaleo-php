@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Booking;
 
 use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Resource\Booking\Authorization\AuthorizationResource;
 use Oleksyuk\Apaleo\Resource\Booking\Block\BlockResource;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\BookingDomainResource;
 use Oleksyuk\Apaleo\Resource\Booking\Group\GroupResource;
@@ -47,5 +48,10 @@ final readonly class BookingResource
     public function offers(): OfferResource
     {
         return new OfferResource($this->pipeline);
+    }
+
+    public function authorizations(): AuthorizationResource
+    {
+        return new AuthorizationResource($this->pipeline);
     }
 }
