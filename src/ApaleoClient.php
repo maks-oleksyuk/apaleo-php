@@ -12,6 +12,7 @@ use Oleksyuk\Apaleo\Auth\TokenCache;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Resource\Availability\AvailabilityResource;
 use Oleksyuk\Apaleo\Resource\Booking\BookingResource;
 use Oleksyuk\Apaleo\Resource\Inventory\InventoryResource;
 use Psr\Http\Client\ClientInterface;
@@ -43,6 +44,11 @@ final readonly class ApaleoClient
     public function booking(): BookingResource
     {
         return new BookingResource($this->pipeline);
+    }
+
+    public function availability(): AvailabilityResource
+    {
+        return new AvailabilityResource($this->pipeline);
     }
 
     /**
