@@ -138,18 +138,21 @@ final readonly class RequestPipeline
     {
         $decoded = $rawBody === '' ? [] : json_decode($rawBody, true);
 
-        if (!\is_array($decoded)) {
-            throw new ApaleoUnexpectedResponseException("Apaleo API returned a non-JSON or malformed body (HTTP {$status}).");
-        }
-
-        /** @var array<string, mixed> $data */
-        $data = $decoded;
-
+        // Checked before the JSON shape: gateways/CDNs answer 502/503/504 with HTML, and those
+        // must still surface as ApaleoServerException so callers' retry logic catches them.
         if ($status >= 400) {
-            throw $this->mapError($status, $data, $retryAfter);
+            /** @var array<string, mixed> $errorData */
+            $errorData = \is_array($decoded) ? $decoded : [];
+
+            throw $this->mapError($status, $errorData, $retryAfter, $rawBody);
         }
 
-        return $data;
+        if (!\is_array($decoded)) {
+            throw new ApaleoUnexpectedResponseException("Apaleo API returned a non-JSON or malformed body (HTTP {$status}): ".$this->excerpt($rawBody));
+        }
+
+        // @phpstan-ignore return.type (a JSON object decodes to string keys; a top-level list isn't an Apaleo response shape)
+        return $decoded;
     }
 
     private function execute(Request $apaleoRequest, AccessToken $token): ResponseInterface
@@ -219,13 +222,25 @@ final readonly class RequestPipeline
         return $client->request($apaleoRequest->method()->value, $uri, $options);
     }
 
+    private function excerpt(string $rawBody): string
+    {
+        $flat = trim((string) preg_replace('/\s+/u', ' ', strip_tags($rawBody)));
+
+        // /u keeps the cut on a UTF-8 character boundary without requiring ext-mbstring.
+        return (string) preg_replace('/^(.{200}).+$/su', '$1…', $flat);
+    }
+
     /**
      * @param array<string, mixed> $data
      */
-    private function mapError(int $status, array $data, string $retryAfter): ApaleoClientException|ApaleoServerException
+    private function mapError(int $status, array $data, string $retryAfter, string $rawBody): ApaleoClientException|ApaleoServerException
     {
         $detail = $data['detail'] ?? $data['title'] ?? null;
-        $message = \is_string($detail) ? $detail : "Apaleo API error (HTTP {$status})";
+        $message = match (true) {
+            \is_string($detail) => $detail,
+            $data === [] && $rawBody !== '' => "Apaleo API error (HTTP {$status}): ".$this->excerpt($rawBody),
+            default => "Apaleo API error (HTTP {$status})",
+        };
         $type = \is_string($data['type'] ?? null) ? $data['type'] : null;
         $messages = $this->extractMessages($data);
 

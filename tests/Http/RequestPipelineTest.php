@@ -10,6 +10,7 @@ use Nyholm\Psr7\Response;
 use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
+use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
@@ -130,6 +131,28 @@ final class RequestPipelineTest extends TestCase
         $this->httpClient->addResponse(new Response(503, ['Content-Type' => 'application/json'], '{}'));
 
         $this->expectException(ApaleoServerException::class);
+
+        $this->pipeline->send($this->requestWithQuery([]));
+    }
+
+    public function testHtmlBodyOn5xxStillMapsToServerException(): void
+    {
+        $this->httpClient->addResponse(new Response(502, ['Content-Type' => 'text/html'], '<html><body><h1>502 Bad Gateway</h1></body></html>'));
+
+        try {
+            $this->pipeline->send($this->requestWithQuery([]));
+            self::fail('Expected ApaleoServerException.');
+        } catch (ApaleoServerException $apaleoServerException) {
+            self::assertSame(502, $apaleoServerException->statusCode);
+            self::assertStringContainsString('502 Bad Gateway', $apaleoServerException->getMessage());
+        }
+    }
+
+    public function testNonJsonBodyOn4xxStillMapsByStatus(): void
+    {
+        $this->httpClient->addResponse(new Response(404, ['Content-Type' => 'text/plain'], 'Not Found'));
+
+        $this->expectException(ApaleoNotFoundException::class);
 
         $this->pipeline->send($this->requestWithQuery([]));
     }
