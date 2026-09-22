@@ -69,7 +69,7 @@ final readonly class Block
             timeSlices: array_map(BlockTimeSlice::fromArray(...), ResponseData::nestedList($data, 'timeSlices')),
             actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
             optionalCutoff: ResponseData::nullableDateTime($data, 'optionalCutoff'),
-            optionalCutoffBehavior: $optionalCutoffBehavior !== null ? OptionalCutoffBehavior::from($optionalCutoffBehavior) : null,
+            optionalCutoffBehavior: $optionalCutoffBehavior !== null ? OptionalCutoffBehavior::fromApi($optionalCutoffBehavior) : null,
             isOptionalDeductingInventory: \array_key_exists('isOptionalDeductingInventory', $data) ? ResponseData::bool($data, 'isOptionalDeductingInventory') : null,
         );
     }

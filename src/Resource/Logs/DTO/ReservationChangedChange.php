@@ -58,7 +58,7 @@ final readonly class ReservationChangedChange
             primaryGuest: [] !== $primaryGuest ? PersonChange::fromArray($primaryGuest) : null,
             paymentAccount: [] !== $paymentAccount ? PaymentAccountChange::fromArray($paymentAccount) : null,
             guaranteeType: null !== $guaranteeType ? GuaranteeType::fromApi($guaranteeType) : null,
-            travelPurpose: null !== $travelPurpose ? TravelPurpose::from($travelPurpose) : null,
+            travelPurpose: null !== $travelPurpose ? TravelPurpose::fromApi($travelPurpose) : null,
             companyId: ResponseData::nullableString($data, 'companyId'),
             noShowFee: [] !== $noShowFee ? MonetaryValue::fromArray($noShowFee) : null,
             cancellationFee: [] !== $cancellationFee ? CancellationFeeChange::fromArray($cancellationFee) : null,

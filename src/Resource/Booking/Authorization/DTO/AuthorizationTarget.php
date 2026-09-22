@@ -20,7 +20,7 @@ final readonly class AuthorizationTarget
     public static function fromArray(array $data): self
     {
         return new self(
-            type: AuthorizationTargetType::from(ResponseData::string($data, 'type')),
+            type: AuthorizationTargetType::fromApi(ResponseData::string($data, 'type')),
             id: ResponseData::string($data, 'id'),
             propertyId: ResponseData::string($data, 'propertyId'),
         );

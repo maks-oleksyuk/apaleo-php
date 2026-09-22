@@ -146,7 +146,7 @@ final readonly class Reservation
             guaranteeType: GuaranteeType::fromApi(ResponseData::string($data, 'guaranteeType')),
             cancellationFee: $cancellationFee !== [] ? ReservationCancellationFee::fromArray($cancellationFee) : null,
             noShowFee: $noShowFee !== [] ? ReservationNoShowFee::fromArray($noShowFee) : null,
-            travelPurpose: $travelPurpose !== null ? TravelPurpose::tryFrom($travelPurpose) : null,
+            travelPurpose: $travelPurpose !== null ? TravelPurpose::fromApi($travelPurpose) : null,
             balance: MonetaryValue::fromArray(ResponseData::nested($data, 'balance')),
             assignedUnits: array_map(ReservationAssignedUnit::fromArray(...), ResponseData::nestedList($data, 'assignedUnits')),
             validationMessages: array_map(ReservationValidationMessage::fromArray(...), ResponseData::nestedList($data, 'validationMessages')),

@@ -80,7 +80,7 @@ final readonly class ReservationAddedChange
             guaranteeType: GuaranteeType::fromApi(ResponseData::string($data, 'guaranteeType')),
             cancellationFee: CancellationFeeChange::fromArray(ResponseData::nested($data, 'cancellationFee')),
             noShowFee: MonetaryValue::fromArray(ResponseData::nested($data, 'noShowFee')),
-            travelPurpose: null !== $travelPurpose ? TravelPurpose::from($travelPurpose) : null,
+            travelPurpose: null !== $travelPurpose ? TravelPurpose::fromApi($travelPurpose) : null,
             prePaymentAmount: [] !== $prePaymentAmount ? MonetaryValue::fromArray($prePaymentAmount) : null,
             validationMessages: array_map(ReservationValidationMessage::fromArray(...), ResponseData::nestedList($data, 'validationMessages')),
             companyId: ResponseData::nullableString($data, 'companyId'),
