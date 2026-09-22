@@ -158,9 +158,8 @@ final readonly class RequestPipeline
     private function execute(Request $apaleoRequest, AccessToken $token): ResponseInterface
     {
         $uri = $this->baseUri.$apaleoRequest->endpoint();
-        $query = $apaleoRequest->query();
+        $query = $this->query($apaleoRequest);
         if ($query !== []) {
-            $query = array_map(static fn (mixed $value): mixed => \is_bool($value) ? ($value ? 'true' : 'false') : $value, $query);
             $uri .= '?'.http_build_query($query);
         }
 
@@ -174,7 +173,7 @@ final readonly class RequestPipeline
             $psrRequest = $psrRequest->withHeader($name, $value);
         }
 
-        $body = $apaleoRequest->body();
+        $body = $this->body($apaleoRequest);
         if ($body !== null) {
             try {
                 $encodedBody = json_encode($body, JSON_THROW_ON_ERROR);
@@ -208,18 +207,59 @@ final readonly class RequestPipeline
             ],
         ];
 
-        $query = $apaleoRequest->query();
+        $query = $this->query($apaleoRequest);
         if ($query !== []) {
-            $options['query'] = array_map(static fn (mixed $value): mixed => \is_bool($value) ? ($value ? 'true' : 'false') : $value, $query);
+            $options['query'] = $query;
         }
 
-        $body = $apaleoRequest->body();
+        $body = $this->body($apaleoRequest);
         if ($body !== null) {
             $options['json'] = $body;
         }
 
         // Non-blocking: I/O and any transport error happen lazily, on first read of the response.
         return $client->request($apaleoRequest->method()->value, $uri, $options);
+    }
+
+    /**
+     * Bools as "true"/"false" (ASP.NET's binder rejects PHP's 1/0), and no enum placeholder
+     * for an unrecognized API value may leak into a request.
+     *
+     * @return array<string, mixed>
+     */
+    private function query(Request $request): array
+    {
+        $query = array_map(static fn (mixed $value): mixed => \is_bool($value) ? ($value ? 'true' : 'false') : $value, $request->query());
+        $this->assertNoUnknownEnum($query);
+
+        return $query;
+    }
+
+    /** @return null|array<array-key, mixed> */
+    private function body(Request $request): ?array
+    {
+        $body = $request->body();
+        if ($body !== null) {
+            $this->assertNoUnknownEnum($body);
+        }
+
+        return $body;
+    }
+
+    /**
+     * Enums carry an Unknown/UnmappedValue case for values the API added after this SDK was
+     * written. It's a read-side placeholder only: Apaleo would reject it, and silently dropping
+     * it would widen a filter to "everything", so it's refused before anything is sent.
+     *
+     * @param array<array-key, mixed> $values
+     */
+    private function assertNoUnknownEnum(array $values): void
+    {
+        array_walk_recursive($values, static function (mixed $value, int|string $key): void {
+            if (\is_string($value) && preg_match('/(?:^|,)__(?:unknown|unmapped)__(?:,|$)/', $value) === 1) {
+                throw new \InvalidArgumentException("Cannot send an Unknown enum value for \"{$key}\": it stands for a value this SDK doesn't recognize, not one Apaleo accepts.");
+            }
+        });
     }
 
     private function excerpt(string $rawBody): string

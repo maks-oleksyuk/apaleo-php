@@ -155,15 +155,15 @@ final class UnitGroupResourceTest extends TestCase
         self::assertSame('DELETE', $this->lastRequest()->getMethod());
     }
 
-    public function testUnknownTypeIsOmittedFromListQuery(): void
+    public function testUnknownTypeInListFilterIsRejectedWithoutSendingARequest(): void
     {
-        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{"count":0,"unitGroups":[]}'));
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->unitGroups->list(unitGroupTypes: [UnitGroupType::Unknown, UnitGroupType::BedRoom]);
-
-        $uri = (string) $this->lastRequest()->getUri();
-        self::assertStringContainsString('unitGroupTypes=BedRoom', $uri);
-        self::assertStringNotContainsString('__unknown__', $uri);
+        try {
+            $this->unitGroups->list(unitGroupTypes: [UnitGroupType::BedRoom, UnitGroupType::Unknown]);
+        } finally {
+            self::assertFalse($this->httpClient->getLastRequest());
+        }
     }
 
     private function lastRequest(): RequestInterface

@@ -232,15 +232,15 @@ final class UnitResourceTest extends TestCase
         self::assertStringContainsString('/unit-actions/U1/archive', (string) $request->getUri());
     }
 
-    public function testUnknownConditionAndMaintenanceTypeAreOmittedFromQuery(): void
+    public function testUnknownConditionInFilterIsRejectedWithoutSendingARequest(): void
     {
-        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{"count":0,"units":[]}'));
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->units->list(maintenanceType: UnitMaintenanceType::Unknown, condition: UnitCondition::Unknown);
-
-        $uri = (string) $this->lastRequest()->getUri();
-        self::assertStringNotContainsString('condition=', $uri);
-        self::assertStringNotContainsString('maintenanceType=', $uri);
+        try {
+            $this->units->list(condition: UnitCondition::Unknown);
+        } finally {
+            self::assertFalse($this->httpClient->getLastRequest());
+        }
     }
 
     public function testListRejectsPageSizeAboveApaleosLimitWithoutSendingARequest(): void

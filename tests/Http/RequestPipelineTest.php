@@ -157,6 +157,41 @@ final class RequestPipelineTest extends TestCase
         $this->pipeline->send($this->requestWithQuery([]));
     }
 
+    public function testUnknownEnumPlaceholderInQueryIsRejectedWithoutSendingARequest(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        try {
+            $this->pipeline->send($this->requestWithQuery(['status' => 'Confirmed,__unknown__']));
+        } finally {
+            self::assertFalse($this->httpClient->getLastRequest());
+        }
+    }
+
+    public function testUnmappedEnumPlaceholderNestedInBodyIsRejected(): void
+    {
+        $request = new readonly class extends Request {
+            public function method(): Method
+            {
+                return Method::POST;
+            }
+
+            public function endpoint(): string
+            {
+                return '/x';
+            }
+
+            public function body(): array
+            {
+                return ['guests' => [['gender' => '__unmapped__']]];
+            }
+        };
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->pipeline->send($request);
+    }
+
     public function testInvalidJsonBodyOnSuccessThrowsUnexpectedResponseException(): void
     {
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'text/html'], '<html>not json</html>'));

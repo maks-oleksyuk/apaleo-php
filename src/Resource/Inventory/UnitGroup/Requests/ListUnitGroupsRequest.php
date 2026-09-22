@@ -38,7 +38,7 @@ final readonly class ListUnitGroupsRequest extends Request
             'propertyId' => $this->propertyId,
             'unitGroupTypes' => implode(',', array_map(
                 static fn (UnitGroupType $t): string => $t->value,
-                array_filter($this->unitGroupTypes, static fn (UnitGroupType $t): bool => $t !== UnitGroupType::Unknown),
+                $this->unitGroupTypes,
             )) ?: null,
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
