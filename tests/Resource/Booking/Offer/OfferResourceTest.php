@@ -9,7 +9,6 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
-use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\OfferResource;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
@@ -81,7 +80,7 @@ final class OfferResourceTest extends TestCase
 
         $stayOffers = $this->offers->forProperty('MUC', '2026-09-20', '2026-09-22', 1);
 
-        self::assertSame('MUC', $stayOffers->property->id);
+        self::assertSame('MUC', $stayOffers->property?->id);
         self::assertCount(1, $stayOffers->offers);
         self::assertSame(279.0, $stayOffers->offers[0]->totalGrossAmount->amount);
         self::assertSame('MUC-SGL', $stayOffers->offers[0]->unitGroup->id);
@@ -111,9 +110,10 @@ final class OfferResourceTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(204));
 
-        $this->expectException(ApaleoUnexpectedResponseException::class);
+        $stayOffers = $this->offers->forRatePlan('MUC-NONREF_SGL', '2026-09-20', '2026-09-22', 1);
 
-        $this->offers->forRatePlan('MUC-NONREF_SGL', '2026-09-20', '2026-09-22', 1);
+        self::assertNull($stayOffers->property);
+        self::assertSame([], $stayOffers->offers);
     }
 
     public function testServicesReturnsServiceOffers(): void

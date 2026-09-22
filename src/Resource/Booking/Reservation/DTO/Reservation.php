@@ -85,7 +85,7 @@ final readonly class Reservation
         public bool $hasCityTax,
         public ?Commission $commission,
         public ?string $promoCode,
-        public PayableAmount $payableAmount,
+        public ?PayableAmount $payableAmount,
         public bool $isPreCheckedIn,
         public bool $isOpenForCharges,
         public ?EmbeddedMarketSegment $marketSegment,
@@ -107,6 +107,8 @@ final readonly class Reservation
         $commission = ResponseData::nested($data, 'commission');
         $marketSegment = ResponseData::nested($data, 'marketSegment');
         $externalReferences = ResponseData::nested($data, 'externalReferences');
+        // Marked required by the schema, but verified live: absent on GET /reservations list responses.
+        $payableAmount = ResponseData::nested($data, 'payableAmount');
 
         return new self(
             id: ResponseData::string($data, 'id'),
@@ -156,7 +158,7 @@ final readonly class Reservation
             hasCityTax: ResponseData::bool($data, 'hasCityTax'),
             commission: $commission !== [] ? Commission::fromArray($commission) : null,
             promoCode: ResponseData::nullableString($data, 'promoCode'),
-            payableAmount: PayableAmount::fromArray(ResponseData::nested($data, 'payableAmount')),
+            payableAmount: $payableAmount !== [] ? PayableAmount::fromArray($payableAmount) : null,
             isPreCheckedIn: ResponseData::bool($data, 'isPreCheckedIn'),
             isOpenForCharges: ResponseData::bool($data, 'isOpenForCharges'),
             marketSegment: $marketSegment !== [] ? EmbeddedMarketSegment::fromArray($marketSegment) : null,

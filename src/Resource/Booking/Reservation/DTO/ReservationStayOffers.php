@@ -9,17 +9,24 @@ use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class ReservationStayOffers
 {
-    /** @param list<ReservationStayOffer> $offers */
+    /**
+     * $property is null when there were no offers at all (apaleo returns 204 No Content for
+     * "there are no available offers for the specified parameters" — a normal, common result).
+     *
+     * @param list<ReservationStayOffer> $offers
+     */
     public function __construct(
-        public EmbeddedProperty $property,
+        public ?EmbeddedProperty $property,
         public array $offers,
     ) {}
 
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
+        $property = ResponseData::nested($data, 'property');
+
         return new self(
-            property: EmbeddedProperty::fromArray(ResponseData::nested($data, 'property')),
+            property: $property !== [] ? EmbeddedProperty::fromArray($property) : null,
             offers: array_map(ReservationStayOffer::fromArray(...), ResponseData::nestedList($data, 'offers')),
         );
     }

@@ -343,6 +343,73 @@ final class ReservationResourceTest extends TestCase
         self::assertSame('MUC-NONREF_SGL', $body['timeSlices'][0]['ratePlanId']);
     }
 
+    public function testOffersReturnsReservationStayOffers(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
+            'property' => ['id' => 'MUC'],
+            'offers' => [[
+                'arrival' => '2026-09-20T17:00:00+02:00',
+                'departure' => '2026-09-23T11:00:00+02:00',
+                'minGuaranteeType' => 'CreditCard',
+                'availableUnits' => 3,
+                'totalGrossAmount' => ['amount' => 300.0, 'currency' => 'EUR'],
+                'cancellationFee' => [
+                    'code' => 'FLEX', 'name' => 'Flexible', 'description' => 'Free cancellation.',
+                    'dueDateTime' => '2026-09-19T17:00:00+02:00', 'fee' => ['amount' => 300.0, 'currency' => 'EUR'],
+                ],
+                'noShowFee' => [
+                    'code' => 'NOSHOW', 'name' => 'Non Refundable', 'description' => 'No free no-show',
+                    'fee' => ['amount' => 300.0, 'currency' => 'EUR'],
+                ],
+                'timeSlices' => [],
+                'taxDetails' => [],
+                'isCorporate' => false,
+            ]],
+        ])));
+
+        $offers = $this->reservations->offers('XPGMSXGF-1', arrival: '2026-09-20', departure: '2026-09-23', adults: 2);
+
+        self::assertSame('MUC', $offers->property?->id);
+        self::assertCount(1, $offers->offers);
+        self::assertSame(300.0, $offers->offers[0]->totalGrossAmount->amount);
+
+        $request = $this->lastRequest();
+        self::assertStringContainsString('/reservations/XPGMSXGF-1/offers', (string) $request->getUri());
+        self::assertStringContainsString('adults=2', (string) $request->getUri());
+    }
+
+    public function testOffersHandlesEmpty204Response(): void
+    {
+        $this->httpClient->addResponse(new Response(204));
+
+        $offers = $this->reservations->offers('XPGMSXGF-1');
+
+        self::assertNull($offers->property);
+        self::assertSame([], $offers->offers);
+    }
+
+    public function testServiceOffersReturnsServiceOffers(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
+            'services' => [[
+                'service' => [
+                    'id' => 'MUC-SPA', 'code' => 'SPA', 'name' => 'Spa access', 'description' => 'Spa access per stay',
+                    'pricingUnit' => 'Person', 'defaultGrossPrice' => ['amount' => 30.0, 'currency' => 'EUR'],
+                ],
+                'count' => 1,
+                'totalAmount' => ['grossAmount' => 30.0, 'netAmount' => 25.21, 'vatType' => 'Normal', 'vatPercent' => 19.0, 'currency' => 'EUR'],
+                'prePaymentAmount' => ['amount' => 0.0, 'currency' => 'EUR'],
+                'dates' => [],
+            ]],
+        ])));
+
+        $serviceOffers = $this->reservations->serviceOffers('XPGMSXGF-1', channelCode: ChannelCode::Direct);
+
+        self::assertCount(1, $serviceOffers->services);
+        self::assertSame('MUC-SPA', $serviceOffers->services[0]->service->id);
+        self::assertStringContainsString('channelCode=Direct', (string) $this->lastRequest()->getUri());
+    }
+
     public function testAmendForceAppendsForceSegment(): void
     {
         $this->httpClient->addResponse(new Response(204));
