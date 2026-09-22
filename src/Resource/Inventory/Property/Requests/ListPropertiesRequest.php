@@ -6,19 +6,13 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Property\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
+use Oleksyuk\Apaleo\Resource\Inventory\Property\PropertyFilter;
 
 final readonly class ListPropertiesRequest extends Request
 {
-    /**
-     * @param list<PropertyStatus> $status
-     * @param list<string> $countryCode ISO Alpha-2 country codes
-     * @param list<string> $expand
-     */
+    /** @param list<'actions'> $expand */
     public function __construct(
-        private array $status = [],
-        private ?bool $includeArchived = null,
-        private array $countryCode = [],
+        private PropertyFilter $filter = new PropertyFilter(),
         private ?int $pageNumber = null,
         private ?int $pageSize = null,
         private array $expand = [],
@@ -37,12 +31,7 @@ final readonly class ListPropertiesRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'status' => implode(',', array_map(
-                static fn (PropertyStatus $s): string => $s->value,
-                $this->status,
-            )) ?: null,
-            'includeArchived' => $this->includeArchived,
-            'countryCode' => implode(',', $this->countryCode) ?: null,
+            ...$this->filter->toQuery(),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
             'expand' => implode(',', $this->expand) ?: null,

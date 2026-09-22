@@ -8,9 +8,6 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\CreateUnit;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\Unit;
-use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitArchiveFilter;
-use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
-use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\ArchiveUnitRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\BulkCreateUnitsRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\BulkUpdateUnitsRequest;
@@ -38,43 +35,19 @@ final readonly class UnitResource
     }
 
     /**
-     * @param list<string> $unitGroupIds
-     * @param list<string> $unitAttributeIds
-     * @param list<string> $expand supported: property, unitGroup, connectedUnits, actions
+     * @param list<'actions'|'connectedUnits'|'property'|'unitGroup'> $expand
      *
      * @return PaginatedResult<Unit>
      */
     public function list(
-        ?string $propertyId = null,
-        ?string $unitGroupId = null,
-        array $unitGroupIds = [],
-        array $unitAttributeIds = [],
-        ?bool $isOccupied = null,
-        ?UnitMaintenanceType $maintenanceType = null,
-        ?UnitCondition $condition = null,
-        ?string $textSearch = null,
-        ?UnitArchiveFilter $status = null,
+        UnitFilter $filter = new UnitFilter(),
         ?int $pageNumber = null,
         ?int $pageSize = null,
         array $expand = [],
     ): PaginatedResult {
         Pagination::assertValidPageSize($pageSize);
 
-        $request = new ListUnitsRequest(
-            $propertyId,
-            $unitGroupId,
-            $unitGroupIds,
-            $unitAttributeIds,
-            $isOccupied,
-            $maintenanceType,
-            $condition,
-            $textSearch,
-            $status,
-            $pageNumber,
-            $pageSize,
-            $expand,
-        );
-        $data = $this->pipeline->send($request);
+        $data = $this->pipeline->send(new ListUnitsRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
             items: array_map(Unit::fromArray(...), ResponseData::nestedList($data, 'units')),
@@ -82,33 +55,9 @@ final readonly class UnitResource
         );
     }
 
-    /**
-     * @param list<string> $unitGroupIds
-     * @param list<string> $unitAttributeIds
-     */
-    public function count(
-        ?string $propertyId = null,
-        ?string $unitGroupId = null,
-        array $unitGroupIds = [],
-        array $unitAttributeIds = [],
-        ?bool $isOccupied = null,
-        ?UnitMaintenanceType $maintenanceType = null,
-        ?UnitCondition $condition = null,
-        ?string $textSearch = null,
-        ?UnitArchiveFilter $status = null,
-    ): int {
-        $request = new CountUnitsRequest(
-            $propertyId,
-            $unitGroupId,
-            $unitGroupIds,
-            $unitAttributeIds,
-            $isOccupied,
-            $maintenanceType,
-            $condition,
-            $textSearch,
-            $status,
-        );
-        $data = $this->pipeline->send($request);
+    public function count(UnitFilter $filter = new UnitFilter()): int
+    {
+        $data = $this->pipeline->send(new CountUnitsRequest($filter));
 
         return ResponseData::int($data, 'count');
     }

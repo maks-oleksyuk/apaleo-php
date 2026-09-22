@@ -15,6 +15,7 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\Address;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\CreateProperty;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
+use Oleksyuk\Apaleo\Resource\Inventory\Property\PropertyFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\PropertyResource;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
@@ -274,7 +275,7 @@ final class PropertyResourceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         try {
-            $this->properties->list(status: [PropertyStatus::Unknown, PropertyStatus::Live]);
+            $this->properties->list(new PropertyFilter(status: [PropertyStatus::Unknown, PropertyStatus::Live]));
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }

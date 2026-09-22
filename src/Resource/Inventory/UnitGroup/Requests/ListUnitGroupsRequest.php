@@ -6,17 +6,13 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\UnitGroupFilter;
 
 final readonly class ListUnitGroupsRequest extends Request
 {
-    /**
-     * @param list<UnitGroupType> $unitGroupTypes
-     * @param list<string> $expand supported: property, connectedUnitGroups
-     */
+    /** @param list<'connectedUnitGroups'|'property'> $expand */
     public function __construct(
-        private ?string $propertyId = null,
-        private array $unitGroupTypes = [],
+        private UnitGroupFilter $filter = new UnitGroupFilter(),
         private ?int $pageNumber = null,
         private ?int $pageSize = null,
         private array $expand = [],
@@ -35,11 +31,7 @@ final readonly class ListUnitGroupsRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'propertyId' => $this->propertyId,
-            'unitGroupTypes' => implode(',', array_map(
-                static fn (UnitGroupType $t): string => $t->value,
-                $this->unitGroupTypes,
-            )) ?: null,
+            ...$this->filter->toQuery(),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
             'expand' => implode(',', $this->expand) ?: null,

@@ -15,6 +15,7 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\CreateUnit;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
+use Oleksyuk\Apaleo\Resource\Inventory\Unit\UnitFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\UnitResource;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
@@ -123,7 +124,7 @@ final class UnitResourceTest extends TestCase
             'units' => [$this->fullUnitFixture, $second],
         ])));
 
-        $units = $this->units->list('BER');
+        $units = $this->units->list(new UnitFilter('BER'));
 
         self::assertCount(2, $units);
         self::assertSame('U1', $units[0]->id);
@@ -143,7 +144,7 @@ final class UnitResourceTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode(['count' => 62])));
 
-        self::assertSame(62, $this->units->count(propertyId: '03_BS'));
+        self::assertSame(62, $this->units->count(new UnitFilter(propertyId: '03_BS')));
     }
 
     public function testLocalizedDescriptionIsNormalized(): void
@@ -237,7 +238,7 @@ final class UnitResourceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         try {
-            $this->units->list(condition: UnitCondition::Unknown);
+            $this->units->list(new UnitFilter(condition: UnitCondition::Unknown));
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }

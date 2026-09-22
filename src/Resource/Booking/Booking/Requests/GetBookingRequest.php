@@ -9,7 +9,7 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final readonly class GetBookingRequest extends Request
 {
-    /** @param list<string> $expand */
+    /** @param list<'property'|'propertyValues'|'ratePlan'|'reservations'|'services'|'unitGroup'> $expand */
     public function __construct(
         private string $bookingId,
         private array $expand = [],

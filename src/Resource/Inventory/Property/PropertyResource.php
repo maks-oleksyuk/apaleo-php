@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\CreateProperty;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\Property;
-use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ArchivePropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ClonePropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\CountPropertiesRequest;
@@ -37,23 +36,19 @@ final readonly class PropertyResource
     }
 
     /**
-     * @param list<PropertyStatus> $status
-     * @param list<string> $countryCode ISO Alpha-2 country codes
-     * @param list<string> $expand supported: actions
+     * @param list<'actions'> $expand
      *
      * @return PaginatedResult<Property>
      */
     public function list(
-        array $status = [],
-        ?bool $includeArchived = null,
-        array $countryCode = [],
+        PropertyFilter $filter = new PropertyFilter(),
         ?int $pageNumber = null,
         ?int $pageSize = null,
         array $expand = [],
     ): PaginatedResult {
         Pagination::assertValidPageSize($pageSize);
 
-        $data = $this->pipeline->send(new ListPropertiesRequest($status, $includeArchived, $countryCode, $pageNumber, $pageSize, $expand));
+        $data = $this->pipeline->send(new ListPropertiesRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
             items: array_map(Property::fromArray(...), ResponseData::nestedList($data, 'properties')),

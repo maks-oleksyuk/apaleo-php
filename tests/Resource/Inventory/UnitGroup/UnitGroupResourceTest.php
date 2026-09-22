@@ -13,6 +13,7 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\CreateUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\ReplaceUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\UnitGroupFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\UnitGroupResource;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
@@ -94,7 +95,7 @@ final class UnitGroupResourceTest extends TestCase
             'unitGroups' => [$this->fixture],
         ])));
 
-        $unitGroups = $this->unitGroups->list('BER');
+        $unitGroups = $this->unitGroups->list(new UnitGroupFilter('BER'));
 
         self::assertCount(1, $unitGroups);
         self::assertSame('DBL', $unitGroups[0]->id);
@@ -113,7 +114,7 @@ final class UnitGroupResourceTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode(['count' => 7])));
 
-        self::assertSame(7, $this->unitGroups->count('BER'));
+        self::assertSame(7, $this->unitGroups->count(new UnitGroupFilter('BER')));
     }
 
     public function testCreateReturnsCreatedId(): void
@@ -160,7 +161,7 @@ final class UnitGroupResourceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         try {
-            $this->unitGroups->list(unitGroupTypes: [UnitGroupType::BedRoom, UnitGroupType::Unknown]);
+            $this->unitGroups->list(new UnitGroupFilter(unitGroupTypes: [UnitGroupType::BedRoom, UnitGroupType::Unknown]));
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }

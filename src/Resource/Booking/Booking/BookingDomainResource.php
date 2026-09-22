@@ -17,7 +17,6 @@ use Oleksyuk\Apaleo\Resource\Booking\Booking\Requests\ListBookingsRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\Requests\UpdateBookingRequest;
 use Oleksyuk\Apaleo\Resource\Booking\BookingResource;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\CreateReservation;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
@@ -29,7 +28,7 @@ final readonly class BookingDomainResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<string> $expand */
+    /** @param list<'property'|'propertyValues'|'ratePlan'|'reservations'|'services'|'unitGroup'> $expand */
     public function get(string $bookingId, array $expand = []): Booking
     {
         $data = $this->pipeline->send(new GetBookingRequest($bookingId, $expand));
@@ -38,38 +37,19 @@ final readonly class BookingDomainResource
     }
 
     /**
-     * @param list<string>      $bookingIds
-     * @param list<ChannelCode> $channelCode
-     * @param list<string>      $expand
+     * @param list<'property'|'ratePlan'|'reservations'|'services'|'unitGroup'> $expand
      *
      * @return PaginatedResult<Booking>
      */
     public function list(
-        ?string $reservationId = null,
-        ?string $groupId = null,
-        array $bookingIds = [],
-        array $channelCode = [],
-        ?string $externalCode = null,
-        ?string $textSearch = null,
-        ?bool $hasActivePaymentAccount = null,
+        BookingFilter $filter = new BookingFilter(),
         ?int $pageNumber = null,
         ?int $pageSize = null,
         array $expand = [],
     ): PaginatedResult {
         Pagination::assertValidPageSize($pageSize);
 
-        $data = $this->pipeline->send(new ListBookingsRequest(
-            $reservationId,
-            $groupId,
-            $bookingIds,
-            $channelCode,
-            $externalCode,
-            $textSearch,
-            $hasActivePaymentAccount,
-            $pageNumber,
-            $pageSize,
-            $expand,
-        ));
+        $data = $this->pipeline->send(new ListBookingsRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
             items: array_map(Booking::fromArray(...), ResponseData::nestedList($data, 'bookings')),

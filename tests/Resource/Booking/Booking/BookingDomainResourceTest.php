@@ -13,6 +13,7 @@ use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\BookingDomainResource;
+use Oleksyuk\Apaleo\Resource\Booking\Booking\BookingFilter;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\CreateBooking;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\CreateReservation;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\CreateReservationTimeSlice;
@@ -114,7 +115,7 @@ final class BookingDomainResourceTest extends TestCase
             'bookings' => [$this->fullBookingFixture],
         ])));
 
-        $result = $this->bookings->list(groupId: 'GRP1', pageSize: 25);
+        $result = $this->bookings->list(new BookingFilter(groupId: 'GRP1'), pageSize: 25);
 
         self::assertCount(1, $result);
         self::assertSame(1, $result->totalCount);

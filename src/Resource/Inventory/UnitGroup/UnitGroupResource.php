@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\CreateUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\ReplaceUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\UnitGroup;
-use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Requests\CountUnitGroupsRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Requests\CreateUnitGroupRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Requests\DeleteUnitGroupRequest;
@@ -33,21 +32,19 @@ final readonly class UnitGroupResource
     }
 
     /**
-     * @param list<UnitGroupType> $unitGroupTypes
-     * @param list<string> $expand supported: property, connectedUnitGroups
+     * @param list<'connectedUnitGroups'|'property'> $expand
      *
      * @return PaginatedResult<UnitGroup>
      */
     public function list(
-        ?string $propertyId = null,
-        array $unitGroupTypes = [],
+        UnitGroupFilter $filter = new UnitGroupFilter(),
         ?int $pageNumber = null,
         ?int $pageSize = null,
         array $expand = [],
     ): PaginatedResult {
         Pagination::assertValidPageSize($pageSize);
 
-        $data = $this->pipeline->send(new ListUnitGroupsRequest($propertyId, $unitGroupTypes, $pageNumber, $pageSize, $expand));
+        $data = $this->pipeline->send(new ListUnitGroupsRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
             items: array_map(UnitGroup::fromArray(...), ResponseData::nestedList($data, 'unitGroups')),
@@ -55,12 +52,9 @@ final readonly class UnitGroupResource
         );
     }
 
-    /**
-     * @param list<UnitGroupType> $unitGroupTypes
-     */
-    public function count(?string $propertyId = null, array $unitGroupTypes = []): int
+    public function count(UnitGroupFilter $filter = new UnitGroupFilter()): int
     {
-        $data = $this->pipeline->send(new CountUnitGroupsRequest($propertyId, $unitGroupTypes));
+        $data = $this->pipeline->send(new CountUnitGroupsRequest($filter));
 
         return ResponseData::int($data, 'count');
     }
