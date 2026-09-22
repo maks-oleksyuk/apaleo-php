@@ -6,11 +6,13 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation;
 
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Resource\Booking\Offer\DTO\ServiceOffers;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\AutoAssignedUnitItem;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\BookReservationService;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\DesiredStayDetails;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\Reservation;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\ReservationServiceItem;
+use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\ReservationStayOffers;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\AmendReservationRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\AssignSpecificUnitRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\AssignUnitRequest;
@@ -18,12 +20,15 @@ use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\BookReservationService
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\CheckInRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\CountReservationsRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\DeleteReservationServiceRequest;
+use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\GetReservationOffersRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\GetReservationRequest;
+use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\GetReservationServiceOffersRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\GetReservationServicesRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\ListReservationsRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\ReservationSimpleActionRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\UpdateReservationRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnit;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
@@ -175,5 +180,53 @@ final readonly class ReservationResource
     public function amend(string $reservationId, DesiredStayDetails $details, bool $force = false): void
     {
         $this->pipeline->send(new AmendReservationRequest($reservationId, $details, $force));
+    }
+
+    /**
+     * Offers for amending this reservation's stay (arrival/departure/adults/rate plan).
+     *
+     * @param list<int>    $childrenAges
+     * @param list<string> $unitGroupIds
+     */
+    public function offers(
+        string $reservationId,
+        ?string $arrival = null,
+        ?string $departure = null,
+        ?int $adults = null,
+        array $childrenAges = [],
+        ?ChannelCode $channelCode = null,
+        ?string $promoCode = null,
+        ?string $corporateCode = null,
+        ?bool $requote = null,
+        ?bool $includeUnavailable = null,
+        array $unitGroupIds = [],
+    ): ReservationStayOffers {
+        $data = $this->pipeline->send(new GetReservationOffersRequest(
+            $reservationId,
+            $arrival,
+            $departure,
+            $adults,
+            $childrenAges,
+            $channelCode,
+            $promoCode,
+            $corporateCode,
+            $requote,
+            $includeUnavailable,
+            $unitGroupIds,
+        ));
+
+        return ReservationStayOffers::fromArray($data);
+    }
+
+    /** Bookable extra services for this reservation. */
+    public function serviceOffers(
+        string $reservationId,
+        ?ChannelCode $channelCode = null,
+        ?bool $onlyDefaultDates = null,
+        ?bool $includeUnavailable = null,
+    ): ServiceOffers {
+        $data = $this->pipeline->send(new GetReservationServiceOffersRequest($reservationId, $channelCode, $onlyDefaultDates, $includeUnavailable));
+
+        return ServiceOffers::fromArray($data);
     }
 }
