@@ -48,6 +48,15 @@ final class ClientCredentialsTokenProviderTest extends TestCase
         );
     }
 
+    public function testEmptyCredentialsAreRejectedUpFront(): void
+    {
+        $factory = new Psr17Factory();
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        new ClientCredentialsTokenProvider($this->httpClient, $factory, $factory, '', 'client-secret');
+    }
+
     public function testFetchesTokenAndCachesItOnColdCache(): void
     {
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([

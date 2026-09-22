@@ -26,7 +26,12 @@ final readonly class ClientCredentialsTokenProvider implements TokenProvider
         private string $clientSecret,
         private TokenCache $cache = new InMemoryTokenCache(),
         private string $identityBaseUri = 'https://identity.apaleo.com',
-    ) {}
+    ) {
+        // Fail at construction: an empty env var would otherwise surface as a puzzling 401 later.
+        if ($clientId === '' || $clientSecret === '') {
+            throw new \InvalidArgumentException('Apaleo client ID and client secret must not be empty.');
+        }
+    }
 
     public function getToken(bool $forceRefresh = false): AccessToken
     {
