@@ -180,7 +180,7 @@ final readonly class RequestPipeline
             try {
                 $encodedBody = json_encode($body, JSON_THROW_ON_ERROR);
             } catch (\JsonException $jsonException) {
-                throw new ApaleoUnexpectedResponseException('Failed to encode request body as JSON: '.$jsonException->getMessage(), $jsonException->getCode(), previous: $jsonException);
+                throw new \InvalidArgumentException('Failed to encode request body as JSON: '.$jsonException->getMessage(), $jsonException->getCode(), previous: $jsonException);
             }
 
             $psrRequest = $psrRequest

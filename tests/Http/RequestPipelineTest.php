@@ -235,6 +235,30 @@ final class RequestPipelineTest extends TestCase
         self::assertSame('k1', $sent->getHeaderLine('Idempotency-Key'));
     }
 
+    public function testUnencodableBodyIsAnInvalidArgumentNotAResponseError(): void
+    {
+        $request = new readonly class extends Request {
+            public function method(): Method
+            {
+                return Method::POST;
+            }
+
+            public function endpoint(): string
+            {
+                return '/x';
+            }
+
+            public function body(): array
+            {
+                return ['name' => "\xB1"];
+            }
+        };
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->pipeline->send($request);
+    }
+
     public function testTransportFailureMapsToTransportException(): void
     {
         $client = new class implements ClientInterface {
