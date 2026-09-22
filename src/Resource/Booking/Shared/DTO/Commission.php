@@ -23,4 +23,13 @@ final readonly class Commission
             beforeCommissionAmount: $before !== [] ? MonetaryValue::fromArray($before) : null,
         );
     }
+
+    /** @return array<string, mixed> */
+    public function toArray(): array
+    {
+        return array_filter([
+            'commissionAmount' => $this->commissionAmount->toArray(),
+            'beforeCommissionAmount' => $this->beforeCommissionAmount?->toArray(),
+        ], static fn (mixed $value): bool => $value !== null);
+    }
 }

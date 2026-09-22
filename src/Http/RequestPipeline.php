@@ -81,6 +81,10 @@ final readonly class RequestPipeline
             ->withHeader('Accept', 'application/json')
         ;
 
+        foreach ($apaleoRequest->headers() as $name => $value) {
+            $psrRequest = $psrRequest->withHeader($name, $value);
+        }
+
         $body = $apaleoRequest->body();
         if ($body !== null) {
             try {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Booking;
 
 use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Resource\Booking\Booking\BookingDomainResource;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\ReservationResource;
 use Oleksyuk\Apaleo\Resource\Booking\Types\TypesResource;
 
@@ -23,5 +24,10 @@ final readonly class BookingResource
     public function reservations(): ReservationResource
     {
         return new ReservationResource($this->pipeline);
+    }
+
+    public function bookings(): BookingDomainResource
+    {
+        return new BookingDomainResource($this->pipeline);
     }
 }

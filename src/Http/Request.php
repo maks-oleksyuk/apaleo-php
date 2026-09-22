@@ -18,6 +18,12 @@ abstract class Request
         return [];
     }
 
+    /** @return array<string, string> extra headers, e.g. Idempotency-Key; never Authorization/Accept/Content-Type */
+    public function headers(): array
+    {
+        return [];
+    }
+
     /** @return null|array<array-key, mixed> */
     public function body(): ?array
     {
