@@ -39,6 +39,29 @@ final class ResponseData
     /**
      * @param array<string, mixed> $data
      */
+    public static function float(array $data, string $key): float
+    {
+        $value = $data[$key] ?? null;
+        if (!\is_int($value) && !\is_float($value)) {
+            throw new ApaleoUnexpectedResponseException("Expected number for field \"{$key}\" in Apaleo API response.");
+        }
+
+        return (float) $value;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function nullableFloat(array $data, string $key): ?float
+    {
+        $value = $data[$key] ?? null;
+
+        return \is_int($value) || \is_float($value) ? (float) $value : null;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function dateTime(array $data, string $key): \DateTimeImmutable
     {
         $value = self::string($data, $key);
@@ -103,6 +126,20 @@ final class ResponseData
         }
 
         return $filtered;
+    }
+
+    /**
+     * Tolerant int list: missing/null/non-array becomes [], non-int items are dropped.
+     *
+     * @param array<string, mixed> $data
+     *
+     * @return list<int>
+     */
+    public static function intList(array $data, string $key): array
+    {
+        $value = $data[$key] ?? null;
+
+        return \is_array($value) ? array_values(array_filter($value, \is_int(...))) : [];
     }
 
     /**
