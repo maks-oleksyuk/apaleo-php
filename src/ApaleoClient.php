@@ -64,8 +64,21 @@ final readonly class ApaleoClient
     }
 
     /**
+     * Escape hatch: sends one low-level Request, either an SDK one (`new ListReservationsRequest(...)`)
+     * or your own subclass for an endpoint the SDK doesn't cover yet.
+     *
+     * @return array<string, mixed> decoded response body; map it with the matching DTO's fromArray()
+     */
+    public function send(Request $request): array
+    {
+        return $this->pipeline->send($request);
+    }
+
+    /**
      * Batch escape hatch: sends several low-level Request objects concurrently, e.g.
      * `new ListReservationsRequest(...)`. Decode each result with the matching DTO's fromArray().
+     *
+     * All-or-nothing: if any request fails, its exception is thrown and the other results are lost.
      *
      * @param list<Request> $requests
      *

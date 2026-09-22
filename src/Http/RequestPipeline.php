@@ -55,6 +55,8 @@ final readonly class RequestPipeline
     }
 
     /**
+     * All-or-nothing: the first failed response throws, and the other results are lost.
+     *
      * Sends several requests concurrently via $asyncHttpClient, if one was given; otherwise falls
      * back to send()-ing them one by one. $httpClient is never used here: a PSR-18-wrapped
      * Symfony client can't be unwrapped back into its concurrency-capable form.
