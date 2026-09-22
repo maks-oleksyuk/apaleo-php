@@ -29,6 +29,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\ReservationSimpleActio
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\UpdateReservationRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnit;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
@@ -153,7 +154,7 @@ final readonly class ReservationResource
     /**
      * Auto-assigns a unit for the whole stay.
      *
-     * @param list<string> $unitConditions allowed: Clean, CleanToBeInspected, Dirty
+     * @param list<UnitCondition> $unitConditions
      *
      * @return list<AutoAssignedUnitItem>
      */

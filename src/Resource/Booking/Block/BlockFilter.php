@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Booking\Block;
 
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\BlockStatus;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
 
 /** Filter criteria shared by BlockResource::list() and ::count(). */
@@ -26,7 +27,7 @@ final readonly class BlockFilter
         public array $ratePlanIds = [],
         public array $timeSliceDefinitionIds = [],
         public array $unitGroupTypes = [],
-        public ?string $timeSliceTemplate = null,
+        public ?TimeSliceTemplate $timeSliceTemplate = null,
         public ?\DateTimeImmutable $from = null,
         public ?\DateTimeImmutable $to = null,
     ) {}
@@ -42,7 +43,7 @@ final readonly class BlockFilter
             'ratePlanIds' => implode(',', $this->ratePlanIds) ?: null,
             'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,
             'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
-            'timeSliceTemplate' => $this->timeSliceTemplate,
+            'timeSliceTemplate' => $this->timeSliceTemplate?->value,
             'from' => $this->from?->format(\DateTimeInterface::ATOM),
             'to' => $this->to?->format(\DateTimeInterface::ATOM),
         ], static fn (mixed $value): bool => $value !== null);

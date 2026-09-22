@@ -13,6 +13,8 @@ use Oleksyuk\Apaleo\Resource\Booking\Offer\Requests\GetRatePlanOffersRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\Requests\GetServiceOffersRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\Requests\OfferIndexRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
 
 final readonly class OfferResource
 {
@@ -33,7 +35,7 @@ final readonly class OfferResource
      *
      * @param list<string> $timeSliceDefinitionIds
      * @param list<string> $unitGroupIds
-     * @param list<string> $unitGroupTypes
+     * @param list<UnitGroupType> $unitGroupTypes
      * @param list<int>    $childrenAges
      */
     public function forProperty(
@@ -41,7 +43,7 @@ final readonly class OfferResource
         \DateTimeImmutable $arrival,
         \DateTimeImmutable $departure,
         int $adults,
-        ?string $timeSliceTemplate = null,
+        ?TimeSliceTemplate $timeSliceTemplate = null,
         array $timeSliceDefinitionIds = [],
         array $unitGroupIds = [],
         array $unitGroupTypes = [],

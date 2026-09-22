@@ -7,13 +7,15 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Offer\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
 
 final readonly class GetOffersRequest extends Request
 {
     /**
      * @param list<string> $timeSliceDefinitionIds
      * @param list<string> $unitGroupIds
-     * @param list<string> $unitGroupTypes
+     * @param list<UnitGroupType> $unitGroupTypes
      * @param list<int>    $childrenAges
      */
     public function __construct(
@@ -21,7 +23,7 @@ final readonly class GetOffersRequest extends Request
         private \DateTimeImmutable $arrival,
         private \DateTimeImmutable $departure,
         private int $adults,
-        private ?string $timeSliceTemplate = null,
+        private ?TimeSliceTemplate $timeSliceTemplate = null,
         private array $timeSliceDefinitionIds = [],
         private array $unitGroupIds = [],
         private array $unitGroupTypes = [],
@@ -49,10 +51,10 @@ final readonly class GetOffersRequest extends Request
             'arrival' => $this->arrival->format('Y-m-d'),
             'departure' => $this->departure->format('Y-m-d'),
             'adults' => $this->adults,
-            'timeSliceTemplate' => $this->timeSliceTemplate,
+            'timeSliceTemplate' => $this->timeSliceTemplate?->value,
             'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,
             'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
-            'unitGroupTypes' => implode(',', $this->unitGroupTypes) ?: null,
+            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
             'channelCode' => $this->channelCode?->value,
             'promoCode' => $this->promoCode,
             'corporateCode' => $this->corporateCode,

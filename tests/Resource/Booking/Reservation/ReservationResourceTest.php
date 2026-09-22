@@ -20,6 +20,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Reservation\ReservationFilter;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\ReservationResource;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitCondition;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
@@ -297,7 +298,7 @@ final class ReservationResourceTest extends TestCase
             ]],
         ])));
 
-        $items = $this->reservations->assignUnit('XPGMSXGF-1', unitConditions: ['Clean']);
+        $items = $this->reservations->assignUnit('XPGMSXGF-1', unitConditions: [UnitCondition::Clean]);
 
         self::assertCount(1, $items);
         self::assertSame('MUC-JQI', $items[0]->unit->id);
