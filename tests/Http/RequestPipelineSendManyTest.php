@@ -95,6 +95,41 @@ final class RequestPipelineSendManyTest extends TestCase
         self::assertSame(['a' => 'b'], $seenOptions['query'] ?? null);
     }
 
+    public function testAsyncRequestHeadersCannotOverrideSdkHeaders(): void
+    {
+        $seenHeaders = [];
+        $asyncClient = new MockHttpClient(static function (string $method, string $url, array $options) use (&$seenHeaders): MockResponse {
+            $seenHeaders = $options['headers'];
+
+            return new MockResponse('{}', ['http_code' => 200]);
+        });
+
+        $factory = new Psr17Factory();
+        $pipeline = new RequestPipeline(new MockClient(), $factory, $factory, $this->fakeTokenProvider(), asyncHttpClient: $asyncClient);
+
+        $pipeline->sendMany([new readonly class extends Request {
+            public function method(): Method
+            {
+                return Method::POST;
+            }
+
+            public function endpoint(): string
+            {
+                return '/x';
+            }
+
+            public function headers(): array
+            {
+                return ['authorization' => 'Bearer evil', 'ACCEPT' => 'text/html', 'Idempotency-Key' => 'k1'];
+            }
+        }]);
+
+        self::assertIsArray($seenHeaders);
+        self::assertContains('Authorization: Bearer fake-token', $seenHeaders);
+        self::assertContains('Idempotency-Key: k1', $seenHeaders);
+        self::assertSame([], preg_grep('/evil|text\/html/', $seenHeaders));
+    }
+
     public function test401OnAsyncPathRetriesOnlyThoseRequestsWithAFreshToken(): void
     {
         $calls = 0;

@@ -208,6 +208,33 @@ final class RequestPipelineTest extends TestCase
         self::assertSame([], $this->pipeline->send($this->requestWithQuery([])));
     }
 
+    public function testRequestHeadersCannotOverrideSdkHeaders(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{}'));
+
+        $this->pipeline->send(new readonly class extends Request {
+            public function method(): Method
+            {
+                return Method::POST;
+            }
+
+            public function endpoint(): string
+            {
+                return '/x';
+            }
+
+            public function headers(): array
+            {
+                return ['authorization' => 'Bearer evil', 'ACCEPT' => 'text/html', 'Idempotency-Key' => 'k1'];
+            }
+        });
+
+        $sent = $this->lastRequest();
+        self::assertSame('Bearer fake-token', $sent->getHeaderLine('Authorization'));
+        self::assertSame('application/json', $sent->getHeaderLine('Accept'));
+        self::assertSame('k1', $sent->getHeaderLine('Idempotency-Key'));
+    }
+
     public function testTransportFailureMapsToTransportException(): void
     {
         $client = new class implements ClientInterface {

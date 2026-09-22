@@ -18,7 +18,7 @@ abstract readonly class Request
         return [];
     }
 
-    /** @return array<string, string> extra headers, e.g. Idempotency-Key; never Authorization/Accept/Content-Type */
+    /** @return array<string, string> extra headers, e.g. Idempotency-Key; Authorization/Accept/Content-Type are ignored */
     public function headers(): array
     {
         return [];

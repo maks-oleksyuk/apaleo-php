@@ -171,7 +171,7 @@ final readonly class RequestPipeline
             ->withHeader('Accept', 'application/json')
         ;
 
-        foreach ($apaleoRequest->headers() as $name => $value) {
+        foreach ($this->headers($apaleoRequest) as $name => $value) {
             $psrRequest = $psrRequest->withHeader($name, $value);
         }
 
@@ -205,7 +205,7 @@ final readonly class RequestPipeline
             'headers' => [
                 'Authorization' => 'Bearer '.$token->value,
                 'Accept' => 'application/json',
-                ...$apaleoRequest->headers(),
+                ...$this->headers($apaleoRequest),
             ],
         ];
 
@@ -235,6 +235,20 @@ final readonly class RequestPipeline
         $this->assertNoUnknownEnum($query);
 
         return $query;
+    }
+
+    /**
+     * A request's own headers can't replace the ones the SDK owns, whatever their casing.
+     *
+     * @return array<string, string>
+     */
+    private function headers(Request $request): array
+    {
+        return array_filter(
+            $request->headers(),
+            static fn (string $name): bool => !\in_array(strtolower($name), ['authorization', 'accept', 'content-type'], true),
+            ARRAY_FILTER_USE_KEY,
+        );
     }
 
     /** @return null|array<array-key, mixed> */
