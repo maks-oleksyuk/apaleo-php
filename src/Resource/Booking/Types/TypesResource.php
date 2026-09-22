@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Enum\AllowedValueType;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Requests\ListAllowedValuesRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Requests\ListSourcesRequest;
+use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class TypesResource
 {
@@ -20,7 +21,7 @@ final readonly class TypesResource
     {
         $data = $this->pipeline->send(new ListSourcesRequest());
 
-        return $this->stringListOrEmpty($data, 'sources');
+        return ResponseData::stringListOrEmpty($data, 'sources');
     }
 
     /**
@@ -36,18 +37,6 @@ final readonly class TypesResource
     ): array {
         $data = $this->pipeline->send(new ListAllowedValuesRequest($type, $countryCode, $textSearch, $pageNumber, $pageSize));
 
-        return $this->stringListOrEmpty($data, 'allowedValues');
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     *
-     * @return list<string>
-     */
-    private function stringListOrEmpty(array $data, string $key): array
-    {
-        $value = $data[$key] ?? null;
-
-        return \is_array($value) ? array_values(array_filter($value, \is_string(...))) : [];
+        return ResponseData::stringListOrEmpty($data, 'allowedValues');
     }
 }

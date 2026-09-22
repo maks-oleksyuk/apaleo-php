@@ -158,6 +158,21 @@ final class ResponseData
     }
 
     /**
+     * Tolerant string list: missing/null/non-array becomes [], non-string items are dropped.
+     * Use for a field apaleo omits entirely rather than sending an empty array.
+     *
+     * @param array<string, mixed> $data
+     *
+     * @return list<string>
+     */
+    public static function stringListOrEmpty(array $data, string $key): array
+    {
+        $value = $data[$key] ?? null;
+
+        return \is_array($value) ? array_values(array_filter($value, \is_string(...))) : [];
+    }
+
+    /**
      * Extracts a nested object field as an array; missing or malformed becomes [].
      *
      * @param array<string, mixed> $data

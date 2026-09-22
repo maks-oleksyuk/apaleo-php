@@ -26,7 +26,7 @@ final readonly class TravelPurposeEntry
             purpose: null !== $purpose ? TravelPurpose::fromApi($purpose) : null,
             number: ResponseData::int($data, 'number'),
             percent: ResponseData::float($data, 'percent'),
-            reservationIds: ResponseData::stringList($data, 'reservationIds'),
+            reservationIds: ResponseData::stringListOrEmpty($data, 'reservationIds'),
         );
     }
 }

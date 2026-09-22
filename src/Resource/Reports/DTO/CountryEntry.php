@@ -23,7 +23,7 @@ final readonly class CountryEntry
             countryCode: ResponseData::nullableString($data, 'countryCode'),
             number: ResponseData::int($data, 'number'),
             percent: ResponseData::float($data, 'percent'),
-            reservationIds: ResponseData::stringList($data, 'reservationIds'),
+            reservationIds: ResponseData::stringListOrEmpty($data, 'reservationIds'),
         );
     }
 }
