@@ -8,10 +8,10 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Group\GroupFilter;
 
-final class CountGroupsRequest extends Request
+final readonly class CountGroupsRequest extends Request
 {
     public function __construct(
-        private readonly GroupFilter $filter,
+        private GroupFilter $filter,
     ) {}
 
     public function method(): Method

@@ -7,12 +7,12 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Group\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class GetGroupRequest extends Request
+final readonly class GetGroupRequest extends Request
 {
     /** @param list<string> $expand */
     public function __construct(
-        private readonly string $groupId,
-        private readonly array $expand = [],
+        private string $groupId,
+        private array $expand = [],
     ) {}
 
     public function method(): Method

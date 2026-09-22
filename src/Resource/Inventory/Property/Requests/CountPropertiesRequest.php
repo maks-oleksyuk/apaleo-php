@@ -7,7 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Property\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class CountPropertiesRequest extends Request
+final readonly class CountPropertiesRequest extends Request
 {
     public function method(): Method
     {

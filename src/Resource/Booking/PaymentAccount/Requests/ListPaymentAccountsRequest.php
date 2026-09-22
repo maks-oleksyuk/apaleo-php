@@ -8,18 +8,18 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\PaymentAccountFilter;
 
-final class ListPaymentAccountsRequest extends Request
+final readonly class ListPaymentAccountsRequest extends Request
 {
     /**
      * @param list<string> $sort
      * @param list<string> $expand
      */
     public function __construct(
-        private readonly PaymentAccountFilter $filter,
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
-        private readonly array $sort = [],
-        private readonly array $expand = [],
+        private PaymentAccountFilter $filter,
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
+        private array $sort = [],
+        private array $expand = [],
     ) {}
 
     public function method(): Method

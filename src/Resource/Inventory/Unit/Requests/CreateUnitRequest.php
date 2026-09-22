@@ -8,10 +8,10 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\CreateUnit;
 
-final class CreateUnitRequest extends Request
+final readonly class CreateUnitRequest extends Request
 {
     public function __construct(
-        private readonly CreateUnit $data,
+        private CreateUnit $data,
     ) {}
 
     public function method(): Method

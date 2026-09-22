@@ -7,11 +7,11 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class CheckInRequest extends Request
+final readonly class CheckInRequest extends Request
 {
     public function __construct(
-        private readonly string $reservationId,
-        private readonly ?bool $withCityTax = null,
+        private string $reservationId,
+        private ?bool $withCityTax = null,
     ) {}
 
     public function method(): Method

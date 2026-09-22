@@ -8,13 +8,13 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\OptionalCutoffBehavior;
 
-final class SetBlockToOptionalRequest extends Request
+final readonly class SetBlockToOptionalRequest extends Request
 {
     public function __construct(
-        private readonly string $blockId,
-        private readonly string $optionalCutoff,
-        private readonly bool $isOptionalDeductingInventory,
-        private readonly OptionalCutoffBehavior $optionalCutoffBehavior,
+        private string $blockId,
+        private string $optionalCutoff,
+        private bool $isOptionalDeductingInventory,
+        private OptionalCutoffBehavior $optionalCutoffBehavior,
     ) {}
 
     public function method(): Method

@@ -8,10 +8,10 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Block\BlockFilter;
 
-final class CountBlocksRequest extends Request
+final readonly class CountBlocksRequest extends Request
 {
     public function __construct(
-        private readonly BlockFilter $filter,
+        private BlockFilter $filter,
     ) {}
 
     public function method(): Method

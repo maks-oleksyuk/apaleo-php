@@ -9,15 +9,15 @@ use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\DTO\PaymentAccountDetails;
 use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\DTO\PaymentAccountTarget;
 
-final class CreatePaymentAccountByStoredPaymentMethodRequest extends Request
+final readonly class CreatePaymentAccountByStoredPaymentMethodRequest extends Request
 {
     /** @param string $storedPaymentMethodId a specific stored method's id, or 'LATEST' for the payer's most recent one */
     public function __construct(
-        private readonly PaymentAccountTarget $target,
-        private readonly string $payerReference,
-        private readonly string $storedPaymentMethodId,
-        private readonly ?bool $isVirtual = null,
-        private readonly ?PaymentAccountDetails $accountDetails = null,
+        private PaymentAccountTarget $target,
+        private string $payerReference,
+        private string $storedPaymentMethodId,
+        private ?bool $isVirtual = null,
+        private ?PaymentAccountDetails $accountDetails = null,
     ) {}
 
     public function method(): Method

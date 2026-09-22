@@ -7,14 +7,14 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class AssignSpecificUnitRequest extends Request
+final readonly class AssignSpecificUnitRequest extends Request
 {
     public function __construct(
-        private readonly string $reservationId,
-        private readonly string $unitId,
-        private readonly ?\DateTimeImmutable $from = null,
-        private readonly ?\DateTimeImmutable $to = null,
-        private readonly ?bool $lockUnit = null,
+        private string $reservationId,
+        private string $unitId,
+        private ?\DateTimeImmutable $from = null,
+        private ?\DateTimeImmutable $to = null,
+        private ?bool $lockUnit = null,
     ) {}
 
     public function method(): Method

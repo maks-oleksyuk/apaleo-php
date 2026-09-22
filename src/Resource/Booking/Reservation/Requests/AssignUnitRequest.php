@@ -8,12 +8,12 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
 /** Auto-assigns a unit for the whole reservation stay; see {@see AssignSpecificUnitRequest} to pick the unit yourself. */
-final class AssignUnitRequest extends Request
+final readonly class AssignUnitRequest extends Request
 {
     /** @param list<string> $unitConditions allowed: Clean, CleanToBeInspected, Dirty */
     public function __construct(
-        private readonly string $reservationId,
-        private readonly array $unitConditions = [],
+        private string $reservationId,
+        private array $unitConditions = [],
     ) {}
 
     public function method(): Method

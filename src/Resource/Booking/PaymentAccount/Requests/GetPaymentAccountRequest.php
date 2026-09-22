@@ -7,12 +7,12 @@ namespace Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class GetPaymentAccountRequest extends Request
+final readonly class GetPaymentAccountRequest extends Request
 {
     /** @param list<string> $expand */
     public function __construct(
-        private readonly string $paymentAccountId,
-        private readonly array $expand = [],
+        private string $paymentAccountId,
+        private array $expand = [],
     ) {}
 
     public function method(): Method

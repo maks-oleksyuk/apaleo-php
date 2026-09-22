@@ -8,18 +8,18 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\AuthorizationFilter;
 
-final class ListAuthorizationsRequest extends Request
+final readonly class ListAuthorizationsRequest extends Request
 {
     /**
      * @param list<string> $sort
      * @param list<string> $expand
      */
     public function __construct(
-        private readonly AuthorizationFilter $filter,
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
-        private readonly array $sort = [],
-        private readonly array $expand = [],
+        private AuthorizationFilter $filter,
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
+        private array $sort = [],
+        private array $expand = [],
     ) {}
 
     public function method(): Method

@@ -9,16 +9,16 @@ use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 
-final class CreateAuthorizationByLinkRequest extends Request
+final readonly class CreateAuthorizationByLinkRequest extends Request
 {
     public function __construct(
-        private readonly AuthorizationTarget $target,
-        private readonly MonetaryValue $amount,
-        private readonly string $countryCode,
-        private readonly \DateTimeImmutable $expiresAt,
-        private readonly ?string $description = null,
-        private readonly ?string $payerEmail = null,
-        private readonly ?string $returnUrl = null,
+        private AuthorizationTarget $target,
+        private MonetaryValue $amount,
+        private string $countryCode,
+        private \DateTimeImmutable $expiresAt,
+        private ?string $description = null,
+        private ?string $payerEmail = null,
+        private ?string $returnUrl = null,
     ) {}
 
     public function method(): Method

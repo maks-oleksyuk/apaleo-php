@@ -7,10 +7,10 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Property\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class GetPropertyRequest extends Request
+final readonly class GetPropertyRequest extends Request
 {
     public function __construct(
-        private readonly string $propertyId,
+        private string $propertyId,
     ) {}
 
     public function method(): Method

@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Http;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 
-abstract class Request
+abstract readonly class Request
 {
     abstract public function method(): Method;
 

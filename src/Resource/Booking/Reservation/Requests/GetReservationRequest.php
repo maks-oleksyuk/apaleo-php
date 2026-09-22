@@ -7,12 +7,12 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class GetReservationRequest extends Request
+final readonly class GetReservationRequest extends Request
 {
     /** @param list<string> $expand */
     public function __construct(
-        private readonly string $reservationId,
-        private readonly array $expand = [],
+        private string $reservationId,
+        private array $expand = [],
     ) {}
 
     public function method(): Method

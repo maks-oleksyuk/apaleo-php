@@ -7,7 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Types\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class ListSourcesRequest extends Request
+final readonly class ListSourcesRequest extends Request
 {
     public function method(): Method
     {

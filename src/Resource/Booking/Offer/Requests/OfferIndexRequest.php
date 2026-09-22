@@ -8,15 +8,15 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 
-final class OfferIndexRequest extends Request
+final readonly class OfferIndexRequest extends Request
 {
     public function __construct(
-        private readonly string $ratePlanId,
-        private readonly \DateTimeImmutable $from,
-        private readonly \DateTimeImmutable $to,
-        private readonly ChannelCode $channelCode,
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
+        private string $ratePlanId,
+        private \DateTimeImmutable $from,
+        private \DateTimeImmutable $to,
+        private ChannelCode $channelCode,
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
     ) {}
 
     public function method(): Method

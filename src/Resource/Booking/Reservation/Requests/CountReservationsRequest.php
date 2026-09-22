@@ -8,10 +8,10 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\ReservationFilter;
 
-final class CountReservationsRequest extends Request
+final readonly class CountReservationsRequest extends Request
 {
     public function __construct(
-        private readonly ReservationFilter $filter,
+        private ReservationFilter $filter,
     ) {}
 
     public function method(): Method

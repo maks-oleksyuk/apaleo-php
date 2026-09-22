@@ -8,12 +8,12 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\BookReservationService;
 
-final class BookReservationServiceRequest extends Request
+final readonly class BookReservationServiceRequest extends Request
 {
     public function __construct(
-        private readonly string $reservationId,
-        private readonly BookReservationService $service,
-        private readonly bool $force = false,
+        private string $reservationId,
+        private BookReservationService $service,
+        private bool $force = false,
     ) {}
 
     public function method(): Method

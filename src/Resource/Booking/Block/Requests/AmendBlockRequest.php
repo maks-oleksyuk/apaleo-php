@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Block\DTO\ReplaceBlock;
 
-final class AmendBlockRequest extends Request
+final readonly class AmendBlockRequest extends Request
 {
     public function __construct(
-        private readonly string $blockId,
-        private readonly ReplaceBlock $replacement,
+        private string $blockId,
+        private ReplaceBlock $replacement,
     ) {}
 
     public function method(): Method

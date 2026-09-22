@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
 /** Shared shape for the block-actions endpoints that take no body: cancel, confirm, release, wash. */
-final class BlockSimpleActionRequest extends Request
+final readonly class BlockSimpleActionRequest extends Request
 {
     public function __construct(
-        private readonly string $blockId,
-        private readonly string $action,
+        private string $blockId,
+        private string $action,
     ) {}
 
     public function method(): Method

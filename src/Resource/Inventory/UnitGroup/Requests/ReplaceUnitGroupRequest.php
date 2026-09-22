@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\ReplaceUnitGroup;
 
-final class ReplaceUnitGroupRequest extends Request
+final readonly class ReplaceUnitGroupRequest extends Request
 {
     public function __construct(
-        private readonly string $unitGroupId,
-        private readonly ReplaceUnitGroup $data,
+        private string $unitGroupId,
+        private ReplaceUnitGroup $data,
     ) {}
 
     public function method(): Method

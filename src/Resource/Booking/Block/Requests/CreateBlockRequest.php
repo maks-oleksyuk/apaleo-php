@@ -8,10 +8,10 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Block\DTO\CreateBlock;
 
-final class CreateBlockRequest extends Request
+final readonly class CreateBlockRequest extends Request
 {
     public function __construct(
-        private readonly CreateBlock $block,
+        private CreateBlock $block,
     ) {}
 
     public function method(): Method

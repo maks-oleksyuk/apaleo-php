@@ -7,11 +7,11 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class ListUnitAttributesRequest extends Request
+final readonly class ListUnitAttributesRequest extends Request
 {
     public function __construct(
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
     ) {}
 
     public function method(): Method

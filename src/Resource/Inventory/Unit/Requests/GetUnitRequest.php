@@ -7,10 +7,10 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class GetUnitRequest extends Request
+final readonly class GetUnitRequest extends Request
 {
     public function __construct(
-        private readonly string $unitId,
+        private string $unitId,
     ) {}
 
     public function method(): Method

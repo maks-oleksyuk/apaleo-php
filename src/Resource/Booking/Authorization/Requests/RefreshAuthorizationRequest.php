@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 
-final class RefreshAuthorizationRequest extends Request
+final readonly class RefreshAuthorizationRequest extends Request
 {
     public function __construct(
-        private readonly string $authorizationId,
-        private readonly MonetaryValue $amount,
+        private string $authorizationId,
+        private MonetaryValue $amount,
     ) {}
 
     public function method(): Method

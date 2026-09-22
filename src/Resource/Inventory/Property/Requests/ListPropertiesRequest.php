@@ -8,7 +8,7 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 
-final class ListPropertiesRequest extends Request
+final readonly class ListPropertiesRequest extends Request
 {
     /**
      * @param list<PropertyStatus> $status
@@ -16,12 +16,12 @@ final class ListPropertiesRequest extends Request
      * @param list<string> $expand
      */
     public function __construct(
-        private readonly array $status = [],
-        private readonly ?bool $includeArchived = null,
-        private readonly array $countryCode = [],
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
-        private readonly array $expand = [],
+        private array $status = [],
+        private ?bool $includeArchived = null,
+        private array $countryCode = [],
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
+        private array $expand = [],
     ) {}
 
     public function method(): Method

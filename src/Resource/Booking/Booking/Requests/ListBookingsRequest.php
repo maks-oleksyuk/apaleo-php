@@ -8,7 +8,7 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 
-final class ListBookingsRequest extends Request
+final readonly class ListBookingsRequest extends Request
 {
     /**
      * @param list<string>      $bookingIds
@@ -16,16 +16,16 @@ final class ListBookingsRequest extends Request
      * @param list<string>      $expand
      */
     public function __construct(
-        private readonly ?string $reservationId = null,
-        private readonly ?string $groupId = null,
-        private readonly array $bookingIds = [],
-        private readonly array $channelCode = [],
-        private readonly ?string $externalCode = null,
-        private readonly ?string $textSearch = null,
-        private readonly ?bool $hasActivePaymentAccount = null,
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
-        private readonly array $expand = [],
+        private ?string $reservationId = null,
+        private ?string $groupId = null,
+        private array $bookingIds = [],
+        private array $channelCode = [],
+        private ?string $externalCode = null,
+        private ?string $textSearch = null,
+        private ?bool $hasActivePaymentAccount = null,
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
+        private array $expand = [],
     ) {}
 
     public function method(): Method

@@ -10,12 +10,12 @@ use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 
 /** Does not expose the deprecated `accountOwner` field; pass $paymentAccountId instead (required from 2026-02-15 onward). */
-final class CreateAuthorizationByPaymentAccountRequest extends Request
+final readonly class CreateAuthorizationByPaymentAccountRequest extends Request
 {
     public function __construct(
-        private readonly AuthorizationTarget $target,
-        private readonly MonetaryValue $amount,
-        private readonly ?string $paymentAccountId = null,
+        private AuthorizationTarget $target,
+        private MonetaryValue $amount,
+        private ?string $paymentAccountId = null,
     ) {}
 
     public function method(): Method

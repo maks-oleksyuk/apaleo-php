@@ -7,10 +7,10 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class DeleteUnitAttributeRequest extends Request
+final readonly class DeleteUnitAttributeRequest extends Request
 {
     public function __construct(
-        private readonly string $unitAttributeId,
+        private string $unitAttributeId,
     ) {}
 
     public function method(): Method

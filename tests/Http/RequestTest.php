@@ -17,7 +17,7 @@ final class RequestTest extends TestCase
 {
     public function testMethodReturnsDeclaredValue(): void
     {
-        $request = new class extends Request {
+        $request = new readonly class extends Request {
             public function method(): Method
             {
                 return Method::POST;

@@ -8,18 +8,18 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 
-final class ListUnitGroupsRequest extends Request
+final readonly class ListUnitGroupsRequest extends Request
 {
     /**
      * @param list<UnitGroupType> $unitGroupTypes
      * @param list<string> $expand supported: property, connectedUnitGroups
      */
     public function __construct(
-        private readonly ?string $propertyId = null,
-        private readonly array $unitGroupTypes = [],
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
-        private readonly array $expand = [],
+        private ?string $propertyId = null,
+        private array $unitGroupTypes = [],
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
+        private array $expand = [],
     ) {}
 
     public function method(): Method

@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
 /** Fired by apaleo's own scheduler when an optional block's cutoff is reached; exposed here mainly for completeness/testing. */
-final class CutoffOptionalBlockRequest extends Request
+final readonly class CutoffOptionalBlockRequest extends Request
 {
     public function __construct(
-        private readonly string $blockId,
-        private readonly \DateTimeImmutable $expectedOptionalCutoffUtc,
+        private string $blockId,
+        private \DateTimeImmutable $expectedOptionalCutoffUtc,
     ) {}
 
     public function method(): Method

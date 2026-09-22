@@ -8,12 +8,12 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Group\DTO\PickUpReservation;
 
-final class PickUpReservationsRequest extends Request
+final readonly class PickUpReservationsRequest extends Request
 {
     /** @param list<PickUpReservation> $reservations */
     public function __construct(
-        private readonly string $groupId,
-        private readonly array $reservations,
+        private string $groupId,
+        private array $reservations,
     ) {}
 
     public function method(): Method

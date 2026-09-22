@@ -7,7 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Types\Country\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class ListCountriesRequest extends Request
+final readonly class ListCountriesRequest extends Request
 {
     public function method(): Method
     {

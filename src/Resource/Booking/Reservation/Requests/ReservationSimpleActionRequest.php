@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
 /** Shared shape for the reservation-actions endpoints that take no query params or body: checkout, cancel, noshow, revert-checkin, add-city-tax, remove-city-tax, lock-unit, unlock-unit, unassign-units. */
-final class ReservationSimpleActionRequest extends Request
+final readonly class ReservationSimpleActionRequest extends Request
 {
     public function __construct(
-        private readonly string $reservationId,
-        private readonly string $action,
+        private string $reservationId,
+        private string $action,
     ) {}
 
     public function method(): Method

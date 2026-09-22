@@ -9,12 +9,12 @@ use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 
-final class CreateAuthorizationByTerminalRequest extends Request
+final readonly class CreateAuthorizationByTerminalRequest extends Request
 {
     public function __construct(
-        private readonly AuthorizationTarget $target,
-        private readonly MonetaryValue $amount,
-        private readonly string $terminalId,
+        private AuthorizationTarget $target,
+        private MonetaryValue $amount,
+        private string $terminalId,
     ) {}
 
     public function method(): Method

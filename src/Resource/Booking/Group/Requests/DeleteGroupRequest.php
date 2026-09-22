@@ -7,10 +7,10 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Group\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class DeleteGroupRequest extends Request
+final readonly class DeleteGroupRequest extends Request
 {
     public function __construct(
-        private readonly string $groupId,
+        private string $groupId,
     ) {}
 
     public function method(): Method

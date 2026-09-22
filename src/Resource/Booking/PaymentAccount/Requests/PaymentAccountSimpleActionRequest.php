@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
 /** Shared shape for the payment-account-actions endpoints that take no body: cancel, expire-payment-link. */
-final class PaymentAccountSimpleActionRequest extends Request
+final readonly class PaymentAccountSimpleActionRequest extends Request
 {
     public function __construct(
-        private readonly string $paymentAccountId,
-        private readonly string $action,
+        private string $paymentAccountId,
+        private string $action,
     ) {}
 
     public function method(): Method

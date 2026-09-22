@@ -8,14 +8,14 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Enum\AllowedValueType;
 
-final class ListAllowedValuesRequest extends Request
+final readonly class ListAllowedValuesRequest extends Request
 {
     public function __construct(
-        private readonly AllowedValueType $type,
-        private readonly string $countryCode,
-        private readonly ?string $textSearch = null,
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
+        private AllowedValueType $type,
+        private string $countryCode,
+        private ?string $textSearch = null,
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
     ) {}
 
     public function method(): Method

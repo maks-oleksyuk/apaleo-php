@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class UpdateBlockRequest extends Request
+final readonly class UpdateBlockRequest extends Request
 {
     public function __construct(
-        private readonly string $blockId,
-        private readonly JsonPatch $patch,
+        private string $blockId,
+        private JsonPatch $patch,
     ) {}
 
     public function method(): Method

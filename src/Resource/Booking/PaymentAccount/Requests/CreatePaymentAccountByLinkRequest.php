@@ -8,16 +8,16 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\DTO\PaymentAccountTarget;
 
-final class CreatePaymentAccountByLinkRequest extends Request
+final readonly class CreatePaymentAccountByLinkRequest extends Request
 {
     public function __construct(
-        private readonly PaymentAccountTarget $target,
-        private readonly string $propertyId,
-        private readonly string $countryCode,
-        private readonly \DateTimeImmutable $expiresAt,
-        private readonly ?string $description = null,
-        private readonly ?string $payerEmail = null,
-        private readonly ?string $returnUrl = null,
+        private PaymentAccountTarget $target,
+        private string $propertyId,
+        private string $countryCode,
+        private \DateTimeImmutable $expiresAt,
+        private ?string $description = null,
+        private ?string $payerEmail = null,
+        private ?string $returnUrl = null,
     ) {}
 
     public function method(): Method

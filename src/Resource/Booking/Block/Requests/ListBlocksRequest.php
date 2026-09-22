@@ -8,14 +8,14 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Block\BlockFilter;
 
-final class ListBlocksRequest extends Request
+final readonly class ListBlocksRequest extends Request
 {
     /** @param list<string> $expand */
     public function __construct(
-        private readonly BlockFilter $filter,
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
-        private readonly array $expand = [],
+        private BlockFilter $filter,
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
+        private array $expand = [],
     ) {}
 
     public function method(): Method

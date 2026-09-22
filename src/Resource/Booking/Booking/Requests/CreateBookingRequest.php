@@ -8,15 +8,15 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\CreateBooking;
 
-final class CreateBookingRequest extends Request
+final readonly class CreateBookingRequest extends Request
 {
     /**
      * @param ?string $idempotencyKey lets a retried request be recognized and not double-book; strongly recommended
      */
     public function __construct(
-        private readonly CreateBooking $booking,
-        private readonly bool $force = false,
-        private readonly ?string $idempotencyKey = null,
+        private CreateBooking $booking,
+        private bool $force = false,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method

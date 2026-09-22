@@ -8,14 +8,14 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class BulkUpdateUnitsRequest extends Request
+final readonly class BulkUpdateUnitsRequest extends Request
 {
     /**
      * @param list<string> $unitIds
      */
     public function __construct(
-        private readonly array $unitIds,
-        private readonly JsonPatch $patch,
+        private array $unitIds,
+        private JsonPatch $patch,
     ) {}
 
     public function method(): Method

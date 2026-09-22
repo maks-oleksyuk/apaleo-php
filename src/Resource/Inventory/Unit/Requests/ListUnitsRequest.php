@@ -10,7 +10,7 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitArchiveFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 
-final class ListUnitsRequest extends Request
+final readonly class ListUnitsRequest extends Request
 {
     /**
      * @param list<string> $unitGroupIds
@@ -18,18 +18,18 @@ final class ListUnitsRequest extends Request
      * @param list<string> $expand supported: property, unitGroup, connectedUnits, actions
      */
     public function __construct(
-        private readonly ?string $propertyId = null,
-        private readonly ?string $unitGroupId = null,
-        private readonly array $unitGroupIds = [],
-        private readonly array $unitAttributeIds = [],
-        private readonly ?bool $isOccupied = null,
-        private readonly ?UnitMaintenanceType $maintenanceType = null,
-        private readonly ?UnitCondition $condition = null,
-        private readonly ?string $textSearch = null,
-        private readonly ?UnitArchiveFilter $status = null,
-        private readonly ?int $pageNumber = null,
-        private readonly ?int $pageSize = null,
-        private readonly array $expand = [],
+        private ?string $propertyId = null,
+        private ?string $unitGroupId = null,
+        private array $unitGroupIds = [],
+        private array $unitAttributeIds = [],
+        private ?bool $isOccupied = null,
+        private ?UnitMaintenanceType $maintenanceType = null,
+        private ?UnitCondition $condition = null,
+        private ?string $textSearch = null,
+        private ?UnitArchiveFilter $status = null,
+        private ?int $pageNumber = null,
+        private ?int $pageSize = null,
+        private array $expand = [],
     ) {}
 
     public function method(): Method

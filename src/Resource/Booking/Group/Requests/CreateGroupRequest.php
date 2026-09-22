@@ -8,10 +8,10 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Group\DTO\CreateGroup;
 
-final class CreateGroupRequest extends Request
+final readonly class CreateGroupRequest extends Request
 {
     public function __construct(
-        private readonly CreateGroup $group,
+        private CreateGroup $group,
     ) {}
 
     public function method(): Method

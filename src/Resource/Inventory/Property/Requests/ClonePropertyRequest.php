@@ -8,11 +8,11 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\CreateProperty;
 
-final class ClonePropertyRequest extends Request
+final readonly class ClonePropertyRequest extends Request
 {
     public function __construct(
-        private readonly string $propertyId,
-        private readonly CreateProperty $overrides,
+        private string $propertyId,
+        private CreateProperty $overrides,
     ) {}
 
     public function method(): Method

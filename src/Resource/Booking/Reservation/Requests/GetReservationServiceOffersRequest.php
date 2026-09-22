@@ -8,13 +8,13 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 
-final class GetReservationServiceOffersRequest extends Request
+final readonly class GetReservationServiceOffersRequest extends Request
 {
     public function __construct(
-        private readonly string $reservationId,
-        private readonly ?ChannelCode $channelCode = null,
-        private readonly ?bool $onlyDefaultDates = null,
-        private readonly ?bool $includeUnavailable = null,
+        private string $reservationId,
+        private ?ChannelCode $channelCode = null,
+        private ?bool $onlyDefaultDates = null,
+        private ?bool $includeUnavailable = null,
     ) {}
 
     public function method(): Method

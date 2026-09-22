@@ -8,18 +8,18 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 
-final class GetServiceOffersRequest extends Request
+final readonly class GetServiceOffersRequest extends Request
 {
     /** @param list<int> $childrenAges */
     public function __construct(
-        private readonly string $ratePlanId,
-        private readonly string $arrival,
-        private readonly string $departure,
-        private readonly int $adults,
-        private readonly ?ChannelCode $channelCode = null,
-        private readonly array $childrenAges = [],
-        private readonly ?bool $onlyDefaultDates = null,
-        private readonly ?bool $includeUnavailable = null,
+        private string $ratePlanId,
+        private string $arrival,
+        private string $departure,
+        private int $adults,
+        private ?ChannelCode $channelCode = null,
+        private array $childrenAges = [],
+        private ?bool $onlyDefaultDates = null,
+        private ?bool $includeUnavailable = null,
     ) {}
 
     public function method(): Method

@@ -8,15 +8,15 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\CreateReservation;
 
-final class AddReservationsRequest extends Request
+final readonly class AddReservationsRequest extends Request
 {
     /** @param list<CreateReservation> $reservations */
     public function __construct(
-        private readonly string $bookingId,
-        private readonly array $reservations,
-        private readonly bool $force = false,
-        private readonly ?string $transactionReference = null,
-        private readonly ?string $idempotencyKey = null,
+        private string $bookingId,
+        private array $reservations,
+        private bool $force = false,
+        private ?string $transactionReference = null,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method

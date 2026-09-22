@@ -8,14 +8,14 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 
-final class CountUnitGroupsRequest extends Request
+final readonly class CountUnitGroupsRequest extends Request
 {
     /**
      * @param list<UnitGroupType> $unitGroupTypes
      */
     public function __construct(
-        private readonly ?string $propertyId = null,
-        private readonly array $unitGroupTypes = [],
+        private ?string $propertyId = null,
+        private array $unitGroupTypes = [],
     ) {}
 
     public function method(): Method

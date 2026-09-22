@@ -7,10 +7,10 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Block\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class BlockExistsRequest extends Request
+final readonly class BlockExistsRequest extends Request
 {
     public function __construct(
-        private readonly string $blockId,
+        private string $blockId,
     ) {}
 
     public function method(): Method

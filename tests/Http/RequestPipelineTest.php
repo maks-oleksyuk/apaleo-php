@@ -178,11 +178,11 @@ final class RequestPipelineTest extends TestCase
      */
     private function requestWithQuery(array $query): Request
     {
-        return new class($query) extends Request {
+        return new readonly class($query) extends Request {
             /**
              * @param array<string, mixed> $query
              */
-            public function __construct(private readonly array $query) {}
+            public function __construct(private array $query) {}
 
             public function method(): Method
             {

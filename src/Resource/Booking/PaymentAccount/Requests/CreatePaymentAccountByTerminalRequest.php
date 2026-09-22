@@ -8,12 +8,12 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\DTO\PaymentAccountTarget;
 
-final class CreatePaymentAccountByTerminalRequest extends Request
+final readonly class CreatePaymentAccountByTerminalRequest extends Request
 {
     public function __construct(
-        private readonly PaymentAccountTarget $target,
-        private readonly string $propertyId,
-        private readonly string $terminalId,
+        private PaymentAccountTarget $target,
+        private string $propertyId,
+        private string $terminalId,
     ) {}
 
     public function method(): Method

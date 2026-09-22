@@ -8,10 +8,10 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\CreateProperty;
 
-final class CreatePropertyRequest extends Request
+final readonly class CreatePropertyRequest extends Request
 {
     public function __construct(
-        private readonly CreateProperty $data,
+        private CreateProperty $data,
     ) {}
 
     public function method(): Method

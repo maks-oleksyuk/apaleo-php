@@ -163,11 +163,11 @@ final class RequestPipelineSendManyTest extends TestCase
      */
     private function requestTo(string $endpoint, array $query = []): Request
     {
-        return new class($endpoint, $query) extends Request {
+        return new readonly class($endpoint, $query) extends Request {
             /**
              * @param array<string, mixed> $query
              */
-            public function __construct(private readonly string $endpoint, private readonly array $query) {}
+            public function __construct(private string $endpoint, private array $query) {}
 
             public function method(): Method
             {

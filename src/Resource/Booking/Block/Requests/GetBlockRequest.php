@@ -7,12 +7,12 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Block\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 
-final class GetBlockRequest extends Request
+final readonly class GetBlockRequest extends Request
 {
     /** @param list<string> $expand */
     public function __construct(
-        private readonly string $blockId,
-        private readonly array $expand = [],
+        private string $blockId,
+        private array $expand = [],
     ) {}
 
     public function method(): Method
