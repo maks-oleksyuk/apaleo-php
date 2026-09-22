@@ -2,9 +2,11 @@ name: '🔄 CI'
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -15,6 +17,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  cleanup:
+    name: '🧹 Clean up GitHub repo'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # required by Mattraks/delete-workflow-runs to delete old workflow runs
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: '🗑 Delete workflow runs'
+        uses: Mattraks/delete-workflow-runs@b3018382ca039b53d238908238bd35d1fb14f8ee # v2.1.0
+        with:
+          retain_days: 7
+          keep_minimum_runs: 1
+          delete_workflow_pattern: ci.yml
+
   lint:
     name: '🪄 Lint | ${{ matrix.command.name }}'
     runs-on: ubuntu-latest
@@ -35,13 +52,15 @@ jobs:
           persist-credentials: false
 
       - name: '⚙️ Prepare environment'
-        uses: $/.github/actions/setup
+        uses: ./.github/actions/setup # zizmor: ignore[self-repository] -- conflicts with .gitattributes export-ignore
 
       - name: '${{ matrix.command.name }} validate'
-        run: task ${{ matrix.command.command }}
+        run: eval "task ${COMMAND}"
+        env:
+          COMMAND: ${{ matrix.command.command }}
 
   test:
-    name: '♻️ Test | PHP ${{ matrix.php }} | ${{ matrix.deps }} deps'
+    name: "♻️ Test | PHP ${{ matrix.php }} ${{ matrix.deps == 'highest' && '↑' || '↓' }}"
     runs-on: ubuntu-latest
 
     strategy:
@@ -57,7 +76,7 @@ jobs:
           persist-credentials: false
 
       - name: '⚙️ Prepare environment'
-        uses: $/.github/actions/setup
+        uses: ./.github/actions/setup # zizmor: ignore[self-repository] -- conflicts with .gitattributes export-ignore
         with:
           php: ${{ matrix.php }}
           prefer-lowest: ${{ matrix.deps == 'lowest' }}
