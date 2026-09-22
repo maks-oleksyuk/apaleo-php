@@ -15,6 +15,7 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\AvailabilityResource;
 use Oleksyuk\Apaleo\Resource\Booking\BookingResource;
 use Oleksyuk\Apaleo\Resource\Inventory\InventoryResource;
+use Oleksyuk\Apaleo\Resource\Reports\ReportsResource;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -49,6 +50,11 @@ final readonly class ApaleoClient
     public function availability(): AvailabilityResource
     {
         return new AvailabilityResource($this->pipeline);
+    }
+
+    public function reports(): ReportsResource
+    {
+        return new ReportsResource($this->pipeline);
     }
 
     /**
