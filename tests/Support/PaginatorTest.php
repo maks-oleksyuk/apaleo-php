@@ -61,4 +61,17 @@ final class PaginatorTest extends TestCase
         self::assertSame([], $items);
         self::assertSame(1, $calls);
     }
+
+    public function testMissingCountKeepsPagingUntilAnEmptyPage(): void
+    {
+        $pages = [
+            1 => new PaginatedResult(items: ['a', 'b'], totalCount: 0),
+            2 => new PaginatedResult(items: ['c'], totalCount: 0),
+            3 => new PaginatedResult(items: [], totalCount: 0),
+        ];
+
+        $items = iterator_to_array(Paginator::all(static fn (int $page): PaginatedResult => $pages[$page]), false);
+
+        self::assertSame(['a', 'b', 'c'], $items);
+    }
 }

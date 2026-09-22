@@ -31,6 +31,9 @@ final class Paginator
 
             $seen += \count($page);
             ++$pageNumber;
-        } while (\count($page) > 0 && $seen < $page->totalCount);
+            // totalCount 0 alongside items means the response carried no usable count: keep
+            // paging until an empty page instead of silently stopping after the first one.
+            $countKnown = $page->totalCount > 0;
+        } while (\count($page) > 0 && (!$countKnown || $seen < $page->totalCount));
     }
 }
