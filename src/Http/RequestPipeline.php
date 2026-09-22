@@ -19,6 +19,8 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface as SymfonyHttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyResponseInterface;
 
 /** Sends a resource request: adds auth, executes it, maps errors, decodes JSON. */
 final readonly class RequestPipeline
@@ -33,6 +35,7 @@ final readonly class RequestPipeline
         private StreamFactoryInterface $streamFactory,
         private TokenProvider $tokenProvider,
         string $baseUri = self::DEFAULT_BASE_URI,
+        private ?SymfonyHttpClientInterface $asyncHttpClient = null,
     ) {
         $this->baseUri = rtrim($baseUri, '/');
     }
@@ -48,8 +51,91 @@ final readonly class RequestPipeline
             $response = $this->execute($apaleoRequest, $this->tokenProvider->getToken(forceRefresh: true));
         }
 
-        $status = $response->getStatusCode();
-        $rawBody = (string) $response->getBody();
+        return $this->handleResponse($response->getStatusCode(), (string) $response->getBody(), $response->getHeaderLine('Retry-After'));
+    }
+
+    /**
+     * Sends several requests concurrently via $asyncHttpClient, if one was given; otherwise falls
+     * back to send()-ing them one by one. $httpClient is never used here: a PSR-18-wrapped
+     * Symfony client can't be unwrapped back into its concurrency-capable form.
+     *
+     * @param list<Request> $requests
+     *
+     * @return list<array<string, mixed>> decoded response bodies, in the same order as $requests
+     */
+    public function sendMany(array $requests): array
+    {
+        if ($requests === []) {
+            return [];
+        }
+
+        $asyncHttpClient = $this->asyncHttpClient;
+        if (!$asyncHttpClient instanceof SymfonyHttpClientInterface) {
+            return array_map($this->send(...), $requests);
+        }
+
+        $token = $this->tokenProvider->getToken();
+        $responses = array_map(fn (Request $request): SymfonyResponseInterface => $this->executeAsync($request, $asyncHttpClient, $token), $requests);
+
+        // Symfony multiplexes pending responses together the first time one is read, so this
+        // loop resolves all of them concurrently despite reading them one at a time.
+        $retryIndexes = [];
+        foreach ($responses as $i => $response) {
+            if ($this->statusCode($response) === 401) {
+                $retryIndexes[] = $i;
+            }
+        }
+
+        if ($retryIndexes !== []) {
+            $freshToken = $this->tokenProvider->getToken(forceRefresh: true);
+            $retried = array_map(fn (int $i): SymfonyResponseInterface => $this->executeAsync($requests[$i], $asyncHttpClient, $freshToken), $retryIndexes);
+            foreach ($retryIndexes as $j => $i) {
+                $responses[$i] = $retried[$j];
+            }
+        }
+
+        return array_values(array_map(
+            fn (SymfonyResponseInterface $response): array => $this->handleResponse(
+                $this->statusCode($response),
+                $this->content($response),
+                $this->headerLine($response, 'retry-after'),
+            ),
+            $responses,
+        ));
+    }
+
+    private function statusCode(SymfonyResponseInterface $response): int
+    {
+        try {
+            return $response->getStatusCode();
+        } catch (\Throwable $throwable) {
+            throw new ApaleoTransportException('Failed to reach Apaleo API: '.$throwable->getMessage(), $throwable->getCode(), previous: $throwable);
+        }
+    }
+
+    private function content(SymfonyResponseInterface $response): string
+    {
+        try {
+            return $response->getContent(false);
+        } catch (\Throwable $throwable) {
+            throw new ApaleoTransportException('Failed to reach Apaleo API: '.$throwable->getMessage(), $throwable->getCode(), previous: $throwable);
+        }
+    }
+
+    private function headerLine(SymfonyResponseInterface $response, string $name): string
+    {
+        try {
+            return $response->getHeaders(false)[$name][0] ?? '';
+        } catch (\Throwable $throwable) {
+            throw new ApaleoTransportException('Failed to reach Apaleo API: '.$throwable->getMessage(), $throwable->getCode(), previous: $throwable);
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function handleResponse(int $status, string $rawBody, string $retryAfter): array
+    {
         $decoded = $rawBody === '' ? [] : json_decode($rawBody, true);
 
         if (!\is_array($decoded)) {
@@ -60,7 +146,7 @@ final readonly class RequestPipeline
         $data = $decoded;
 
         if ($status >= 400) {
-            throw $this->mapError($status, $data, $response->getHeaderLine('Retry-After'));
+            throw $this->mapError($status, $data, $retryAfter);
         }
 
         return $data;
@@ -104,6 +190,33 @@ final readonly class RequestPipeline
         } catch (ClientExceptionInterface $clientException) {
             throw new ApaleoTransportException('Failed to reach Apaleo API: '.$clientException->getMessage(), $clientException->getCode(), previous: $clientException);
         }
+    }
+
+    /** Same as execute(), but through Symfony's native non-blocking client instead of PSR-18. */
+    private function executeAsync(Request $apaleoRequest, SymfonyHttpClientInterface $client, AccessToken $token): SymfonyResponseInterface
+    {
+        $uri = $this->baseUri.$apaleoRequest->endpoint();
+
+        $options = [
+            'headers' => [
+                'Authorization' => 'Bearer '.$token->value,
+                'Accept' => 'application/json',
+                ...$apaleoRequest->headers(),
+            ],
+        ];
+
+        $query = $apaleoRequest->query();
+        if ($query !== []) {
+            $options['query'] = array_map(static fn (mixed $value): mixed => \is_bool($value) ? ($value ? 'true' : 'false') : $value, $query);
+        }
+
+        $body = $apaleoRequest->body();
+        if ($body !== null) {
+            $options['json'] = $body;
+        }
+
+        // Non-blocking: I/O and any transport error happen lazily, on first read of the response.
+        return $client->request($apaleoRequest->method()->value, $uri, $options);
     }
 
     /**

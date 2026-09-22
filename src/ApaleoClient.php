@@ -10,25 +10,29 @@ use Oleksyuk\Apaleo\Auth\ClientCredentialsTokenProvider;
 use Oleksyuk\Apaleo\Auth\InMemoryTokenCache;
 use Oleksyuk\Apaleo\Auth\TokenCache;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
+use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\BookingResource;
 use Oleksyuk\Apaleo\Resource\Inventory\InventoryResource;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface as SymfonyHttpClientInterface;
 
 final readonly class ApaleoClient
 {
     private RequestPipeline $pipeline;
 
+    /** $asyncHttpClient enables sendMany()'s concurrent dispatch; apaleo-bundle wires it automatically. */
     public function __construct(
         ClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
         TokenProvider $tokenProvider,
         string $baseUri = RequestPipeline::DEFAULT_BASE_URI,
+        ?SymfonyHttpClientInterface $asyncHttpClient = null,
     ) {
-        $this->pipeline = new RequestPipeline($httpClient, $requestFactory, $streamFactory, $tokenProvider, $baseUri);
+        $this->pipeline = new RequestPipeline($httpClient, $requestFactory, $streamFactory, $tokenProvider, $baseUri, $asyncHttpClient);
     }
 
     public function inventory(): InventoryResource
@@ -39,6 +43,19 @@ final readonly class ApaleoClient
     public function booking(): BookingResource
     {
         return new BookingResource($this->pipeline);
+    }
+
+    /**
+     * Batch escape hatch: sends several low-level Request objects concurrently, e.g.
+     * `new ListReservationsRequest(...)`. Decode each result with the matching DTO's fromArray().
+     *
+     * @param list<Request> $requests
+     *
+     * @return list<array<string, mixed>> decoded response bodies, in the same order as $requests
+     */
+    public function sendMany(array $requests): array
+    {
+        return $this->pipeline->sendMany($requests);
     }
 
     /**
@@ -67,6 +84,8 @@ final readonly class ApaleoClient
             $tokenCache,
         );
 
+        // $asyncHttpClient isn't auto-discovered: it would silently run through a second,
+        // differently-configured client. Pass it to the main constructor explicitly if you want it.
         return new self($httpClient, $requestFactory, $streamFactory, $tokenProvider, $baseUri);
     }
 }

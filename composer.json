@@ -38,7 +38,11 @@
         "php-http/mock-client": "^1.6.1",
         "phpstan/phpstan": "^2.2.14",
         "phpunit/phpunit": "^13.3.4",
-        "rector/rector": "^2.6.7"
+        "rector/rector": "^2.6.7",
+        "symfony/http-client": "^8.0"
+    },
+    "suggest": {
+        "symfony/http-client": "Lets RequestPipeline::sendMany() dispatch requests concurrently instead of one by one."
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
