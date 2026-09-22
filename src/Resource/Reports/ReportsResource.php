@@ -59,7 +59,7 @@ final readonly class ReportsResource
      * @param list<ChannelCode>   $channelCodes
      * @param list<string>        $sources
      * @param list<string>        $marketSegmentIds
-     * @param list<string>        $expand supported: businessDays
+     * @param list<'businessDays'>        $expand
      */
     public function propertyPerformance(
         string $propertyId,

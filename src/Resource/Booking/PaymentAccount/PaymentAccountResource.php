@@ -25,7 +25,7 @@ final readonly class PaymentAccountResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<string> $expand */
+    /** @param list<'actions'> $expand */
     public function get(string $paymentAccountId, array $expand = []): PaymentAccount
     {
         $data = $this->pipeline->send(new GetPaymentAccountRequest($paymentAccountId, $expand));
@@ -35,7 +35,7 @@ final readonly class PaymentAccountResource
 
     /**
      * @param list<string> $sort
-     * @param list<string> $expand
+     * @param list<'actions'> $expand
      *
      * @return PaginatedResult<PaymentAccount>
      */

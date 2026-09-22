@@ -9,7 +9,7 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final readonly class GetPaymentAccountRequest extends Request
 {
-    /** @param list<string> $expand */
+    /** @param list<'actions'> $expand */
     public function __construct(
         private string $paymentAccountId,
         private array $expand = [],

@@ -12,7 +12,7 @@ final readonly class ListAuthorizationsRequest extends Request
 {
     /**
      * @param list<string> $sort
-     * @param list<string> $expand
+     * @param list<'actions'|'remainingBalance'> $expand
      */
     public function __construct(
         private AuthorizationFilter $filter,

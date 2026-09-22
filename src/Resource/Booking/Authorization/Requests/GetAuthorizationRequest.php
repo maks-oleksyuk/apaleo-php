@@ -9,7 +9,7 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final readonly class GetAuthorizationRequest extends Request
 {
-    /** @param list<string> $expand */
+    /** @param list<'actions'> $expand */
     public function __construct(
         private string $authorizationId,
         private array $expand = [],

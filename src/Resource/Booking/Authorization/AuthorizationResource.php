@@ -26,7 +26,7 @@ final readonly class AuthorizationResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<string> $expand */
+    /** @param list<'actions'> $expand */
     public function get(string $authorizationId, array $expand = []): Authorization
     {
         $data = $this->pipeline->send(new GetAuthorizationRequest($authorizationId, $expand));
@@ -36,7 +36,7 @@ final readonly class AuthorizationResource
 
     /**
      * @param list<string> $sort
-     * @param list<string> $expand
+     * @param list<'actions'|'remainingBalance'> $expand
      *
      * @return PaginatedResult<Authorization>
      */

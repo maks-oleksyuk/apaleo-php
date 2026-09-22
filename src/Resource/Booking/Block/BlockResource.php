@@ -33,7 +33,7 @@ final readonly class BlockResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<string> $expand */
+    /** @param list<'actions'|'timeSlices'> $expand */
     public function get(string $blockId, array $expand = []): Block
     {
         $data = $this->pipeline->send(new GetBlockRequest($blockId, $expand));
@@ -53,7 +53,7 @@ final readonly class BlockResource
     }
 
     /**
-     * @param list<string> $expand
+     * @param list<'actions'|'timeSlices'> $expand
      *
      * @return PaginatedResult<Block>
      */

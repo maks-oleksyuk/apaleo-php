@@ -12,7 +12,7 @@ final readonly class ListPaymentAccountsRequest extends Request
 {
     /**
      * @param list<string> $sort
-     * @param list<string> $expand
+     * @param list<'actions'> $expand
      */
     public function __construct(
         private PaymentAccountFilter $filter,

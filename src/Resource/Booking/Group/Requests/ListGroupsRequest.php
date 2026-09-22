@@ -10,7 +10,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Group\GroupFilter;
 
 final readonly class ListGroupsRequest extends Request
 {
-    /** @param list<string> $expand */
+    /** @param list<'actions'|'blocks'> $expand */
     public function __construct(
         private GroupFilter $filter,
         private ?int $pageNumber = null,

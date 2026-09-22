@@ -10,7 +10,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Block\BlockFilter;
 
 final readonly class ListBlocksRequest extends Request
 {
-    /** @param list<string> $expand */
+    /** @param list<'actions'|'timeSlices'> $expand */
     public function __construct(
         private BlockFilter $filter,
         private ?int $pageNumber = null,

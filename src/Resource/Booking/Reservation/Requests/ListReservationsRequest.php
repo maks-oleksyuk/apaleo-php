@@ -12,7 +12,7 @@ final readonly class ListReservationsRequest extends Request
 {
     /**
      * @param list<string> $sort
-     * @param list<string> $expand
+     * @param list<'actions'|'assignedUnits'|'booker'|'company'|'services'|'timeSlices'> $expand
      */
     public function __construct(
         private ReservationFilter $filter,

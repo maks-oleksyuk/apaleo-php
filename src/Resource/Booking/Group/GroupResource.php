@@ -29,7 +29,7 @@ final readonly class GroupResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<string> $expand */
+    /** @param list<'actions'|'blocks'> $expand */
     public function get(string $groupId, array $expand = []): Group
     {
         $data = $this->pipeline->send(new GetGroupRequest($groupId, $expand));
@@ -49,7 +49,7 @@ final readonly class GroupResource
     }
 
     /**
-     * @param list<string> $expand
+     * @param list<'actions'|'blocks'> $expand
      *
      * @return PaginatedResult<Group>
      */

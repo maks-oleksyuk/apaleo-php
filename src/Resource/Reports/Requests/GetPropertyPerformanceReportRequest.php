@@ -21,7 +21,7 @@ final readonly class GetPropertyPerformanceReportRequest extends Request
      * @param list<ChannelCode>   $channelCodes
      * @param list<string>        $sources
      * @param list<string>        $marketSegmentIds
-     * @param list<string>        $expand supported: businessDays
+     * @param list<'businessDays'>        $expand
      */
     public function __construct(
         private string $propertyId,

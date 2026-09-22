@@ -9,7 +9,7 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final readonly class GetBlockRequest extends Request
 {
-    /** @param list<string> $expand */
+    /** @param list<'actions'|'timeSlices'> $expand */
     public function __construct(
         private string $blockId,
         private array $expand = [],

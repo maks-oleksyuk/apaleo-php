@@ -40,7 +40,7 @@ final readonly class ReservationResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<string> $expand */
+    /** @param list<'actions'|'assignedUnits'|'booker'|'company'|'services'|'timeSlices'> $expand */
     public function get(string $reservationId, array $expand = []): Reservation
     {
         $data = $this->pipeline->send(new GetReservationRequest($reservationId, $expand));
@@ -50,7 +50,7 @@ final readonly class ReservationResource
 
     /**
      * @param list<string> $sort
-     * @param list<string> $expand
+     * @param list<'actions'|'assignedUnits'|'booker'|'company'|'services'|'timeSlices'> $expand
      *
      * @return PaginatedResult<Reservation>
      */
