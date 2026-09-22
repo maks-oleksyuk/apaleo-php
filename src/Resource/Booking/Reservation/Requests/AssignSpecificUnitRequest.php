@@ -30,8 +30,8 @@ final readonly class AssignSpecificUnitRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'from' => $this->from?->format(\DateTimeInterface::ATOM),
-            'to' => $this->to?->format(\DateTimeInterface::ATOM),
+            'from' => $this->from?->format('Y-m-d'),
+            'to' => $this->to?->format('Y-m-d'),
             'lockUnit' => $this->lockUnit,
         ], static fn (mixed $value): bool => $value !== null);
     }

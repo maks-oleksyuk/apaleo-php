@@ -175,6 +175,8 @@ final class OfferResourceTest extends TestCase
         $request = $this->lastRequest();
         self::assertStringContainsString('ratePlanId=MUC-NONREF_SGL', (string) $request->getUri());
         self::assertStringContainsString('channelCode=Direct', (string) $request->getUri());
+        // A pure date makes Apaleo treat "to" as an inclusive day; a date-time would drop that day's slice.
+        self::assertStringContainsString('from=2026-09-20&to=2026-09-22', (string) $request->getUri());
     }
 
     public function testIndexHandlesEmptyOffersList(): void

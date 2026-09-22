@@ -33,8 +33,8 @@ final readonly class OfferIndexRequest extends Request
     {
         return array_filter([
             'ratePlanId' => $this->ratePlanId,
-            'from' => $this->from->format(\DateTimeInterface::ATOM),
-            'to' => $this->to->format(\DateTimeInterface::ATOM),
+            'from' => $this->from->format('Y-m-d'),
+            'to' => $this->to->format('Y-m-d'),
             'channelCode' => $this->channelCode->value,
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
