@@ -10,6 +10,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Block\BlockResource;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\BookingDomainResource;
 use Oleksyuk\Apaleo\Resource\Booking\Group\GroupResource;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\OfferResource;
+use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\PaymentAccountResource;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\ReservationResource;
 use Oleksyuk\Apaleo\Resource\Booking\Types\TypesResource;
 
@@ -53,5 +54,10 @@ final readonly class BookingResource
     public function authorizations(): AuthorizationResource
     {
         return new AuthorizationResource($this->pipeline);
+    }
+
+    public function paymentAccounts(): PaymentAccountResource
+    {
+        return new PaymentAccountResource($this->pipeline);
     }
 }
