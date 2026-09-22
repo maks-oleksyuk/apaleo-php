@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use Oleksyuk\Apaleo\Support\ResponseData;
+use Psr\Clock\ClockInterface;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -26,6 +27,7 @@ final readonly class ClientCredentialsTokenProvider implements TokenProvider
         private string $clientSecret,
         private TokenCache $cache = new InMemoryTokenCache(),
         private string $identityBaseUri = 'https://identity.apaleo.com',
+        private ClockInterface $clock = new SystemClock(),
     ) {
         // Fail at construction: an empty env var would otherwise surface as a puzzling 401 later.
         if ($clientId === '' || $clientSecret === '') {
@@ -39,7 +41,7 @@ final readonly class ClientCredentialsTokenProvider implements TokenProvider
 
         if (!$forceRefresh) {
             $cached = $this->cache->get($cacheKey);
-            if ($cached instanceof AccessToken && !$cached->isExpired()) {
+            if ($cached instanceof AccessToken && !$cached->isExpired($this->clock->now())) {
                 return $cached;
             }
         }
@@ -90,7 +92,7 @@ final readonly class ClientCredentialsTokenProvider implements TokenProvider
 
         return new AccessToken(
             value: ResponseData::string($data, 'access_token'),
-            expiresAt: new \DateTimeImmutable('+'.ResponseData::int($data, 'expires_in').' seconds'),
+            expiresAt: $this->clock->now()->modify('+'.ResponseData::int($data, 'expires_in').' seconds'),
         );
     }
 }

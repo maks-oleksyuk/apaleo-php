@@ -18,6 +18,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Clock\MockClock;
 
 /**
  * @internal
@@ -93,6 +94,24 @@ final class ClientCredentialsTokenProviderTest extends TestCase
 
         self::assertSame('renewed-token', $token->value);
         self::assertCount(1, $this->httpClient->getRequests());
+    }
+
+    public function testTokenIsReusedUntilThirtySecondsBeforeExpiry(): void
+    {
+        $clock = new MockClock('2026-09-22 12:00:00');
+        $factory = new Psr17Factory();
+        $provider = new ClientCredentialsTokenProvider($this->httpClient, $factory, $factory, 'client-id', 'client-secret', clock: $clock);
+        foreach (['first', 'second'] as $value) {
+            $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode(['access_token' => $value, 'expires_in' => 3600])));
+        }
+
+        self::assertSame('first', $provider->getToken()->value);
+
+        $clock->sleep(3569);
+        self::assertSame('first', $provider->getToken()->value, 'still 31s left');
+
+        $clock->sleep(1);
+        self::assertSame('second', $provider->getToken()->value, 'within the 30s safety margin');
     }
 
     public function testForceRefreshBypassesCacheEvenWhenTokenIsStillValid(): void

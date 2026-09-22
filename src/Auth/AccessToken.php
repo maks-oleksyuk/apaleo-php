@@ -11,9 +11,9 @@ final readonly class AccessToken
         public \DateTimeImmutable $expiresAt,
     ) {}
 
-    public function isExpired(): bool
+    public function isExpired(\DateTimeImmutable $now = new \DateTimeImmutable()): bool
     {
         // 30s safety margin so a token doesn't expire mid-flight.
-        return $this->expiresAt <= new \DateTimeImmutable('+30 seconds');
+        return $this->expiresAt <= $now->modify('+30 seconds');
     }
 }
