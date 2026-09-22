@@ -15,7 +15,8 @@ class ApaleoRateLimitException extends ApaleoClientException
         public readonly ?int $retryAfterSeconds = null,
         ?string $apaleoErrorType = null,
         array $rawResponse = [],
+        ?\Throwable $previous = null,
     ) {
-        parent::__construct($message, $statusCode, $apaleoErrorType, $rawResponse);
+        parent::__construct($message, $statusCode, $apaleoErrorType, $rawResponse, $previous);
     }
 }

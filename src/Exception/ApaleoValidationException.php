@@ -16,7 +16,8 @@ class ApaleoValidationException extends ApaleoClientException
         ?string $apaleoErrorType = null,
         array $rawResponse = [],
         public readonly array $messages = [],
+        ?\Throwable $previous = null,
     ) {
-        parent::__construct($message, $statusCode, $apaleoErrorType, $rawResponse);
+        parent::__construct($message, $statusCode, $apaleoErrorType, $rawResponse, $previous);
     }
 }
