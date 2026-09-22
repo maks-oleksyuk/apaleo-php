@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Block\BlockResource;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\BookingDomainResource;
+use Oleksyuk\Apaleo\Resource\Booking\Group\GroupResource;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\ReservationResource;
 use Oleksyuk\Apaleo\Resource\Booking\Types\TypesResource;
 
@@ -35,5 +36,10 @@ final readonly class BookingResource
     public function blocks(): BlockResource
     {
         return new BlockResource($this->pipeline);
+    }
+
+    public function groups(): GroupResource
+    {
+        return new GroupResource($this->pipeline);
     }
 }
