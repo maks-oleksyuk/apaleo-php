@@ -74,6 +74,27 @@ final class ResponseData
     }
 
     /**
+     * For `format: date` fields ("2026-09-22"): midnight UTC, so the value doesn't depend on
+     * date.timezone and a round trip through format('Y-m-d') gives back the same day.
+     *
+     * @param array<string, mixed> $data
+     */
+    public static function date(array $data, string $key): \DateTimeImmutable
+    {
+        return self::parseDate($key, self::string($data, $key));
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function nullableDate(array $data, string $key): ?\DateTimeImmutable
+    {
+        $value = $data[$key] ?? null;
+
+        return \is_string($value) ? self::parseDate($key, $value) : null;
+    }
+
+    /**
      * @param array<string, mixed> $data
      */
     public static function nullableDateTime(array $data, string $key): ?\DateTimeImmutable
@@ -258,5 +279,15 @@ final class ResponseData
         }
 
         return $result;
+    }
+
+    private static function parseDate(string $key, string $value): \DateTimeImmutable
+    {
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value, new \DateTimeZone('UTC'));
+        if ($date === false || $date->format('Y-m-d') !== $value) {
+            throw new ApaleoUnexpectedResponseException("Invalid date for field \"{$key}\" in Apaleo API response: \"{$value}\".");
+        }
+
+        return $date;
     }
 }

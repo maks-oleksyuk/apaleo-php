@@ -30,7 +30,7 @@ final readonly class OrderedService
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
             name: ResponseData::string($data, 'name'),
-            serviceDate: ResponseData::dateTime($data, 'serviceDate'),
+            serviceDate: ResponseData::date($data, 'serviceDate'),
             count: ResponseData::int($data, 'count'),
             guest: [] !== $guest ? OrderedServiceGuest::fromArray($guest) : null,
             reservation: OrderedServiceReservation::fromArray(ResponseData::nested($data, 'reservation')),

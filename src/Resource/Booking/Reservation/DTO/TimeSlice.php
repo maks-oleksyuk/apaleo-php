@@ -39,7 +39,7 @@ final readonly class TimeSlice
         return new self(
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
-            serviceDate: ResponseData::dateTime($data, 'serviceDate'),
+            serviceDate: ResponseData::date($data, 'serviceDate'),
             ratePlan: EmbeddedRatePlan::fromArray(ResponseData::nested($data, 'ratePlan')),
             unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
             unit: $unit !== [] ? EmbeddedUnit::fromArray($unit) : null,

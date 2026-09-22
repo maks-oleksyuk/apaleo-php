@@ -35,7 +35,7 @@ final readonly class FolioChangeLogItem
             relatedEntityDescription: ResponseData::nullableString($data, 'relatedEntityDescription'),
             amount: [] !== $amount ? MonetaryValue::fromArray($amount) : null,
             clientId: ResponseData::string($data, 'clientId'),
-            serviceDate: ResponseData::nullableDateTime($data, 'serviceDate'),
+            serviceDate: ResponseData::nullableDate($data, 'serviceDate'),
             propertyId: ResponseData::string($data, 'propertyId'),
             created: ResponseData::dateTime($data, 'created'),
             subjectId: ResponseData::nullableString($data, 'subjectId'),

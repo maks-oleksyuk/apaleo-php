@@ -28,7 +28,7 @@ final readonly class ServiceChange
             count: ResponseData::nullableInt($data, 'count'),
             amount: [] !== $amount ? Amount::fromArray($amount) : null,
             totalAmount: [] !== $totalAmount ? Amount::fromArray($totalAmount) : null,
-            serviceDate: ResponseData::dateTime($data, 'serviceDate'),
+            serviceDate: ResponseData::date($data, 'serviceDate'),
         );
     }
 }

@@ -20,7 +20,7 @@ final readonly class ServiceDateItem
     public static function fromArray(array $data): self
     {
         return new self(
-            serviceDate: ResponseData::dateTime($data, 'serviceDate'),
+            serviceDate: ResponseData::date($data, 'serviceDate'),
             count: ResponseData::int($data, 'count'),
             amount: Amount::fromArray(ResponseData::nested($data, 'amount')),
             isMandatory: ResponseData::bool($data, 'isMandatory'),

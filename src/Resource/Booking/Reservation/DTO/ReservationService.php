@@ -24,7 +24,7 @@ final readonly class ReservationService
     {
         return new self(
             service: EmbeddedService::fromArray(ResponseData::nested($data, 'service')),
-            serviceDate: ResponseData::dateTime($data, 'serviceDate'),
+            serviceDate: ResponseData::date($data, 'serviceDate'),
             count: ResponseData::int($data, 'count'),
             amount: Amount::fromArray(ResponseData::nested($data, 'amount')),
             bookedAsExtra: ResponseData::bool($data, 'bookedAsExtra'),

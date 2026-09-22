@@ -19,7 +19,7 @@ final readonly class PropertyPerformanceReportItem
     public static function fromArray(array $data): self
     {
         return new self(
-            businessDay: ResponseData::dateTime($data, 'businessDay'),
+            businessDay: ResponseData::date($data, 'businessDay'),
             metrics: PerformanceMetrics::fromArray($data),
             unitGroups: array_map(PropertyPerformancePerUnitGroup::fromArray(...), ResponseData::nestedList($data, 'unitGroups')),
         );

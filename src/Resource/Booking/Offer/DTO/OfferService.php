@@ -26,7 +26,7 @@ final readonly class OfferService
     {
         return new self(
             service: EmbeddedService::fromArray(ResponseData::nested($data, 'service')),
-            serviceDate: ResponseData::dateTime($data, 'serviceDate'),
+            serviceDate: ResponseData::date($data, 'serviceDate'),
             count: ResponseData::int($data, 'count'),
             availableCount: ResponseData::nullableInt($data, 'availableCount'),
             amount: Amount::fromArray(ResponseData::nested($data, 'amount')),

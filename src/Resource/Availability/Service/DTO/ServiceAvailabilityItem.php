@@ -27,7 +27,7 @@ final readonly class ServiceAvailabilityItem
             quantity: ResponseData::int($data, 'quantity'),
             soldCount: ResponseData::int($data, 'soldCount'),
             availableCount: ResponseData::int($data, 'availableCount'),
-            serviceDate: ResponseData::dateTime($data, 'serviceDate'),
+            serviceDate: ResponseData::date($data, 'serviceDate'),
             block: BlockCounts::fromArray(ResponseData::nested($data, 'block')),
         );
     }
