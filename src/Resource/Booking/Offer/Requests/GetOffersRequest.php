@@ -18,8 +18,8 @@ final readonly class GetOffersRequest extends Request
      */
     public function __construct(
         private string $propertyId,
-        private string $arrival,
-        private string $departure,
+        private \DateTimeImmutable $arrival,
+        private \DateTimeImmutable $departure,
         private int $adults,
         private ?string $timeSliceTemplate = null,
         private array $timeSliceDefinitionIds = [],
@@ -46,8 +46,8 @@ final readonly class GetOffersRequest extends Request
     {
         return array_filter([
             'propertyId' => $this->propertyId,
-            'arrival' => $this->arrival,
-            'departure' => $this->departure,
+            'arrival' => $this->arrival->format('Y-m-d'),
+            'departure' => $this->departure->format('Y-m-d'),
             'adults' => $this->adults,
             'timeSliceTemplate' => $this->timeSliceTemplate,
             'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,

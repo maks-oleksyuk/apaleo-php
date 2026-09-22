@@ -16,8 +16,8 @@ final readonly class GetReservationOffersRequest extends Request
      */
     public function __construct(
         private string $reservationId,
-        private ?string $arrival = null,
-        private ?string $departure = null,
+        private ?\DateTimeImmutable $arrival = null,
+        private ?\DateTimeImmutable $departure = null,
         private ?int $adults = null,
         private array $childrenAges = [],
         private ?ChannelCode $channelCode = null,
@@ -41,8 +41,8 @@ final readonly class GetReservationOffersRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'arrival' => $this->arrival,
-            'departure' => $this->departure,
+            'arrival' => $this->arrival?->format('Y-m-d'),
+            'departure' => $this->departure?->format('Y-m-d'),
             'adults' => $this->adults,
             'childrenAges' => implode(',', $this->childrenAges) ?: null,
             'channelCode' => $this->channelCode?->value,

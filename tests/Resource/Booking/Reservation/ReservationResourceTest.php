@@ -367,7 +367,7 @@ final class ReservationResourceTest extends TestCase
             ]],
         ])));
 
-        $offers = $this->reservations->offers('XPGMSXGF-1', arrival: '2026-09-20', departure: '2026-09-23', adults: 2);
+        $offers = $this->reservations->offers('XPGMSXGF-1', arrival: new \DateTimeImmutable('2026-09-20'), departure: new \DateTimeImmutable('2026-09-23'), adults: 2);
 
         self::assertSame('MUC', $offers->property?->id);
         self::assertCount(1, $offers->offers);

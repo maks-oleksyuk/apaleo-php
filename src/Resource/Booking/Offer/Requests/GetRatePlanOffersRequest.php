@@ -16,8 +16,8 @@ final readonly class GetRatePlanOffersRequest extends Request
      */
     public function __construct(
         private string $ratePlanId,
-        private string $arrival,
-        private string $departure,
+        private \DateTimeImmutable $arrival,
+        private \DateTimeImmutable $departure,
         private int $adults,
         private ?ChannelCode $channelCode = null,
         private array $childrenAges = [],
@@ -39,8 +39,8 @@ final readonly class GetRatePlanOffersRequest extends Request
     {
         return array_filter([
             'ratePlanId' => $this->ratePlanId,
-            'arrival' => $this->arrival,
-            'departure' => $this->departure,
+            'arrival' => $this->arrival->format('Y-m-d'),
+            'departure' => $this->departure->format('Y-m-d'),
             'adults' => $this->adults,
             'channelCode' => $this->channelCode?->value,
             'childrenAges' => implode(',', $this->childrenAges) ?: null,

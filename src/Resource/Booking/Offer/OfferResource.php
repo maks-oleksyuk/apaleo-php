@@ -38,8 +38,8 @@ final readonly class OfferResource
      */
     public function forProperty(
         string $propertyId,
-        string $arrival,
-        string $departure,
+        \DateTimeImmutable $arrival,
+        \DateTimeImmutable $departure,
         int $adults,
         ?string $timeSliceTemplate = null,
         array $timeSliceDefinitionIds = [],
@@ -78,8 +78,8 @@ final readonly class OfferResource
      */
     public function forRatePlan(
         string $ratePlanId,
-        string $arrival,
-        string $departure,
+        \DateTimeImmutable $arrival,
+        \DateTimeImmutable $departure,
         int $adults,
         ?ChannelCode $channelCode = null,
         array $childrenAges = [],
@@ -98,8 +98,8 @@ final readonly class OfferResource
      */
     public function services(
         string $ratePlanId,
-        string $arrival,
-        string $departure,
+        \DateTimeImmutable $arrival,
+        \DateTimeImmutable $departure,
         int $adults,
         ?ChannelCode $channelCode = null,
         array $childrenAges = [],

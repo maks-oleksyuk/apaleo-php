@@ -190,8 +190,8 @@ final readonly class ReservationResource
      */
     public function offers(
         string $reservationId,
-        ?string $arrival = null,
-        ?string $departure = null,
+        ?\DateTimeImmutable $arrival = null,
+        ?\DateTimeImmutable $departure = null,
         ?int $adults = null,
         array $childrenAges = [],
         ?ChannelCode $channelCode = null,

@@ -78,7 +78,7 @@ final class OfferResourceTest extends TestCase
             'offers' => [$this->fullOfferFixture],
         ])));
 
-        $stayOffers = $this->offers->forProperty('MUC', '2026-09-20', '2026-09-22', 1);
+        $stayOffers = $this->offers->forProperty('MUC', new \DateTimeImmutable('2026-09-20'), new \DateTimeImmutable('2026-09-22'), 1);
 
         self::assertSame('MUC', $stayOffers->property?->id);
         self::assertCount(1, $stayOffers->offers);
@@ -97,7 +97,7 @@ final class OfferResourceTest extends TestCase
             'offers' => [$this->fullOfferFixture],
         ])));
 
-        $stayOffers = $this->offers->forRatePlan('MUC-NONREF_SGL', '2026-09-20', '2026-09-22', 1, overridePrices: [99.5]);
+        $stayOffers = $this->offers->forRatePlan('MUC-NONREF_SGL', new \DateTimeImmutable('2026-09-20'), new \DateTimeImmutable('2026-09-22'), 1, overridePrices: [99.5]);
 
         self::assertCount(1, $stayOffers->offers);
 
@@ -110,7 +110,7 @@ final class OfferResourceTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(204));
 
-        $stayOffers = $this->offers->forRatePlan('MUC-NONREF_SGL', '2026-09-20', '2026-09-22', 1);
+        $stayOffers = $this->offers->forRatePlan('MUC-NONREF_SGL', new \DateTimeImmutable('2026-09-20'), new \DateTimeImmutable('2026-09-22'), 1);
 
         self::assertNull($stayOffers->property);
         self::assertSame([], $stayOffers->offers);
@@ -135,7 +135,7 @@ final class OfferResourceTest extends TestCase
             ]],
         ])));
 
-        $serviceOffers = $this->offers->services('MUC-NONREF_SGL', '2026-09-20', '2026-09-22', 1, channelCode: ChannelCode::Direct);
+        $serviceOffers = $this->offers->services('MUC-NONREF_SGL', new \DateTimeImmutable('2026-09-20'), new \DateTimeImmutable('2026-09-22'), 1, channelCode: ChannelCode::Direct);
 
         self::assertCount(1, $serviceOffers->services);
         self::assertSame('MUC-SPA', $serviceOffers->services[0]->service->id);
