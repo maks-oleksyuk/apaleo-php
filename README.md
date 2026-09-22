@@ -53,7 +53,33 @@ $tokenProvider = new ClientCredentialsTokenProvider(
 $apaleo = new ApaleoClient($httpClient, $requestFactory, $streamFactory, $tokenProvider);
 ```
 
-See [`apaleo-bundle`](//github.com/maks-oleksyuk/apaleo-bundle) for a ready-made Symfony integration (autowired service, cached token, WebProfiler panel).
+### Timeouts and retries
+
+The SDK doesn't retry on its own: that's the HTTP client's job. With `symfony/http-client`, this matches what `apaleo-bundle` sets up: a 10 s timeout, `429` retried for every method (honoring `Retry-After`), and `5xx`/transport errors retried only for `GET`/`HEAD`, because a `502` after a `POST` may still have been applied.
+
+```php
+use Oleksyuk\Apaleo\ApaleoClient;
+use Oleksyuk\Apaleo\Auth\ClientCredentialsTokenProvider;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\Psr18Client;
+use Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
+use Symfony\Component\HttpClient\RetryableHttpClient;
+
+$safe = ['GET', 'HEAD'];
+$http = new RetryableHttpClient(
+    HttpClient::create(['timeout' => 10]),
+    new GenericRetryStrategy([0 => $safe, 429, 500 => $safe, 502 => $safe, 503 => $safe, 504 => $safe]),
+    maxRetries: 2,
+);
+$psr18 = new Psr18Client($http); // also serves as the PSR-17 request/stream factory
+
+$tokenProvider = new ClientCredentialsTokenProvider($psr18, $psr18, $psr18, 'your-client-id', 'your-client-secret');
+$apaleo = new ApaleoClient($psr18, $psr18, $psr18, $tokenProvider, asyncHttpClient: $http);
+```
+
+Passing `asyncHttpClient` also lets `sendMany()` run its requests concurrently. With Guzzle, use its `Middleware::retry()` with the same rules.
+
+See [`apaleo-bundle`](//github.com/maks-oleksyuk/apaleo-bundle) for a ready-made Symfony integration (autowired service, cached token, HTTP client with this timeout and retry policy).
 
 ## Development
 
