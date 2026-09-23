@@ -12,6 +12,7 @@ use Oleksyuk\Apaleo\Auth\TokenCache;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Resource\Account\AccountResource;
 use Oleksyuk\Apaleo\Resource\Availability\AvailabilityResource;
 use Oleksyuk\Apaleo\Resource\Booking\BookingResource;
 use Oleksyuk\Apaleo\Resource\Inventory\InventoryResource;
@@ -73,6 +74,11 @@ final readonly class ApaleoClient
     public function operations(): OperationsResource
     {
         return new OperationsResource($this->pipeline);
+    }
+
+    public function account(): AccountResource
+    {
+        return new AccountResource($this->pipeline);
     }
 
     /**
