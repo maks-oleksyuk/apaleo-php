@@ -16,6 +16,7 @@ use Oleksyuk\Apaleo\Resource\Availability\AvailabilityResource;
 use Oleksyuk\Apaleo\Resource\Booking\BookingResource;
 use Oleksyuk\Apaleo\Resource\Inventory\InventoryResource;
 use Oleksyuk\Apaleo\Resource\Logs\LogsResource;
+use Oleksyuk\Apaleo\Resource\RatePlan\RatePlanResource;
 use Oleksyuk\Apaleo\Resource\Reports\ReportsResource;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -61,6 +62,11 @@ final readonly class ApaleoClient
     public function logs(): LogsResource
     {
         return new LogsResource($this->pipeline);
+    }
+
+    public function ratePlan(): RatePlanResource
+    {
+        return new RatePlanResource($this->pipeline);
     }
 
     /**
