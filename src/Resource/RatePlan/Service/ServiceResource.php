@@ -26,10 +26,13 @@ final readonly class ServiceResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'property'> $expand */
-    public function get(string $serviceId, array $expand = []): Service
+    /**
+     * @param list<'property'> $expand
+     * @param ?list<string> $languages
+     */
+    public function get(string $serviceId, array $expand = [], ?array $languages = null): Service
     {
-        $data = $this->pipeline->send(new GetServiceRequest($serviceId, $expand));
+        $data = $this->pipeline->send(new GetServiceRequest($serviceId, $expand, $languages));
 
         return Service::fromArray($data);
     }

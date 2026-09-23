@@ -30,10 +30,13 @@ final readonly class RatePlanDomainResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'cancellationPolicy'|'property'> $expand */
-    public function get(string $ratePlanId, array $expand = []): RatePlan
+    /**
+     * @param list<'cancellationPolicy'|'property'> $expand
+     * @param ?list<string> $languages
+     */
+    public function get(string $ratePlanId, array $expand = [], ?array $languages = null): RatePlan
     {
-        $data = $this->pipeline->send(new GetRatePlanRequest($ratePlanId, $expand));
+        $data = $this->pipeline->send(new GetRatePlanRequest($ratePlanId, $expand, $languages));
 
         return RatePlan::fromArray($data);
     }

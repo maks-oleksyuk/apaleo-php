@@ -35,7 +35,7 @@ final class PolicyAndCodeResourceTest extends RatePlanTestCase
         self::assertSame(CancellationPolicyReference::PriorToArrival, $policy->reference);
         self::assertSame(100, $policy->fee->percentValue?->percent);
         self::assertNull($policy->fee->fixedValue);
-        self::assertStringEndsWith('/rateplan/v1/cancellation-policies/MUC-FLEX?languages=all', $this->lastUri());
+        self::assertStringEndsWith('/rateplan/v1/cancellation-policies/MUC-FLEX', $this->lastUri());
 
         $this->respond(['id' => 'MUC-FLEX'], 201);
         $this->api->cancellationPolicies()->create(new CreateCancellationPolicy(

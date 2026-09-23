@@ -9,8 +9,10 @@ use Oleksyuk\Apaleo\Http\Request;
 
 final readonly class GetUnitGroupRequest extends Request
 {
+    /** @param ?list<string> $languages */
     public function __construct(
         private string $unitGroupId,
+        private ?array $languages = null,
     ) {}
 
     public function method(): Method
@@ -23,9 +25,10 @@ final readonly class GetUnitGroupRequest extends Request
         return '/inventory/v1/unit-groups/'.rawurlencode($this->unitGroupId);
     }
 
-    /** Requests every configured language so localized fields are always a full map, never account-dependent. */
     public function query(): array
     {
-        return ['languages' => 'all'];
+        return array_filter([
+            'languages' => $this->languages !== null ? implode(',', $this->languages) : null,
+        ], static fn (mixed $value): bool => $value !== null);
     }
 }

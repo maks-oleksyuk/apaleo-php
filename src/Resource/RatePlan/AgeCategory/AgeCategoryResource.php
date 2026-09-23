@@ -22,9 +22,10 @@ final readonly class AgeCategoryResource
         private RequestPipeline $pipeline,
     ) {}
 
-    public function get(string $ageCategoryId): AgeCategory
+    /** @param ?list<string> $languages */
+    public function get(string $ageCategoryId, ?array $languages = null): AgeCategory
     {
-        $data = $this->pipeline->send(new GetAgeCategoryRequest($ageCategoryId));
+        $data = $this->pipeline->send(new GetAgeCategoryRequest($ageCategoryId, $languages));
 
         return AgeCategory::fromArray($data);
     }

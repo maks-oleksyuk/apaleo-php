@@ -27,9 +27,10 @@ final readonly class UnitResource
         private RequestPipeline $pipeline,
     ) {}
 
-    public function get(string $unitId): Unit
+    /** @param ?list<string> $languages */
+    public function get(string $unitId, ?array $languages = null): Unit
     {
-        $data = $this->pipeline->send(new GetUnitRequest($unitId));
+        $data = $this->pipeline->send(new GetUnitRequest($unitId, $languages));
 
         return Unit::fromArray($data);
     }

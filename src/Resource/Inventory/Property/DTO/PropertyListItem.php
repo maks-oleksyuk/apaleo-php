@@ -7,20 +7,17 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Property\DTO;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final readonly class Property
+/** Item shape of GET /inventory/v1/properties: unlike Property, $name and $description are plain strings, not localized maps. */
+final readonly class PropertyListItem
 {
-    /**
-     * @param array<string, string> $name localized
-     * @param array<string, string> $description
-     * @param array<string, string> $paymentTerms
-     */
+    /** @param array<string, string> $paymentTerms */
     public function __construct(
         public string $id,
         public string $code,
         public ?string $propertyTemplateId,
         public bool $isTemplate,
-        public array $name,
-        public array $description,
+        public string $name,
+        public ?string $description,
         public string $companyName,
         public ?string $managingDirectors,
         public string $commercialRegisterEntry,
@@ -36,9 +33,7 @@ final readonly class Property
         public \DateTimeImmutable $created,
     ) {}
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
         $status = ResponseData::string($data, 'status');
@@ -49,8 +44,8 @@ final readonly class Property
             code: ResponseData::string($data, 'code'),
             propertyTemplateId: ResponseData::nullableString($data, 'propertyTemplateId'),
             isTemplate: ResponseData::bool($data, 'isTemplate'),
-            name: ResponseData::localizedText($data, 'name'),
-            description: ResponseData::localizedText($data, 'description'),
+            name: ResponseData::string($data, 'name'),
+            description: ResponseData::nullableString($data, 'description'),
             companyName: ResponseData::string($data, 'companyName'),
             managingDirectors: ResponseData::nullableString($data, 'managingDirectors'),
             commercialRegisterEntry: ResponseData::string($data, 'commercialRegisterEntry'),

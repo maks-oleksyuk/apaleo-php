@@ -140,19 +140,25 @@ final class PropertyResourceTest extends TestCase
 
     public function testListPropertiesMapsWrappedResponse(): void
     {
-        $second = $this->fullPropertyFixture;
+        // list items use a flat shape: name/description are plain strings, not localized maps
+        $first = $this->fullPropertyFixture;
+        $first['name'] = 'Berlin Hotel';
+        $first['description'] = 'A nice hotel';
+
+        $second = $first;
         $second['id'] = 'VIE';
         $second['code'] = 'VIE';
 
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
             'count' => 2,
-            'properties' => [$this->fullPropertyFixture, $second],
+            'properties' => [$first, $second],
         ])));
 
         $properties = $this->properties->list();
 
         self::assertCount(2, $properties);
         self::assertSame('BER', $properties[0]->id);
+        self::assertSame('Berlin Hotel', $properties[0]->name);
         self::assertSame('VIE', $properties[1]->id);
     }
 

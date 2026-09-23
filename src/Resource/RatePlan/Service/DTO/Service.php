@@ -38,6 +38,7 @@ final readonly class Service
         public array $accountingConfigs,
         public array $channelCodes,
         public ?string $ageCategoryId,
+        // null only on the single-GET shape, where these are flattened out (see class docblock)
         public ?ServiceType $serviceType,
         public ?VatType $vatType,
         public ?string $subAccountId,

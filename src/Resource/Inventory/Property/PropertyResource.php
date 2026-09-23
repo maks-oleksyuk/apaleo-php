@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\CreateProperty;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\Property;
+use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\PropertyListItem;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ArchivePropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ClonePropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\CountPropertiesRequest;
@@ -28,9 +29,10 @@ final readonly class PropertyResource
         private RequestPipeline $pipeline,
     ) {}
 
-    public function get(string $propertyId): Property
+    /** @param ?list<string> $languages */
+    public function get(string $propertyId, ?array $languages = null): Property
     {
-        $data = $this->pipeline->send(new GetPropertyRequest($propertyId));
+        $data = $this->pipeline->send(new GetPropertyRequest($propertyId, $languages));
 
         return Property::fromArray($data);
     }
@@ -38,7 +40,7 @@ final readonly class PropertyResource
     /**
      * @param list<'actions'> $expand
      *
-     * @return PaginatedResult<Property>
+     * @return PaginatedResult<PropertyListItem>
      */
     public function list(
         PropertyFilter $filter = new PropertyFilter(),
@@ -51,7 +53,7 @@ final readonly class PropertyResource
         $data = $this->pipeline->send(new ListPropertiesRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
-            items: array_map(Property::fromArray(...), ResponseData::nestedList($data, 'properties')),
+            items: array_map(PropertyListItem::fromArray(...), ResponseData::nestedList($data, 'properties')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

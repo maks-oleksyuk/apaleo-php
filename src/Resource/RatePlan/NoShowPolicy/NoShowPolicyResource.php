@@ -23,9 +23,10 @@ final readonly class NoShowPolicyResource
         private RequestPipeline $pipeline,
     ) {}
 
-    public function get(string $noShowPolicyId): NoShowPolicy
+    /** @param ?list<string> $languages */
+    public function get(string $noShowPolicyId, ?array $languages = null): NoShowPolicy
     {
-        $data = $this->pipeline->send(new GetNoShowPolicyRequest($noShowPolicyId));
+        $data = $this->pipeline->send(new GetNoShowPolicyRequest($noShowPolicyId, $languages));
 
         return NoShowPolicy::fromArray($data);
     }

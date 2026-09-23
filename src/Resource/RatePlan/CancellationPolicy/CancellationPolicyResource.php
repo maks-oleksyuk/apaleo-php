@@ -23,9 +23,10 @@ final readonly class CancellationPolicyResource
         private RequestPipeline $pipeline,
     ) {}
 
-    public function get(string $cancellationPolicyId): CancellationPolicy
+    /** @param ?list<string> $languages */
+    public function get(string $cancellationPolicyId, ?array $languages = null): CancellationPolicy
     {
-        $data = $this->pipeline->send(new GetCancellationPolicyRequest($cancellationPolicyId));
+        $data = $this->pipeline->send(new GetCancellationPolicyRequest($cancellationPolicyId, $languages));
 
         return CancellationPolicy::fromArray($data);
     }

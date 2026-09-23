@@ -36,7 +36,8 @@ final class RatePlanDomainResourceTest extends RatePlanTestCase
         self::assertSame('MUC-BRKF', $ratePlan->includedServices[0]->serviceId);
         self::assertSame('2027-12-31', $ratePlan->ratesRange?->to->format('Y-m-d'));
         self::assertNull($ratePlan->marketSegment);
-        self::assertStringContainsString('languages=all&expand=property', $this->lastUri());
+        self::assertStringContainsString('expand=property', $this->lastUri());
+        self::assertStringNotContainsString('languages=', $this->lastUri());
     }
 
     public function testListReadsEmbeddedServiceShapeAndSendsFilter(): void
