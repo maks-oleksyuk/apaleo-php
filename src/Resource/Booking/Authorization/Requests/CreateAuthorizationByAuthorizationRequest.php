@@ -9,7 +9,6 @@ use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 
-/** Creates an authorization from an external payment transaction (e.g. an OTA-collected card) referenced by $transactionReference. */
 final readonly class CreateAuthorizationByAuthorizationRequest extends Request
 {
     public function __construct(

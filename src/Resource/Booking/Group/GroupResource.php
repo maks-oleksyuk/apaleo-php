@@ -76,7 +76,6 @@ final readonly class GroupResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @return string the id of the created group */
     public function create(CreateGroup $group): string
     {
         $data = $this->pipeline->send(new CreateGroupRequest($group));

@@ -18,7 +18,6 @@ use Oleksyuk\Apaleo\Resource\Account\Requests\SuspendCurrentAccountRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** The Account API (account-v1) — the current account plus account administration, so no sub-resources beneath this one. */
 final readonly class AccountResource
 {
     public function __construct(

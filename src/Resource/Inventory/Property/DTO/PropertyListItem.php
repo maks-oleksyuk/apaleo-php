@@ -7,7 +7,6 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Property\DTO;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /inventory/v1/properties: unlike Property, $name and $description are plain strings, not localized maps. */
 final readonly class PropertyListItem
 {
     /** @param array<string, string> $paymentTerms */

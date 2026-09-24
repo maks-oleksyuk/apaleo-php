@@ -220,7 +220,6 @@ final readonly class ReservationResource
         return ReservationStayOffers::fromArray($data);
     }
 
-    /** Bookable extra services for this reservation. */
     public function serviceOffers(
         string $reservationId,
         ?ChannelCode $channelCode = null,

@@ -6,7 +6,6 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Booking;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 
-/** Filter criteria for BookingDomainResource::list(). */
 final readonly class BookingFilter
 {
     /**

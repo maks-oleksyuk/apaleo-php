@@ -9,7 +9,6 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\FeeDetails;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\Period;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /rateplan/v1/cancellation-policies: unlike CancellationPolicy, $name and $description are plain strings, not localized maps. */
 final readonly class CancellationPolicyListItem
 {
     /**

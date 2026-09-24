@@ -23,7 +23,6 @@ use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /booking/v1/reservations: unlike Reservation, it has no $payableAmount and $taxDetails. */
 final readonly class ReservationListItem
 {
     /**

@@ -80,7 +80,6 @@ final readonly class BlockResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @return string the id of the created block */
     public function create(CreateBlock $block): string
     {
         $data = $this->pipeline->send(new CreateBlockRequest($block));

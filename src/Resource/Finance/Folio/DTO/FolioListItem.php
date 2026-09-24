@@ -12,7 +12,6 @@ use Oleksyuk\Apaleo\Resource\Finance\Folio\Enum\FolioWarning;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FolioType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /finance/v1/folios: unlike Folio, it has no property, pending payments, related folios, allowed payment or maximum allowance. */
 final readonly class FolioListItem
 {
     /**

@@ -9,7 +9,6 @@ use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 
-/** Filter criteria shared by RatePlanDomainResource::list() and ::count(). */
 final readonly class RatePlanFilter
 {
     /**

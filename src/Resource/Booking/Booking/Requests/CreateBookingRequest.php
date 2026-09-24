@@ -10,9 +10,6 @@ use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\CreateBooking;
 
 final readonly class CreateBookingRequest extends Request
 {
-    /**
-     * @param ?string $idempotencyKey lets a retried request be recognized and not double-book; strongly recommended
-     */
     public function __construct(
         private CreateBooking $booking,
         private bool $force = false,

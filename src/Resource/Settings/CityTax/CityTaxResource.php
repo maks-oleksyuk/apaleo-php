@@ -42,7 +42,6 @@ final readonly class CityTaxResource
         );
     }
 
-    /** @return string the id of the created city tax */
     public function create(CreateCityTax $data): string
     {
         $response = $this->pipeline->send(new CreateCityTaxRequest($data));

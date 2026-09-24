@@ -7,7 +7,6 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /inventory/v1/unit-groups: unlike UnitGroup, $name and $description are plain strings, not localized maps. */
 final readonly class UnitGroupListItem
 {
     /** @param list<ConnectedUnitGroup> $connectedUnitGroups */

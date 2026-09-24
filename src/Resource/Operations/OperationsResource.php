@@ -24,7 +24,6 @@ use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** The Operations API (operations-v1) — maintenance windows plus two standalone actions (night audit, unit condition), so no sub-resources beneath this one. */
 final readonly class OperationsResource
 {
     public function __construct(
@@ -78,7 +77,6 @@ final readonly class OperationsResource
         }
     }
 
-    /** @return string the id of the created maintenance */
     public function createMaintenance(CreateMaintenance $maintenance, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateMaintenanceRequest($maintenance, $idempotencyKey));
@@ -89,7 +87,7 @@ final readonly class OperationsResource
     /**
      * @param list<CreateMaintenance> $maintenances
      *
-     * @return list<string> the ids of the created maintenances
+     * @return list<string>
      */
     public function bulkCreateMaintenances(array $maintenances, ?string $idempotencyKey = null): array
     {

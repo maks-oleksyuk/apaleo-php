@@ -46,7 +46,6 @@ final readonly class CompanyResource
         );
     }
 
-    /** @return string the id of the created company */
     public function create(CreateCompany $data): string
     {
         $response = $this->pipeline->send(new CreateCompanyRequest($data));

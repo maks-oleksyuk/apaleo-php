@@ -81,7 +81,6 @@ final readonly class RatePlanDomainResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @return string the id of the created rate plan */
     public function create(CreateRatePlan $data): string
     {
         $response = $this->pipeline->send(new CreateRatePlanRequest($data));

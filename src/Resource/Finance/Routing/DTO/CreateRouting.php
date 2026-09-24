@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Routing\DTO;
 
-/** Routes a booking's charges matching $filter to $destinationFolioId as they get posted. */
 final readonly class CreateRouting
 {
     public function __construct(

@@ -11,7 +11,6 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\UnitResource;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\UnitAttributeResource;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\UnitGroupResource;
 
-/** Aggregates the Inventory API's sub-resources (properties, units, unit groups, unit attributes, countries). */
 final readonly class InventoryResource
 {
     public function __construct(

@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Account\DTO;
 
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\Address;
 
-/** Input for AccountResource::replaceCurrent(): a full replace, unset fields are cleared. */
+/** A full replacement: unset fields are cleared. */
 final readonly class ReplaceAccount
 {
     /** @param list<string> $additionallySupportedCountries ISO Alpha-2 country codes */

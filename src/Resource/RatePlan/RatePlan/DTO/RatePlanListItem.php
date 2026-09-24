@@ -11,7 +11,6 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\EmbeddedProperty;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /rateplan/v1/rate-plans: unlike RatePlan, $name and $description are plain strings, not localized maps. */
 final readonly class RatePlanListItem
 {
     /**

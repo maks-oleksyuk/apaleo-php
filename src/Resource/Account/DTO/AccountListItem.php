@@ -7,7 +7,6 @@ namespace Oleksyuk\Apaleo\Resource\Account\DTO;
 use Oleksyuk\Apaleo\Resource\Account\Enum\AccountType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /account/v1/accounts: a flat subset of Account, missing defaultLanguage, logoUrl, location and additionallySupportedCountries. */
 final readonly class AccountListItem
 {
     public function __construct(

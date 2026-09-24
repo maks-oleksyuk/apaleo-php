@@ -9,7 +9,6 @@ use Oleksyuk\Apaleo\Resource\Settings\CityTax\Enum\CityTaxType;
 use Oleksyuk\Apaleo\Resource\Settings\CityTax\Enum\TaxHandlingType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /settings/v1/city-tax: unlike CityTax, $name and $description are plain strings, and limit, subcategories, pricing rules and ignoredFor are missing. */
 final readonly class CityTaxListItem
 {
     /** @param float $value percent or multiplier, depending on $type */

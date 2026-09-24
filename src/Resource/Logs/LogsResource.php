@@ -21,7 +21,6 @@ use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** The Logs API (logs-v1) — four unrelated audit-log endpoints, so no sub-resources beneath this one. */
 final readonly class LogsResource
 {
     public function __construct(

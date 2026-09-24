@@ -31,8 +31,6 @@ final readonly class OfferResource
     }
 
     /**
-     * Bookable stay offers for a property, across every eligible rate plan/unit group.
-     *
      * @param list<string> $timeSliceDefinitionIds
      * @param list<string> $unitGroupIds
      * @param list<UnitGroupType> $unitGroupTypes
@@ -73,8 +71,6 @@ final readonly class OfferResource
     }
 
     /**
-     * Bookable stay offers for one specific rate plan.
-     *
      * @param list<int>   $childrenAges
      * @param list<float> $overridePrices desired price per time slice, to quote a custom rate
      */
@@ -93,11 +89,7 @@ final readonly class OfferResource
         return StayOffers::fromArray($data);
     }
 
-    /**
-     * Bookable extra services for a stay under a given rate plan.
-     *
-     * @param list<int> $childrenAges
-     */
+    /** @param list<int> $childrenAges */
     public function services(
         string $ratePlanId,
         \DateTimeImmutable $arrival,

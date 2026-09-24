@@ -6,7 +6,6 @@ namespace Oleksyuk\Apaleo\Resource\Operations;
 
 use Oleksyuk\Apaleo\Resource\Operations\Enum\MaintenanceType;
 
-/** Filter criteria shared by MaintenanceResource::list() and ::count(). */
 final readonly class MaintenanceFilter
 {
     /** @param list<MaintenanceType> $types */

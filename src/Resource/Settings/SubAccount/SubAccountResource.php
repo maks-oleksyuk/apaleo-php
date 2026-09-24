@@ -65,7 +65,6 @@ final readonly class SubAccountResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @return string the id of the created sub-account */
     public function create(CreateSubAccount $data): string
     {
         $response = $this->pipeline->send(new CreateSubAccountRequest($data));

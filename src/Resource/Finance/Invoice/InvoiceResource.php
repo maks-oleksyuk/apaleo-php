@@ -74,9 +74,7 @@ final readonly class InvoiceResource
     }
 
     /**
-     * Check preview() first: it tells whether this would fail, or also close the folio.
-     *
-     * @return string the id of the created invoice
+     * Check preview() first: it tells whether this would fail or also close the folio.
      */
     public function create(string $folioId, string $languageCode, ?string $idempotencyKey = null): string
     {

@@ -69,7 +69,6 @@ final readonly class MarketSegmentResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @return string the id of the created market segment */
     public function create(CreateMarketSegment $data): string
     {
         $response = $this->pipeline->send(new CreateMarketSegmentRequest($data));

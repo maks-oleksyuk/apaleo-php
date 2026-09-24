@@ -11,7 +11,6 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Shape of GET /rateplan/v1/services/{id}; the list endpoint returns ServiceListItem. */
 final readonly class Service
 {
     /**

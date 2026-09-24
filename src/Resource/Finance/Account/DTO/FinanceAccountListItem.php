@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Resource\Finance\Account\Enum\AccountType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\VatRate;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of the account lists and the chart of accounts: unlike FinanceAccount, no transactions, but its VAT and sub-accounts. */
 final readonly class FinanceAccountListItem
 {
     /** @param list<FinanceAccountListItem> $subAccounts only filled up to the requested depth */

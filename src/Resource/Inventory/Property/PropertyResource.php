@@ -65,9 +65,6 @@ final readonly class PropertyResource
         return ResponseData::int($data, 'count');
     }
 
-    /**
-     * @return string the id of the created property
-     */
     public function create(CreateProperty $data): string
     {
         $response = $this->pipeline->send(new CreatePropertyRequest($data));
@@ -85,9 +82,6 @@ final readonly class PropertyResource
         $this->pipeline->send(new DeletePropertyRequest($propertyId));
     }
 
-    /**
-     * @return string the id of the cloned property
-     */
     public function clone(string $propertyId, CreateProperty $overrides): string
     {
         $response = $this->pipeline->send(new ClonePropertyRequest($propertyId, $overrides));

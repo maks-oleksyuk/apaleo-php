@@ -7,7 +7,6 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\Service;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ServiceType;
 
-/** Filter criteria shared by ServiceResource::list() and ::count(). */
 final readonly class ServiceFilter
 {
     /**

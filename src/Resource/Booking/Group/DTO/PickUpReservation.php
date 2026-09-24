@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\BookReservationService;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Guest;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TravelPurpose;
 
-/** Picks up a reservation from a block already blocked for a {@see Group}. */
 final readonly class PickUpReservation
 {
     /**

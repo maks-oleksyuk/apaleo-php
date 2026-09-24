@@ -12,11 +12,6 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ServiceType;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/**
- * Item shape of GET /rateplan/v1/services: unlike Service, $name and $description are plain strings,
- * and instead of the $accountingConfigs history only the currently valid one is returned, flattened
- * into $serviceType / $vatType / $subAccountId.
- */
 final readonly class ServiceListItem
 {
     /** @param list<ChannelCode> $channelCodes */

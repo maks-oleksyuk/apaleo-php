@@ -49,7 +49,6 @@ final readonly class RoutingResource
         );
     }
 
-    /** @return string the id of the created routing */
     public function create(CreateRouting $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateRoutingRequest($data, $idempotencyKey));

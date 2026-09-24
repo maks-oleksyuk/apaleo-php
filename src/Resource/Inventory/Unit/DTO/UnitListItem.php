@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /inventory/v1/units: unlike Unit, $description is a plain string and maintenance carries only its type. */
 final readonly class UnitListItem
 {
     /**

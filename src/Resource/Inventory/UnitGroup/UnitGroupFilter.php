@@ -6,7 +6,6 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\UnitGroup;
 
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 
-/** Filter criteria shared by UnitGroupResource::list() and ::count(). */
 final readonly class UnitGroupFilter
 {
     /** @param list<UnitGroupType> $unitGroupTypes */

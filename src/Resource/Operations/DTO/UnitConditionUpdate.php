@@ -6,7 +6,6 @@ namespace Oleksyuk\Apaleo\Resource\Operations\DTO;
 
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
 
-/** One entry of OperationsResource::setUnitsCondition()'s bulk request. */
 final readonly class UnitConditionUpdate
 {
     public function __construct(

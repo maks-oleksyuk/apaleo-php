@@ -61,9 +61,6 @@ final readonly class UnitGroupResource
         return ResponseData::int($data, 'count');
     }
 
-    /**
-     * @return string the id of the created unit group
-     */
     public function create(CreateUnitGroup $data): string
     {
         $response = $this->pipeline->send(new CreateUnitGroupRequest($data));

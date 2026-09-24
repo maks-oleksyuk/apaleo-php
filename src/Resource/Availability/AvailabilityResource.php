@@ -10,7 +10,6 @@ use Oleksyuk\Apaleo\Resource\Availability\Service\ServiceResource;
 use Oleksyuk\Apaleo\Resource\Availability\Unit\UnitResource;
 use Oleksyuk\Apaleo\Resource\Availability\UnitGroup\UnitGroupResource;
 
-/** Aggregates the Availability API's sub-resources (unit groups, units, services, house-level overbooking). */
 final readonly class AvailabilityResource
 {
     public function __construct(

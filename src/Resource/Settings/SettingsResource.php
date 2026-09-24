@@ -16,10 +16,7 @@ use Oleksyuk\Apaleo\Resource\Settings\PropertySettings\PropertySettingsResource;
 use Oleksyuk\Apaleo\Resource\Settings\SubAccount\SubAccountResource;
 use Oleksyuk\Apaleo\Resource\Settings\TimeSliceDefinition\TimeSliceDefinitionResource;
 
-/**
- * Aggregates the Settings API's sub-resources. Age categories also live under /settings/v1, but ship
- * in the Rate Plan API spec, so they're in {@see RatePlanResource}.
- */
+/** Age categories also live under /settings/v1, but ship in the Rate Plan API spec, so they're in {@see RatePlanResource}. */
 final readonly class SettingsResource
 {
     public function __construct(

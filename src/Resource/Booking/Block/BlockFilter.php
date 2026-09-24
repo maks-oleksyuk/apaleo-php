@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\BlockStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
 
-/** Filter criteria shared by BlockResource::list() and ::count(). */
 final readonly class BlockFilter
 {
     /**

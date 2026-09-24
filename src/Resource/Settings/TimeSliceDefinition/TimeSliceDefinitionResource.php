@@ -45,7 +45,6 @@ final readonly class TimeSliceDefinitionResource
         );
     }
 
-    /** @return string the id of the created time slice definition */
     public function create(string $propertyId, CreateTimeSliceDefinition $data): string
     {
         $response = $this->pipeline->send(new CreateTimeSliceDefinitionRequest($propertyId, $data));

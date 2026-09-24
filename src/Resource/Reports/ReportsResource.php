@@ -21,7 +21,6 @@ use Oleksyuk\Apaleo\Resource\Reports\Requests\ListOrderedServicesRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** The Reports API (reports-v1) — five unrelated read-only reports, so no sub-resources beneath this one. */
 final readonly class ReportsResource
 {
     public function __construct(

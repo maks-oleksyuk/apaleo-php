@@ -7,7 +7,6 @@ namespace Oleksyuk\Apaleo\Resource\Settings\CapturePolicy\DTO;
 use Oleksyuk\Apaleo\Resource\Settings\CapturePolicy\Enum\CapturePaymentMode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /settings/v1/capture-policies: unlike CapturePolicy, $code is always set. */
 final readonly class CapturePolicyListItem
 {
     public function __construct(

@@ -56,8 +56,6 @@ final readonly class UnitResource
     }
 
     /**
-     * Alternative units the reservation could be moved to.
-     *
      * @param list<string> $unitAttributeIds
      *
      * @return PaginatedResult<AvailableUnitItem>

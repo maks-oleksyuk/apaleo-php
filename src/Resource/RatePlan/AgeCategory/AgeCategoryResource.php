@@ -42,7 +42,6 @@ final readonly class AgeCategoryResource
         );
     }
 
-    /** @return string the id of the created age category */
     public function create(CreateAgeCategory $data): string
     {
         $response = $this->pipeline->send(new CreateAgeCategoryRequest($data));

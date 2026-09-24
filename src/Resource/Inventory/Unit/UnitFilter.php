@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitArchiveFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 
-/** Filter criteria shared by UnitResource::list() and ::count(). */
 final readonly class UnitFilter
 {
     /**

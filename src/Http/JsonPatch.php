@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Http;
 
-/** Builds an RFC 6902 JSON Patch document for PATCH requests. */
 final class JsonPatch
 {
     /** @var list<array<string, mixed>> */

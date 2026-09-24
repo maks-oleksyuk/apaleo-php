@@ -13,7 +13,6 @@ use Oleksyuk\Apaleo\Resource\Finance\Refund\RefundResource;
 use Oleksyuk\Apaleo\Resource\Finance\Routing\RoutingResource;
 use Oleksyuk\Apaleo\Resource\Finance\Types\FinanceTypesResource;
 
-/** Aggregates the Finance API's sub-resources. */
 final readonly class FinanceResource
 {
     public function __construct(

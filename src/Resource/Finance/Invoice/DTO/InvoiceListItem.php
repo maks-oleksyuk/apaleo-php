@@ -12,7 +12,6 @@ use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceStatus;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /finance/v1/invoices: invoice metadata only, without recipient, sender, line items, payments or taxes. */
 final readonly class InvoiceListItem
 {
     /** @param list<InvoiceAction> $allowedActions only filled with expand: ['allowedActions'] */

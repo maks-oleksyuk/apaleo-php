@@ -45,9 +45,6 @@ final readonly class UnitAttributeResource
         );
     }
 
-    /**
-     * @return string the id of the created unit attribute definition
-     */
     public function create(CreateUnitAttributeDefinition $data): string
     {
         $response = $this->pipeline->send(new CreateUnitAttributeRequest($data));

@@ -9,7 +9,6 @@ use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\ReservationStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
 
-/** Filter criteria shared by ReservationResource::list() and ::count() — same query params on both endpoints. */
 final readonly class ReservationFilter
 {
     /**

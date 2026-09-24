@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO;
 
-/** Full replacement payload for PUT /unit-groups/{id}. */
 final readonly class ReplaceUnitGroup
 {
     /**

@@ -24,10 +24,7 @@ use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/**
- * The property's subledger: its chart of accounts and the transactions booked on them.
- * Methods ending in Daily filter by business day, the others by exact timestamp.
- */
+/** Methods ending in Daily filter by business day, the others by exact timestamp. */
 final readonly class FinanceAccountResource
 {
     public function __construct(

@@ -22,7 +22,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface as SymfonyHttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyResponseInterface;
 
-/** Sends a resource request: adds auth, executes it, maps errors, decodes JSON. */
 final readonly class RequestPipeline
 {
     public const string DEFAULT_BASE_URI = 'https://api.apaleo.com';

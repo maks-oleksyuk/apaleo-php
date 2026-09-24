@@ -10,7 +10,6 @@ use Oleksyuk\Apaleo\Resource\Account\DTO\CreateAccount;
 
 final readonly class CreateAccountRequest extends Request
 {
-    /** @param ?string $idempotencyKey lets a retried request be recognized and not create a duplicate account */
     public function __construct(
         private CreateAccount $account,
         private ?string $idempotencyKey = null,

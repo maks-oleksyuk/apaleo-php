@@ -47,7 +47,6 @@ final readonly class RefundResource
         );
     }
 
-    /** @return string the id of the created refund */
     public function create(string $folioId, CreateFolioRefund $refund, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new CreateFolioRefundRequest($folioId, $refund, $idempotencyKey));
@@ -55,7 +54,6 @@ final readonly class RefundResource
         return ResponseData::string($data, 'id');
     }
 
-    /** @return string the id of the created refund */
     public function refundPayment(string $folioId, string $paymentId, CreatePaymentRefund $refund, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new RefundPaymentRequest($folioId, $paymentId, $refund, $idempotencyKey));

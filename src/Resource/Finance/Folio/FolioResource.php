@@ -103,7 +103,6 @@ final readonly class FolioResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @return string the id of the created folio */
     public function create(CreateFolio $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateFolioRequest($data, $idempotencyKey));
@@ -144,7 +143,6 @@ final readonly class FolioResource
         return AddedCharge::fromArray($data);
     }
 
-    /** @return string the id of the created transitory charge */
     public function addTransitoryCharge(string $folioId, CreateTransitoryCharge $charge, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new AddTransitoryChargeRequest($folioId, $charge, $idempotencyKey));
@@ -168,7 +166,6 @@ final readonly class FolioResource
         return AddedCharge::fromArray($data);
     }
 
-    /** @return string the id of the created allowance */
     public function addChargeAllowance(
         string $folioId,
         string $chargeId,
@@ -182,7 +179,6 @@ final readonly class FolioResource
         return ResponseData::string($data, 'id');
     }
 
-    /** @return string the id of the created allowance */
     public function addFolioAllowance(string $folioId, CreateFolioAllowance $allowance, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new AddFolioAllowanceRequest($folioId, $allowance, $idempotencyKey));

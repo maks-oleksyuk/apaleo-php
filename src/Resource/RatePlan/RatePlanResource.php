@@ -15,11 +15,7 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Rate\RateResource;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\RatePlanDomainResource;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\ServiceResource;
 
-/**
- * Aggregates the Rate Plan API's sub-resources (rate plans, rates, services, companies, cancellation
- * and no-show policies, corporate and promo codes, age categories). Age categories live under
- * /settings/v1 but ship in the same API spec, so they're grouped here.
- */
+/** Age categories live under /settings/v1 but ship in the Rate Plan API spec, so they're grouped here. */
 final readonly class RatePlanResource
 {
     public function __construct(

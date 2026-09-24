@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Booker;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\RegisteredCard;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /booking/v1/bookings: unlike Booking, it has no $propertyValues. */
 final readonly class BookingListItem
 {
     /**

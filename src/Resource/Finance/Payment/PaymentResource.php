@@ -56,11 +56,6 @@ final readonly class PaymentResource
         );
     }
 
-    /**
-     * Takes a payment; how depends on the type of $payment (recorded, card terminal, pre-authorization capture, stored payment account, or payment link).
-     *
-     * @return string the id of the created payment
-     */
     public function create(
         string $folioId,
         CreateAccountPayment|CreateAuthorizationPayment|CreateCustomPayment|CreatePaymentLink|CreateTerminalPayment $payment,

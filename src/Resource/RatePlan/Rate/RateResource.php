@@ -68,8 +68,6 @@ final readonly class RateResource
     }
 
     /**
-     * Applies one patch to the rates of several rate plans at once.
-     *
      * @param list<string> $ratePlanIds
      * @param list<DayOfWeek> $weekDays empty = every day
      */
@@ -83,7 +81,6 @@ final readonly class RateResource
         $this->pipeline->send(new BulkUpdateRatesRequest($ratePlanIds, $from, $to, $patch, $weekDays));
     }
 
-    /** Deletes every rate in the range. */
     public function delete(string $ratePlanId, \DateTimeImmutable $from, \DateTimeImmutable $to): void
     {
         $this->pipeline->send(new DeleteRatesRequest($ratePlanId, $from, $to));

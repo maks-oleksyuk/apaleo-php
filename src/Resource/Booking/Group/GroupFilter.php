@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Group;
 
-/** Filter criteria shared by GroupResource::list() and ::count(). */
 final readonly class GroupFilter
 {
     /** @param list<string> $propertyIds */

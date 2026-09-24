@@ -77,7 +77,6 @@ final readonly class ServiceResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @return string the id of the created service */
     public function create(CreateService $data): string
     {
         $response = $this->pipeline->send(new CreateServiceRequest($data));

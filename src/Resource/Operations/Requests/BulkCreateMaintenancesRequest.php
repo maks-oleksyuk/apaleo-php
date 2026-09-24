@@ -12,7 +12,6 @@ final readonly class BulkCreateMaintenancesRequest extends Request
 {
     /**
      * @param list<CreateMaintenance> $maintenances
-     * @param ?string $idempotencyKey lets a retried request be recognized and not create duplicate maintenances
      */
     public function __construct(
         private array $maintenances,

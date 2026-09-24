@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitCondition;
 
-/** Alternative units a reservation could be moved to. */
 final readonly class ListReservationAvailableUnitsRequest extends Request
 {
     /** @param list<string> $unitAttributeIds */

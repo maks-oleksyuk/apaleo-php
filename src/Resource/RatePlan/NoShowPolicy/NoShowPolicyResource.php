@@ -45,7 +45,6 @@ final readonly class NoShowPolicyResource
         );
     }
 
-    /** @return string the id of the created no-show policy */
     public function create(CreateNoShowPolicy $data): string
     {
         $response = $this->pipeline->send(new CreateNoShowPolicyRequest($data));

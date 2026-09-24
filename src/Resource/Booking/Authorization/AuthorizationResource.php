@@ -57,7 +57,6 @@ final readonly class AuthorizationResource
         );
     }
 
-    /** Authorizes $amount against an external payment transaction referenced by $transactionReference. */
     public function createByAuthorization(AuthorizationTarget $target, MonetaryValue $amount, string $transactionReference): string
     {
         $data = $this->pipeline->send(new CreateAuthorizationByAuthorizationRequest($target, $amount, $transactionReference));
@@ -104,7 +103,6 @@ final readonly class AuthorizationResource
         $this->pipeline->send(new AuthorizationSimpleActionRequest($authorizationId, 'expire-payment-link'));
     }
 
-    /** Re-authorizes for a new $amount, e.g. after the original authorization's hold is about to lapse. */
     public function refresh(string $authorizationId, MonetaryValue $amount): void
     {
         $this->pipeline->send(new RefreshAuthorizationRequest($authorizationId, $amount));

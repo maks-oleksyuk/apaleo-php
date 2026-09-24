@@ -56,7 +56,6 @@ final readonly class PaymentAccountResource
         );
     }
 
-    /** Creates a payment account from an external payment transaction (e.g. an OTA-collected card) referenced by $transactionReference. */
     public function createByAuthorization(PaymentAccountTarget $target, string $transactionReference): string
     {
         $data = $this->pipeline->send(new CreatePaymentAccountByAuthorizationRequest($target, $transactionReference));

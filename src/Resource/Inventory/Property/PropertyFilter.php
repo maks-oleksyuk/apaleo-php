@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Property;
 
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 
-/** Filter criteria for PropertyResource::list() (Apaleo's properties/$count takes none). */
+/** list() only: Apaleo's properties/$count takes no filter. */
 final readonly class PropertyFilter
 {
     /**

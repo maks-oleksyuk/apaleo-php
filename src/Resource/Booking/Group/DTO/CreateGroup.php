@@ -8,8 +8,8 @@ use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Booker;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\RegisteredCard;
 
 /**
- * The payload for creating a group booking. Does not expose the deprecated inline `paymentAccount`
- * field (superseded by the dedicated PaymentAccounts resource, being removed 2026-05-15).
+ * Does not expose the deprecated inline `paymentAccount` field
+ * (superseded by the dedicated PaymentAccounts resource, being removed 2026-05-15).
  */
 final readonly class CreateGroup
 {

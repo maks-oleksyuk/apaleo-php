@@ -14,7 +14,6 @@ use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\PaymentAccountResource;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\ReservationResource;
 use Oleksyuk\Apaleo\Resource\Booking\Types\TypesResource;
 
-/** Aggregates the Booking API's sub-resources (reservations, bookings, blocks, groups, offers, authorizations, payment accounts, types). */
 final readonly class BookingResource
 {
     public function __construct(

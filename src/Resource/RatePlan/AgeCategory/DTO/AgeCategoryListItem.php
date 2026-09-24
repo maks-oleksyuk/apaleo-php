@@ -6,7 +6,6 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\DTO;
 
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Item shape of GET /settings/v1/age-categories: unlike AgeCategory, $name is a plain string, not a localized map. */
 final readonly class AgeCategoryListItem
 {
     public function __construct(

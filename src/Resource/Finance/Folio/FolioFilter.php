@@ -7,7 +7,6 @@ namespace Oleksyuk\Apaleo\Resource\Finance\Folio;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\Enum\FolioStatus;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FolioType;
 
-/** Filter criteria shared by FolioResource::list() and ::count(). */
 final readonly class FolioFilter
 {
     /**

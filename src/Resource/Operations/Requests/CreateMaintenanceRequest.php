@@ -10,7 +10,6 @@ use Oleksyuk\Apaleo\Resource\Operations\DTO\CreateMaintenance;
 
 final readonly class CreateMaintenanceRequest extends Request
 {
-    /** @param ?string $idempotencyKey lets a retried request be recognized and not create a duplicate maintenance */
     public function __construct(
         private CreateMaintenance $maintenance,
         private ?string $idempotencyKey = null,

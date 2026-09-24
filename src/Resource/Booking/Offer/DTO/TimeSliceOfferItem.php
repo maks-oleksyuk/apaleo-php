@@ -8,7 +8,6 @@ use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** One rate plan's offer for a single time slice, as returned by the offer-index endpoint. */
 final readonly class TimeSliceOfferItem
 {
     /** @param list<PerOccupancyPriceItem> $prices */

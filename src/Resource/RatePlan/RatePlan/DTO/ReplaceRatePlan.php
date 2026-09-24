@@ -9,7 +9,7 @@ use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\PriceCalculationMode;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\AccountingConfig;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 
-/** Full replacement payload for PUT /rate-plans/{id}: anything left out is cleared. */
+/** A full replacement: anything left out is cleared. */
 final readonly class ReplaceRatePlan
 {
     /**

@@ -45,7 +45,6 @@ final readonly class CancellationPolicyResource
         );
     }
 
-    /** @return string the id of the created cancellation policy */
     public function create(CreateCancellationPolicy $data): string
     {
         $response = $this->pipeline->send(new CreateCancellationPolicyRequest($data));

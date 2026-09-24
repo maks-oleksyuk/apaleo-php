@@ -6,7 +6,6 @@ namespace Oleksyuk\Apaleo\Resource\Settings\MarketSegment\DTO;
 
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** Shape of both the list and the single GET. */
 final readonly class MarketSegment
 {
     /** @param list<string> $propertyIds empty when the segment isn't restricted to specific properties */

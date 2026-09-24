@@ -64,9 +64,6 @@ final readonly class UnitResource
         return ResponseData::int($data, 'count');
     }
 
-    /**
-     * @return string the id of the created unit
-     */
     public function create(CreateUnit $data): string
     {
         $response = $this->pipeline->send(new CreateUnitRequest($data));
@@ -77,7 +74,7 @@ final readonly class UnitResource
     /**
      * @param list<CreateUnit> $units
      *
-     * @return list<string> ids of the created units
+     * @return list<string>
      */
     public function bulkCreate(array $units): array
     {
