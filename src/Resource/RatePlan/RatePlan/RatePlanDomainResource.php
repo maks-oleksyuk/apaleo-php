@@ -9,6 +9,7 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO\CreateRatePlan;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO\RatePlan;
+use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO\RatePlanListItem;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO\ReplaceRatePlan;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Requests\ArchiveRatePlanRequest;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Requests\BulkDeleteRatePlansRequest;
@@ -55,7 +56,7 @@ final readonly class RatePlanDomainResource
     /**
      * @param list<'ageCategories'|'bookingPeriods'|'cancellationPolicy'|'property'|'services'|'surcharges'|'unitGroup'> $expand
      *
-     * @return PaginatedResult<RatePlan>
+     * @return PaginatedResult<RatePlanListItem>
      */
     public function list(
         RatePlanFilter $filter = new RatePlanFilter(),
@@ -68,7 +69,7 @@ final readonly class RatePlanDomainResource
         $data = $this->pipeline->send(new ListRatePlansRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
-            items: array_map(RatePlan::fromArray(...), ResponseData::nestedList($data, 'ratePlans')),
+            items: array_map(RatePlanListItem::fromArray(...), ResponseData::nestedList($data, 'ratePlans')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

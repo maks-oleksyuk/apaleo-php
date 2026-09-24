@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy\DTO\CreateNoShowPolicy;
 use Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy\DTO\NoShowPolicy;
+use Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy\DTO\NoShowPolicyListItem;
 use Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy\Requests\CreateNoShowPolicyRequest;
 use Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy\Requests\DeleteNoShowPolicyRequest;
 use Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy\Requests\GetNoShowPolicyRequest;
@@ -31,7 +32,7 @@ final readonly class NoShowPolicyResource
         return NoShowPolicy::fromArray($data);
     }
 
-    /** @return PaginatedResult<NoShowPolicy> */
+    /** @return PaginatedResult<NoShowPolicyListItem> */
     public function list(?string $propertyId = null, ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
         Pagination::assertValidPageSize($pageSize);
@@ -39,7 +40,7 @@ final readonly class NoShowPolicyResource
         $data = $this->pipeline->send(new ListNoShowPoliciesRequest($propertyId, $pageNumber, $pageSize));
 
         return new PaginatedResult(
-            items: array_map(NoShowPolicy::fromArray(...), ResponseData::nestedList($data, 'noShowPolicies')),
+            items: array_map(NoShowPolicyListItem::fromArray(...), ResponseData::nestedList($data, 'noShowPolicies')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

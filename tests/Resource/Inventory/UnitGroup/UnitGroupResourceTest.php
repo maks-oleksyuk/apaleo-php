@@ -92,13 +92,14 @@ final class UnitGroupResourceTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
             'count' => 1,
-            'unitGroups' => [$this->fixture],
+            'unitGroups' => [['name' => 'Double Room', 'description' => 'A double room'] + $this->fixture],
         ])));
 
         $unitGroups = $this->unitGroups->list(new UnitGroupFilter('BER'));
 
         self::assertCount(1, $unitGroups);
         self::assertSame('DBL', $unitGroups[0]->id);
+        self::assertSame('Double Room', $unitGroups[0]->name);
     }
 
     public function testListUnitGroupsHandlesEmpty204Response(): void

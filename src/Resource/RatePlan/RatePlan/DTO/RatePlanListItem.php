@@ -11,11 +11,10 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\EmbeddedProperty;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final readonly class RatePlan
+/** Item shape of GET /rateplan/v1/rate-plans: unlike RatePlan, $name and $description are plain strings, not localized maps. */
+final readonly class RatePlanListItem
 {
     /**
-     * @param array<string, string> $name
-     * @param array<string, string> $description
      * @param list<ChannelCode> $channelCodes
      * @param list<string> $promoCodes
      * @param list<BookingPeriod> $bookingPeriods
@@ -28,8 +27,8 @@ final readonly class RatePlan
     public function __construct(
         public string $id,
         public string $code,
-        public array $name,
-        public array $description,
+        public string $name,
+        public string $description,
         public GuaranteeType $minGuaranteeType,
         public ?PriceCalculationMode $priceCalculationMode,
         public EmbeddedProperty $property,
@@ -69,8 +68,8 @@ final readonly class RatePlan
         return new self(
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
-            name: ResponseData::localizedText($data, 'name'),
-            description: ResponseData::localizedText($data, 'description'),
+            name: ResponseData::string($data, 'name'),
+            description: ResponseData::string($data, 'description'),
             minGuaranteeType: GuaranteeType::fromApi(ResponseData::string($data, 'minGuaranteeType')),
             priceCalculationMode: $priceCalculationMode !== null ? PriceCalculationMode::fromApi($priceCalculationMode) : null,
             property: EmbeddedProperty::fromArray(ResponseData::nested($data, 'property')),

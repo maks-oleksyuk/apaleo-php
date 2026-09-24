@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy\DTO\CancellationPolicy;
+use Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy\DTO\CancellationPolicyListItem;
 use Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy\DTO\CreateCancellationPolicy;
 use Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy\Requests\CreateCancellationPolicyRequest;
 use Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy\Requests\DeleteCancellationPolicyRequest;
@@ -31,7 +32,7 @@ final readonly class CancellationPolicyResource
         return CancellationPolicy::fromArray($data);
     }
 
-    /** @return PaginatedResult<CancellationPolicy> */
+    /** @return PaginatedResult<CancellationPolicyListItem> */
     public function list(?string $propertyId = null, ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
         Pagination::assertValidPageSize($pageSize);
@@ -39,7 +40,7 @@ final readonly class CancellationPolicyResource
         $data = $this->pipeline->send(new ListCancellationPoliciesRequest($propertyId, $pageNumber, $pageSize));
 
         return new PaginatedResult(
-            items: array_map(CancellationPolicy::fromArray(...), ResponseData::nestedList($data, 'cancellationPolicies')),
+            items: array_map(CancellationPolicyListItem::fromArray(...), ResponseData::nestedList($data, 'cancellationPolicies')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

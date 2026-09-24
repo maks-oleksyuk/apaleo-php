@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\CreateUnit;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\Unit;
+use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\UnitListItem;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\ArchiveUnitRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\BulkCreateUnitsRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\BulkUpdateUnitsRequest;
@@ -38,7 +39,7 @@ final readonly class UnitResource
     /**
      * @param list<'actions'|'connectedUnits'|'property'|'unitGroup'> $expand
      *
-     * @return PaginatedResult<Unit>
+     * @return PaginatedResult<UnitListItem>
      */
     public function list(
         UnitFilter $filter = new UnitFilter(),
@@ -51,7 +52,7 @@ final readonly class UnitResource
         $data = $this->pipeline->send(new ListUnitsRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
-            items: array_map(Unit::fromArray(...), ResponseData::nestedList($data, 'units')),
+            items: array_map(UnitListItem::fromArray(...), ResponseData::nestedList($data, 'units')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

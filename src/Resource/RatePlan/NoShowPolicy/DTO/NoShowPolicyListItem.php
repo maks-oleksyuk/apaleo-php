@@ -7,18 +7,15 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy\DTO;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\FeeDetails;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final readonly class NoShowPolicy
+/** Item shape of GET /rateplan/v1/no-show-policies: unlike NoShowPolicy, $name and $description are plain strings, not localized maps. */
+final readonly class NoShowPolicyListItem
 {
-    /**
-     * @param array<string, string> $name
-     * @param array<string, string> $description
-     */
     public function __construct(
         public string $id,
         public string $code,
         public string $propertyId,
-        public array $name,
-        public array $description,
+        public string $name,
+        public string $description,
         public FeeDetails $fee,
     ) {}
 
@@ -29,8 +26,8 @@ final readonly class NoShowPolicy
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
             propertyId: ResponseData::string($data, 'propertyId'),
-            name: ResponseData::localizedText($data, 'name'),
-            description: ResponseData::localizedText($data, 'description'),
+            name: ResponseData::string($data, 'name'),
+            description: ResponseData::string($data, 'description'),
             fee: FeeDetails::fromArray(ResponseData::nested($data, 'fee')),
         );
     }

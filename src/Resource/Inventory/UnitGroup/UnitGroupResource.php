@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\CreateUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\ReplaceUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\UnitGroup;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\UnitGroupListItem;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Requests\CountUnitGroupsRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Requests\CreateUnitGroupRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Requests\DeleteUnitGroupRequest;
@@ -35,7 +36,7 @@ final readonly class UnitGroupResource
     /**
      * @param list<'connectedUnitGroups'|'property'> $expand
      *
-     * @return PaginatedResult<UnitGroup>
+     * @return PaginatedResult<UnitGroupListItem>
      */
     public function list(
         UnitGroupFilter $filter = new UnitGroupFilter(),
@@ -48,7 +49,7 @@ final readonly class UnitGroupResource
         $data = $this->pipeline->send(new ListUnitGroupsRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
-            items: array_map(UnitGroup::fromArray(...), ResponseData::nestedList($data, 'unitGroups')),
+            items: array_map(UnitGroupListItem::fromArray(...), ResponseData::nestedList($data, 'unitGroups')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

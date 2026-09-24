@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO;
 
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
+use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final readonly class Unit
+/** Item shape of GET /inventory/v1/units: unlike Unit, $description is a plain string and maintenance carries only its type. */
+final readonly class UnitListItem
 {
     /**
-     * @param array<string, string> $description
      * @param list<UnitAttribute> $attributes
      * @param list<ConnectedUnit> $connectedUnits
      */
     public function __construct(
         public string $id,
         public string $name,
-        public array $description,
+        public string $description,
         public string $propertyId,
         public ?string $unitGroupId,
         public ?string $connectingUnitId,
@@ -25,7 +26,7 @@ final readonly class Unit
         public UnitCondition $condition,
         public string $rawCondition,
         public bool $isOccupied,
-        public ?UnitMaintenance $maintenance,
+        public ?UnitMaintenanceType $maintenanceType,
         public bool $isArchived,
         public ?\DateTimeImmutable $archived,
         public array $attributes,
@@ -33,42 +34,29 @@ final readonly class Unit
         public \DateTimeImmutable $created,
     ) {}
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
         $status = ResponseData::nested($data, 'status');
-        $property = ResponseData::nested($data, 'property');
-        $unitGroup = ResponseData::nested($data, 'unitGroup');
-        $connectingUnit = ResponseData::nested($data, 'connectingUnit');
-        $maintenance = ResponseData::nested($status, 'maintenance');
-        $archived = ResponseData::nullableDateTime($data, 'archived');
-
+        $maintenanceType = ResponseData::nullableString(ResponseData::nested($status, 'maintenance'), 'type');
         $condition = ResponseData::string($status, 'condition');
 
         return new self(
             id: ResponseData::string($data, 'id'),
             name: ResponseData::string($data, 'name'),
-            description: ResponseData::localizedText($data, 'description'),
-            propertyId: ResponseData::string($property, 'id'),
-            unitGroupId: ResponseData::nullableString($unitGroup, 'id'),
-            connectingUnitId: ResponseData::nullableString($connectingUnit, 'id'),
+            description: ResponseData::string($data, 'description'),
+            propertyId: ResponseData::string(ResponseData::nested($data, 'property'), 'id'),
+            unitGroupId: ResponseData::nullableString(ResponseData::nested($data, 'unitGroup'), 'id'),
+            connectingUnitId: ResponseData::nullableString(ResponseData::nested($data, 'connectingUnit'), 'id'),
             maxPersons: ResponseData::int($data, 'maxPersons'),
             condition: UnitCondition::fromApi($condition),
             rawCondition: $condition,
             isOccupied: ResponseData::bool($status, 'isOccupied'),
-            maintenance: $maintenance !== [] ? UnitMaintenance::fromArray($maintenance) : null,
+            maintenanceType: $maintenanceType !== null ? UnitMaintenanceType::fromApi($maintenanceType) : null,
             isArchived: ResponseData::bool($data, 'isArchived'),
-            archived: $archived,
-            attributes: array_map(
-                UnitAttribute::fromArray(...),
-                ResponseData::nestedList($data, 'attributes'),
-            ),
-            connectedUnits: array_map(
-                ConnectedUnit::fromArray(...),
-                ResponseData::nestedList($data, 'connectedUnits'),
-            ),
+            archived: ResponseData::nullableDateTime($data, 'archived'),
+            attributes: array_map(UnitAttribute::fromArray(...), ResponseData::nestedList($data, 'attributes')),
+            connectedUnits: array_map(ConnectedUnit::fromArray(...), ResponseData::nestedList($data, 'connectedUnits')),
             created: ResponseData::dateTime($data, 'created'),
         );
     }

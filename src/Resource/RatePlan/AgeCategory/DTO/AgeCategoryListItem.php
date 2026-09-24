@@ -6,14 +6,14 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\DTO;
 
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final readonly class AgeCategory
+/** Item shape of GET /settings/v1/age-categories: unlike AgeCategory, $name is a plain string, not a localized map. */
+final readonly class AgeCategoryListItem
 {
-    /** @param array<string, string> $name */
     public function __construct(
         public string $id,
         public string $code,
         public string $propertyId,
-        public array $name,
+        public string $name,
         public int $minAge,
         public int $maxAge,
     ) {}
@@ -25,7 +25,7 @@ final readonly class AgeCategory
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
             propertyId: ResponseData::string($data, 'propertyId'),
-            name: ResponseData::localizedText($data, 'name'),
+            name: ResponseData::string($data, 'name'),
             minAge: ResponseData::int($data, 'minAge'),
             maxAge: ResponseData::int($data, 'maxAge'),
         );

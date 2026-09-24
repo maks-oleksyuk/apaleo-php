@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\DTO\AgeCategory;
+use Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\DTO\AgeCategoryListItem;
 use Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\DTO\CreateAgeCategory;
 use Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\Requests\CreateAgeCategoryRequest;
 use Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\Requests\DeleteAgeCategoryRequest;
@@ -30,13 +31,13 @@ final readonly class AgeCategoryResource
         return AgeCategory::fromArray($data);
     }
 
-    /** @return PaginatedResult<AgeCategory> */
+    /** @return PaginatedResult<AgeCategoryListItem> */
     public function list(string $propertyId): PaginatedResult
     {
         $data = $this->pipeline->send(new ListAgeCategoriesRequest($propertyId));
 
         return new PaginatedResult(
-            items: array_map(AgeCategory::fromArray(...), ResponseData::nestedList($data, 'ageCategories')),
+            items: array_map(AgeCategoryListItem::fromArray(...), ResponseData::nestedList($data, 'ageCategories')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

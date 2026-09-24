@@ -9,19 +9,18 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\FeeDetails;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\Period;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final readonly class CancellationPolicy
+/** Item shape of GET /rateplan/v1/cancellation-policies: unlike CancellationPolicy, $name and $description are plain strings, not localized maps. */
+final readonly class CancellationPolicyListItem
 {
     /**
-     * @param array<string, string> $name
-     * @param array<string, string> $description
      * @param Period $periodFromReference how long before arrival / after booking the guest can still cancel for free
      */
     public function __construct(
         public string $id,
         public string $code,
         public string $propertyId,
-        public array $name,
-        public array $description,
+        public string $name,
+        public string $description,
         public Period $periodFromReference,
         public CancellationPolicyReference $reference,
         public FeeDetails $fee,
@@ -34,8 +33,8 @@ final readonly class CancellationPolicy
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
             propertyId: ResponseData::string($data, 'propertyId'),
-            name: ResponseData::localizedText($data, 'name'),
-            description: ResponseData::localizedText($data, 'description'),
+            name: ResponseData::string($data, 'name'),
+            description: ResponseData::string($data, 'description'),
             periodFromReference: Period::fromArray(ResponseData::nested($data, 'periodFromReference')),
             reference: CancellationPolicyReference::fromApi(ResponseData::string($data, 'reference')),
             fee: FeeDetails::fromArray(ResponseData::nested($data, 'fee')),

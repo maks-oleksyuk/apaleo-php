@@ -42,13 +42,14 @@ final class RatePlanDomainResourceTest extends RatePlanTestCase
 
     public function testListReadsEmbeddedServiceShapeAndSendsFilter(): void
     {
-        $item = ['name' => 'Non Refundable', 'includedServices' => [['service' => ['id' => 'MUC-BRKF'], 'grossPrice' => ['amount' => 15, 'currency' => 'EUR']]]] + $this->fixture();
+        $item = ['name' => 'Non Refundable', 'description' => 'No refunds', 'includedServices' => [['service' => ['id' => 'MUC-BRKF'], 'grossPrice' => ['amount' => 15, 'currency' => 'EUR']]]] + $this->fixture();
         $this->respond(['count' => 3, 'ratePlans' => [$item]]);
 
         $result = $this->api->ratePlans()->list(new RatePlanFilter(propertyId: 'MUC', channelCodes: [ChannelCode::Direct, ChannelCode::Ibe], derivationLevelFilter: ['lte_1']), pageSize: 1);
 
         self::assertSame(3, $result->totalCount);
-        self::assertSame(['default' => 'Non Refundable'], $result[0]->name);
+        self::assertSame('Non Refundable', $result[0]->name);
+        self::assertSame('No refunds', $result[0]->description);
         self::assertSame('MUC-BRKF', $result[0]->includedServices[0]->serviceId);
         self::assertStringContainsString('propertyId=MUC&channelCodes=Direct,Ibe&derivationLevelFilter=lte_1&pageSize=1', $this->lastUri());
     }

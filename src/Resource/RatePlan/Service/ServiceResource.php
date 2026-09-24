@@ -9,6 +9,7 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\DTO\CreateService;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\DTO\Service;
+use Oleksyuk\Apaleo\Resource\RatePlan\Service\DTO\ServiceListItem;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\Requests\CountServicesRequest;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\Requests\CreateServiceRequest;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\Requests\DeleteServiceRequest;
@@ -51,7 +52,7 @@ final readonly class ServiceResource
     /**
      * @param list<'property'> $expand
      *
-     * @return PaginatedResult<Service>
+     * @return PaginatedResult<ServiceListItem>
      */
     public function list(
         ServiceFilter $filter = new ServiceFilter(),
@@ -64,7 +65,7 @@ final readonly class ServiceResource
         $data = $this->pipeline->send(new ListServicesRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
-            items: array_map(Service::fromArray(...), ResponseData::nestedList($data, 'services')),
+            items: array_map(ServiceListItem::fromArray(...), ResponseData::nestedList($data, 'services')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

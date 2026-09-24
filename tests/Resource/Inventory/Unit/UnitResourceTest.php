@@ -129,6 +129,8 @@ final class UnitResourceTest extends TestCase
         self::assertCount(2, $units);
         self::assertSame('U1', $units[0]->id);
         self::assertSame('U2', $units[1]->id);
+        self::assertSame('Double Room', $units[0]->description);
+        self::assertSame(UnitMaintenanceType::OutOfOrder, $units[0]->maintenanceType);
     }
 
     public function testListUnitsHandlesEmpty204Response(): void

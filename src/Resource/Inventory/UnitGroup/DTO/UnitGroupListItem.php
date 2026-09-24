@@ -7,19 +7,16 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final readonly class UnitGroup
+/** Item shape of GET /inventory/v1/unit-groups: unlike UnitGroup, $name and $description are plain strings, not localized maps. */
+final readonly class UnitGroupListItem
 {
-    /**
-     * @param array<string, string> $name
-     * @param array<string, string> $description
-     * @param list<ConnectedUnitGroup> $connectedUnitGroups
-     */
+    /** @param list<ConnectedUnitGroup> $connectedUnitGroups */
     public function __construct(
         public string $id,
         public string $code,
         public string $propertyId,
-        public array $name,
-        public array $description,
+        public string $name,
+        public string $description,
         public int $memberCount,
         public ?int $maxPersons,
         public ?int $rank,
@@ -28,29 +25,23 @@ final readonly class UnitGroup
         public array $connectedUnitGroups,
     ) {}
 
-    /**
-     * @param array<string, mixed> $data
-     */
+    /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $property = ResponseData::nested($data, 'property');
         $type = ResponseData::string($data, 'type');
 
         return new self(
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
-            propertyId: ResponseData::string($property, 'id'),
-            name: ResponseData::localizedText($data, 'name'),
-            description: ResponseData::localizedText($data, 'description'),
+            propertyId: ResponseData::string(ResponseData::nested($data, 'property'), 'id'),
+            name: ResponseData::string($data, 'name'),
+            description: ResponseData::string($data, 'description'),
             memberCount: ResponseData::int($data, 'memberCount'),
             maxPersons: ResponseData::nullableInt($data, 'maxPersons'),
             rank: ResponseData::nullableInt($data, 'rank'),
             type: UnitGroupType::fromApi($type),
             rawType: $type,
-            connectedUnitGroups: array_map(
-                ConnectedUnitGroup::fromArray(...),
-                ResponseData::nestedList($data, 'connectedUnitGroups'),
-            ),
+            connectedUnitGroups: array_map(ConnectedUnitGroup::fromArray(...), ResponseData::nestedList($data, 'connectedUnitGroups')),
         );
     }
 }

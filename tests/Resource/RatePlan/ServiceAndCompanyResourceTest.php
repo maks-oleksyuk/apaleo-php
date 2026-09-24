@@ -46,7 +46,6 @@ final class ServiceAndCompanyResourceTest extends RatePlanTestCase
         self::assertSame(PricingUnit::Person, $service->pricingUnit);
         self::assertSame(AvailabilityMode::Daily, $service->availability->mode);
         self::assertSame(ServiceType::FoodAndBeverages, $service->accountingConfigs[0]->serviceType);
-        self::assertNull($service->vatType);
     }
 
     public function testListServicesMapsFlattenedAccountingAndSendsFilter(): void
@@ -61,6 +60,7 @@ final class ServiceAndCompanyResourceTest extends RatePlanTestCase
         $result = $this->api->services()->list(new ServiceFilter(propertyId: 'MUC', onlySoldAsExtras: true, serviceTypes: [ServiceType::FoodAndBeverages]));
 
         self::assertSame(VatType::Reduced, $result[0]->vatType);
+        self::assertSame('Breakfast', $result[0]->name);
         self::assertStringContainsString('propertyId=MUC&onlySoldAsExtras=true&serviceTypes=FoodAndBeverages', $this->lastUri());
     }
 
