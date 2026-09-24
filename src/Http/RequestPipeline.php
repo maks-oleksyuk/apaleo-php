@@ -45,13 +45,25 @@ final readonly class RequestPipeline
      */
     public function send(Request $apaleoRequest): array
     {
-        $response = $this->execute($apaleoRequest, $this->tokenProvider->getToken());
-
-        if ($response->getStatusCode() === 401) {
-            $response = $this->execute($apaleoRequest, $this->tokenProvider->getToken(forceRefresh: true));
-        }
+        $response = $this->executeWithRetriedAuth($apaleoRequest);
 
         return $this->handleResponse($response->getStatusCode(), (string) $response->getBody(), $response->getHeaderLine('Retry-After'));
+    }
+
+    /**
+     * Same as send(), but returns the body as-is instead of decoding it: for binary endpoints like
+     * invoice PDFs. Errors still come back as JSON and are mapped to the usual exceptions.
+     */
+    public function sendRaw(Request $apaleoRequest): string
+    {
+        $response = $this->executeWithRetriedAuth($apaleoRequest);
+        $rawBody = (string) $response->getBody();
+
+        if ($response->getStatusCode() >= 400) {
+            $this->handleResponse($response->getStatusCode(), $rawBody, $response->getHeaderLine('Retry-After'));
+        }
+
+        return $rawBody;
     }
 
     /**
@@ -104,6 +116,17 @@ final readonly class RequestPipeline
             ),
             $responses,
         ));
+    }
+
+    private function executeWithRetriedAuth(Request $apaleoRequest): ResponseInterface
+    {
+        $response = $this->execute($apaleoRequest, $this->tokenProvider->getToken());
+
+        if ($response->getStatusCode() === 401) {
+            return $this->execute($apaleoRequest, $this->tokenProvider->getToken(forceRefresh: true));
+        }
+
+        return $response;
     }
 
     private function statusCode(SymfonyResponseInterface $response): int
@@ -168,7 +191,7 @@ final readonly class RequestPipeline
         $psrRequest = $this->requestFactory
             ->createRequest($apaleoRequest->method()->value, $uri)
             ->withHeader('Authorization', 'Bearer '.$token->value)
-            ->withHeader('Accept', 'application/json')
+            ->withHeader('Accept', $apaleoRequest->accept())
         ;
 
         foreach ($this->headers($apaleoRequest) as $name => $value) {
@@ -204,7 +227,7 @@ final readonly class RequestPipeline
         $options = [
             'headers' => [
                 'Authorization' => 'Bearer '.$token->value,
-                'Accept' => 'application/json',
+                'Accept' => $apaleoRequest->accept(),
                 ...$this->headers($apaleoRequest),
             ],
         ];

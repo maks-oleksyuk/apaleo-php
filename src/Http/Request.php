@@ -18,6 +18,12 @@ abstract readonly class Request
         return [];
     }
 
+    /** Media type sent as Accept; only non-JSON for endpoints read with RequestPipeline::sendRaw(), e.g. PDFs. */
+    public function accept(): string
+    {
+        return 'application/json';
+    }
+
     /** @return array<string, string> extra headers, e.g. Idempotency-Key; Authorization/Accept/Content-Type are ignored */
     public function headers(): array
     {
