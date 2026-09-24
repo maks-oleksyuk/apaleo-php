@@ -15,6 +15,7 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Account\AccountResource;
 use Oleksyuk\Apaleo\Resource\Availability\AvailabilityResource;
 use Oleksyuk\Apaleo\Resource\Booking\BookingResource;
+use Oleksyuk\Apaleo\Resource\Finance\FinanceResource;
 use Oleksyuk\Apaleo\Resource\Inventory\InventoryResource;
 use Oleksyuk\Apaleo\Resource\Logs\LogsResource;
 use Oleksyuk\Apaleo\Resource\Operations\OperationsResource;
@@ -85,6 +86,11 @@ final readonly class ApaleoClient
     public function settings(): SettingsResource
     {
         return new SettingsResource($this->pipeline);
+    }
+
+    public function finance(): FinanceResource
+    {
+        return new FinanceResource($this->pipeline);
     }
 
     /**
