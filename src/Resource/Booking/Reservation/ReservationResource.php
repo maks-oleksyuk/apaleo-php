@@ -11,6 +11,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\AutoAssignedUnitItem;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\BookReservationService;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\DesiredStayDetails;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\Reservation;
+use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\ReservationListItem;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\ReservationServiceItem;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\ReservationStayOffers;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\AmendReservationRequest;
@@ -52,7 +53,7 @@ final readonly class ReservationResource
      * @param list<string> $sort
      * @param list<'actions'|'assignedUnits'|'booker'|'company'|'services'|'timeSlices'> $expand
      *
-     * @return PaginatedResult<Reservation>
+     * @return PaginatedResult<ReservationListItem>
      */
     public function list(
         ReservationFilter $filter = new ReservationFilter(),
@@ -66,7 +67,7 @@ final readonly class ReservationResource
         $data = $this->pipeline->send(new ListReservationsRequest($filter, $pageNumber, $pageSize, $sort, $expand));
 
         return new PaginatedResult(
-            items: array_map(Reservation::fromArray(...), ResponseData::nestedList($data, 'reservations')),
+            items: array_map(ReservationListItem::fromArray(...), ResponseData::nestedList($data, 'reservations')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

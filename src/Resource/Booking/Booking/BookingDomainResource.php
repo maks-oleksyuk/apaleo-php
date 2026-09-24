@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\Booking;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\BookingCreated;
+use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\BookingListItem;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\CreateBooking;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\ReservationsCreated;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\Requests\AddReservationsRequest;
@@ -39,7 +40,7 @@ final readonly class BookingDomainResource
     /**
      * @param list<'property'|'ratePlan'|'reservations'|'services'|'unitGroup'> $expand
      *
-     * @return PaginatedResult<Booking>
+     * @return PaginatedResult<BookingListItem>
      */
     public function list(
         BookingFilter $filter = new BookingFilter(),
@@ -52,7 +53,7 @@ final readonly class BookingDomainResource
         $data = $this->pipeline->send(new ListBookingsRequest($filter, $pageNumber, $pageSize, $expand));
 
         return new PaginatedResult(
-            items: array_map(Booking::fromArray(...), ResponseData::nestedList($data, 'bookings')),
+            items: array_map(BookingListItem::fromArray(...), ResponseData::nestedList($data, 'bookings')),
             totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
         );
     }

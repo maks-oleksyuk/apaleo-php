@@ -17,15 +17,14 @@ use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\ExternalReferences;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Guest;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\PayableAmount;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\RegisteredCard;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\TaxDetail;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-final readonly class Reservation
+/** Item shape of GET /booking/v1/reservations: unlike Reservation, it has no $payableAmount and $taxDetails. */
+final readonly class ReservationListItem
 {
     /**
      * @param list<int>                          $childrenAges
@@ -35,7 +34,6 @@ final readonly class Reservation
      * @param list<ReservationAssignedUnit>       $assignedUnits
      * @param list<ReservationValidationMessage>  $validationMessages
      * @param list<Action>                        $actions
-     * @param list<TaxDetail>                     $taxDetails
      */
     public function __construct(
         public string $id,
@@ -81,11 +79,9 @@ final readonly class Reservation
         public ?EmbeddedCompany $company,
         public ?string $corporateCode,
         public bool $allFoliosHaveInvoice,
-        public array $taxDetails,
         public bool $hasCityTax,
         public ?Commission $commission,
         public ?string $promoCode,
-        public PayableAmount $payableAmount,
         public bool $isPreCheckedIn,
         public bool $isOpenForCharges,
         public ?EmbeddedMarketSegment $marketSegment,
@@ -152,11 +148,9 @@ final readonly class Reservation
             company: $company !== [] ? EmbeddedCompany::fromArray($company) : null,
             corporateCode: ResponseData::nullableString($data, 'corporateCode'),
             allFoliosHaveInvoice: ResponseData::bool($data, 'allFoliosHaveInvoice'),
-            taxDetails: array_map(TaxDetail::fromArray(...), ResponseData::nestedList($data, 'taxDetails')),
             hasCityTax: ResponseData::bool($data, 'hasCityTax'),
             commission: $commission !== [] ? Commission::fromArray($commission) : null,
             promoCode: ResponseData::nullableString($data, 'promoCode'),
-            payableAmount: PayableAmount::fromArray(ResponseData::nested($data, 'payableAmount')),
             isPreCheckedIn: ResponseData::bool($data, 'isPreCheckedIn'),
             isOpenForCharges: ResponseData::bool($data, 'isOpenForCharges'),
             marketSegment: $marketSegment !== [] ? EmbeddedMarketSegment::fromArray($marketSegment) : null,
