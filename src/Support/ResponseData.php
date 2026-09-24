@@ -6,7 +6,10 @@ namespace Oleksyuk\Apaleo\Support;
 
 use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
 
-/** Strict field extraction from decoded JSON API responses (untrusted, typed as mixed). */
+/**
+ * Strict field extraction from decoded JSON API responses (untrusted, typed as mixed).
+ * Strings are trimmed: many fields are typed in by hotel staff and carry stray whitespace.
+ */
 final class ResponseData
 {
     /**
@@ -19,7 +22,7 @@ final class ResponseData
             throw new ApaleoUnexpectedResponseException("Expected string for field \"{$key}\" in Apaleo API response.");
         }
 
-        return $value;
+        return mb_trim($value);
     }
 
     /**
@@ -128,7 +131,13 @@ final class ResponseData
     {
         $value = $data[$key] ?? null;
 
-        return \is_string($value) ? $value : null;
+        if (!\is_string($value)) {
+            return null;
+        }
+
+        $value = mb_trim($value);
+
+        return $value !== '' ? $value : null;
     }
 
     /**
@@ -175,7 +184,7 @@ final class ResponseData
             throw new ApaleoUnexpectedResponseException("Expected list for field \"{$key}\" in Apaleo API response.");
         }
 
-        return array_values(array_filter($value, \is_string(...)));
+        return array_map(mb_trim(...), array_values(array_filter($value, \is_string(...))));
     }
 
     /**
@@ -190,7 +199,7 @@ final class ResponseData
     {
         $value = $data[$key] ?? null;
 
-        return \is_array($value) ? array_values(array_filter($value, \is_string(...))) : [];
+        return \is_array($value) ? array_map(mb_trim(...), array_values(array_filter($value, \is_string(...)))) : [];
     }
 
     /**
@@ -247,7 +256,7 @@ final class ResponseData
         $value = $data[$key] ?? null;
 
         if (\is_string($value)) {
-            return ['default' => $value];
+            return ['default' => mb_trim($value)];
         }
 
         if (!\is_array($value)) {
@@ -257,7 +266,7 @@ final class ResponseData
         $result = [];
         foreach ($value as $lang => $text) {
             if (\is_string($lang) && \is_string($text)) {
-                $result[$lang] = $text;
+                $result[$lang] = mb_trim($text);
             }
         }
 

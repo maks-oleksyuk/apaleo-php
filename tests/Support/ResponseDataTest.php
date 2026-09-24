@@ -40,4 +40,25 @@ final class ResponseDataTest extends TestCase
 
         ResponseData::date(['d' => '2026-02-30'], 'd');
     }
+
+    public function testStringsAreTrimmed(): void
+    {
+        $data = [
+            's' => " Breakfast \t",
+            'n' => 'Buffet  ',
+            'blank' => '   ',
+            'list' => [' a', 'b '],
+            'loc' => ['en' => 'Double Room ', 'de' => ' Doppelzimmer'],
+            'plain' => ' Single ',
+        ];
+
+        self::assertSame('Breakfast', ResponseData::string($data, 's'));
+        self::assertSame('Buffet', ResponseData::nullableString($data, 'n'));
+        self::assertNull(ResponseData::nullableString($data, 'blank'));
+        self::assertSame('', ResponseData::string($data, 'blank'));
+        self::assertSame(['a', 'b'], ResponseData::stringList($data, 'list'));
+        self::assertSame(['a', 'b'], ResponseData::stringListOrEmpty($data, 'list'));
+        self::assertSame(['en' => 'Double Room', 'de' => 'Doppelzimmer'], ResponseData::localizedText($data, 'loc'));
+        self::assertSame(['default' => 'Single'], ResponseData::localizedText($data, 'plain'));
+    }
 }
