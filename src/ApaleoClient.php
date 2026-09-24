@@ -20,6 +20,7 @@ use Oleksyuk\Apaleo\Resource\Logs\LogsResource;
 use Oleksyuk\Apaleo\Resource\Operations\OperationsResource;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlanResource;
 use Oleksyuk\Apaleo\Resource\Reports\ReportsResource;
+use Oleksyuk\Apaleo\Resource\Settings\SettingsResource;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -79,6 +80,11 @@ final readonly class ApaleoClient
     public function account(): AccountResource
     {
         return new AccountResource($this->pipeline);
+    }
+
+    public function settings(): SettingsResource
+    {
+        return new SettingsResource($this->pipeline);
     }
 
     /**
