@@ -131,6 +131,7 @@ final class RequestPipelineTest extends TestCase
         $this->httpClient->addResponse(new Response(503, ['Content-Type' => 'application/json'], '{}'));
 
         $this->expectException(ApaleoServerException::class);
+        $this->expectExceptionCode(503);
 
         $this->pipeline->send($this->requestWithQuery([]));
     }

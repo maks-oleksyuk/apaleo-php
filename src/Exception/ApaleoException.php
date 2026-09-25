@@ -16,6 +16,6 @@ abstract class ApaleoException extends \RuntimeException implements ApaleoExcept
         public readonly array $rawResponse = [],
         ?\Throwable $previous = null,
     ) {
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, $statusCode, $previous);
     }
 }
