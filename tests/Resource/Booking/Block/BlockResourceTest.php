@@ -19,7 +19,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Block\DTO\CreateBlockTimeSlice;
 use Oleksyuk\Apaleo\Resource\Booking\Block\DTO\ReplaceBlock;
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\BlockStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\OptionalCutoffBehavior;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;

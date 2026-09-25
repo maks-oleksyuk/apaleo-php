@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Payment\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\PaidCharge;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 final readonly class CreateTerminalPayment
 {

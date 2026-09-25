@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Folio\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FinanceServiceType;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 
 /** An allowance on the folio as a whole, not tied to one charge. */
 final readonly class CreateFolioAllowance

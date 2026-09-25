@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Payment\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Payment\Enum\AuthorizationReferenceType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\PaidCharge;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 /** Captures from an existing pre-authorization, identified by $transactionReference. */
 final readonly class CreateAuthorizationPayment

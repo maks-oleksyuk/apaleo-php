@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Finance;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\Split;
 use Oleksyuk\Apaleo\Resource\Finance\Payment\DTO\CreateAccountPayment;
 use Oleksyuk\Apaleo\Resource\Finance\Payment\DTO\CreateCustomPayment;
@@ -16,6 +15,7 @@ use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\PaidCharge;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentFailureCode;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentStatus;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 /**
  * @internal

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Finance\Payment\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Action;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Payment\Enum\PaymentType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\EmbeddedFolio;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\ExternalReference;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentFailureCode;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentStatus;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /**

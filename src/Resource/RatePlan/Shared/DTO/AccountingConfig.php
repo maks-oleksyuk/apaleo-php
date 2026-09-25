@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO;
 
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ServiceType;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\VatType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class AccountingConfig

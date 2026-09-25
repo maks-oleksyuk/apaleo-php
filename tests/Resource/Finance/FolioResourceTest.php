@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Finance;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\PersonAddress;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\BulkAllowanceItem;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\CreateCharge;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\CreateFolio;
@@ -22,6 +20,8 @@ use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FinanceServiceType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FolioType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
 use Oleksyuk\Apaleo\Resource\Reports\Enum\Title;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 
 /**
  * @internal

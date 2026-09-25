@@ -18,7 +18,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\CreateBooking;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\CreateReservation;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\CreateReservationTimeSlice;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Booker;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 

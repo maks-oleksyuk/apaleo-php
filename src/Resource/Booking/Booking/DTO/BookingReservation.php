@@ -9,13 +9,13 @@ use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\ReservationNoShowFee;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\ReservationServiceItem;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\ReservationStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedCompany;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedProperty;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedRatePlan;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\ExternalReferences;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\RegisteredCard;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedProperty;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedUnitGroup;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** The reservation summary embedded in a {@see Booking}; see ReservationResource::get() for the full reservation. */

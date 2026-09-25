@@ -7,7 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Authorization\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 /** Does not expose the deprecated `accountOwner` field; pass $paymentAccountId instead (required from 2026-02-15 onward). */
 final readonly class CreateAuthorizationByPaymentAccountRequest extends Request

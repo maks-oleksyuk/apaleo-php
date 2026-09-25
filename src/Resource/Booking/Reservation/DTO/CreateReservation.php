@@ -7,11 +7,11 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Commission;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\ExternalReferences;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Guest;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\RegisteredCard;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
 
 /** The payload for creating a reservation, whether standalone (within a new/existing booking) or as part of a group. */
 final readonly class CreateReservation

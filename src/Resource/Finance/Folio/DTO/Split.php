@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Folio\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 /** How to split a charge or a payment in two: the first part gets the given share, the second the rest. */
 final readonly class Split

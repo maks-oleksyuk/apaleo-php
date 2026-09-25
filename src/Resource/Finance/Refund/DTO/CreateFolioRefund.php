@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Refund\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 /** A refund paid out outside apaleo and just recorded on the folio. */
 final readonly class CreateFolioRefund

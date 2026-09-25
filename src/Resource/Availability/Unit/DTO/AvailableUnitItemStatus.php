@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Availability\Unit\DTO;
 
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\MaintenanceType;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitCondition;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\MaintenanceType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class AvailableUnitItemStatus

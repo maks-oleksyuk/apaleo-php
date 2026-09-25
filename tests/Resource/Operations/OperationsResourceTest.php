@@ -11,12 +11,12 @@ use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
-use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Operations\DTO\CreateMaintenance;
 use Oleksyuk\Apaleo\Resource\Operations\DTO\UnitConditionUpdate;
-use Oleksyuk\Apaleo\Resource\Operations\Enum\MaintenanceType;
 use Oleksyuk\Apaleo\Resource\Operations\MaintenanceFilter;
 use Oleksyuk\Apaleo\Resource\Operations\OperationsResource;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\MaintenanceType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 

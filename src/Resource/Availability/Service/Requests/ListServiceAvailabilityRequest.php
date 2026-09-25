@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Availability\Service\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 
 final readonly class ListServiceAvailabilityRequest extends Request
 {

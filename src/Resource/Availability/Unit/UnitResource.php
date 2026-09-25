@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Availability\Unit;
 
 use Oleksyuk\Apaleo\Http\RequestPipeline;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Availability\Unit\DTO\AvailableUnitItem;
 use Oleksyuk\Apaleo\Resource\Availability\Unit\Requests\ListAvailableUnitsRequest;
 use Oleksyuk\Apaleo\Resource\Availability\Unit\Requests\ListReservationAvailableUnitsRequest;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;

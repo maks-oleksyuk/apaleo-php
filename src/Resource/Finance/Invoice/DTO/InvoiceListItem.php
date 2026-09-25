@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Finance\Invoice\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedCompany;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceAction;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceCancellationReason;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceStatus;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceType;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class InvoiceListItem

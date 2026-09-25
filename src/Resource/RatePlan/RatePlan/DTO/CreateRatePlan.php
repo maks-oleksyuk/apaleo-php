@@ -7,7 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\GuaranteeType;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\PriceCalculationMode;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\AccountingConfig;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 
 final readonly class CreateRatePlan
 {

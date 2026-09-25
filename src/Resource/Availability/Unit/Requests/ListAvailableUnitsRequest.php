@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Availability\Unit\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitCondition;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 
 final readonly class ListAvailableUnitsRequest extends Request
 {

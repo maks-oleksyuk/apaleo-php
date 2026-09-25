@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\CityTax\DTO;
 
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Settings\CityTax\Enum\RemittanceResponsibility;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** One `ignoredFor` entry: charges from this channel (and optionally these sources) aren't taxed. Flattens the API's `{distributionChannel: {...}}` wrapper. */

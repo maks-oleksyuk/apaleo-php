@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Folio\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\EmbeddedFolio;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\ExternalReference;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** A settled payment as embedded in a folio; the full record (status, type, actions) is Payment\DTO\Payment. */

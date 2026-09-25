@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Tests\Resource\Settings;
 
 use Oleksyuk\Apaleo\Http\JsonPatch;
-use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\TimeSliceTemplate;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ServiceType;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Resource\Settings\CapturePolicy\Enum\CapturePaymentMode;
 use Oleksyuk\Apaleo\Resource\Settings\CityTax\DTO\CityTaxIgnoreRule;
 use Oleksyuk\Apaleo\Resource\Settings\CityTax\DTO\CityTaxSubcategory;
@@ -21,6 +18,9 @@ use Oleksyuk\Apaleo\Resource\Settings\Language\DTO\ReplaceLanguage;
 use Oleksyuk\Apaleo\Resource\Settings\MarketSegment\DTO\CreateMarketSegment;
 use Oleksyuk\Apaleo\Resource\Settings\SubAccount\DTO\CreateSubAccount;
 use Oleksyuk\Apaleo\Resource\Settings\TimeSliceDefinition\DTO\CreateTimeSliceDefinition;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 
 /**
  * @internal

@@ -9,8 +9,8 @@ use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Resource\RatePlan\Rate\DTO\RatePatch;
 use Oleksyuk\Apaleo\Resource\RatePlan\Rate\DTO\RateRestrictions;
 use Oleksyuk\Apaleo\Resource\RatePlan\Rate\DTO\ReplaceRate;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\DayOfWeek;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 /**
  * @internal

@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum;
+namespace Oleksyuk\Apaleo\Resource\Shared\Enum;
 
-enum UnitCondition: string
+enum PricingUnit: string
 {
-    case Clean = 'Clean';
-    case CleanToBeInspected = 'CleanToBeInspected';
-    case Dirty = 'Dirty';
+    case Room = 'Room';
+    case Person = 'Person';
     case Unknown = '__unknown__';
 
     public static function fromApi(string $value): self

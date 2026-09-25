@@ -17,7 +17,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationTargetType;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\PayerInteraction;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\TimeSliceDefinition\DTO;
 
-use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 
 final readonly class CreateTimeSliceDefinition
 {

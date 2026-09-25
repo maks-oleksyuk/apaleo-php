@@ -12,12 +12,12 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Company\Enum\InvoiceNetwork;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\DTO\CreateService;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\DTO\ServiceAvailability;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\Enum\AvailabilityMode;
-use Oleksyuk\Apaleo\Resource\RatePlan\Service\Enum\PricingUnit;
 use Oleksyuk\Apaleo\Resource\RatePlan\Service\ServiceFilter;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\AccountingConfig;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ServiceType;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\VatType;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\PricingUnit;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 
 /**
  * @internal

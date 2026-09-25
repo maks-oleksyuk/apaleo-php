@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Availability\Service\DTO;
 
 use Oleksyuk\Apaleo\Resource\Availability\Shared\DTO\BlockCounts;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\DTO\EmbeddedService;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedService;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class ServiceAvailabilityItem

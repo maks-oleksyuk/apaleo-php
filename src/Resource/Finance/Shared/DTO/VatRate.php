@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Shared\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\VatType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class VatRate

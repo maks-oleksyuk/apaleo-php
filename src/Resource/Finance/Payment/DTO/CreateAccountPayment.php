@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Payment\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Payment\Enum\PaymentAccountOwner;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\PaidCharge;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 /** Charges a stored payment account: pick it by $paymentAccountId, or by $accountOwner to use the guest's or booker's. */
 final readonly class CreateAccountPayment

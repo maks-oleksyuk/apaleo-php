@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Rate\DTO;
 
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** The price for a given occupancy, surcharges applied. */

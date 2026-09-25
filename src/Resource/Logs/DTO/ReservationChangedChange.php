@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Logs\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** A partial diff carried by a "ReservationChanged" change entry — every field is optional. */

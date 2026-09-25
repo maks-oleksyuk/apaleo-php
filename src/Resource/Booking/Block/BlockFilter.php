@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Booking\Block;
 
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\BlockStatus;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TimeSliceTemplate;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 
 final readonly class BlockFilter
 {

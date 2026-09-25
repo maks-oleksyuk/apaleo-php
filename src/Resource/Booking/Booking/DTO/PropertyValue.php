@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Booking\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedProperty;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedProperty;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class PropertyValue

@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Block\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\BlockStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\OptionalCutoffBehavior;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 final readonly class ReplaceBlock
 {

@@ -6,11 +6,11 @@ namespace Oleksyuk\Apaleo\Resource\Availability\UnitGroup;
 
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\TimeSliceTemplate;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Resource\Availability\UnitGroup\DTO\UnitGroupAvailabilityTimeSlice;
 use Oleksyuk\Apaleo\Resource\Availability\UnitGroup\Requests\ListUnitGroupAvailabilityRequest;
 use Oleksyuk\Apaleo\Resource\Availability\UnitGroup\Requests\UpdateUnitGroupAvailabilityRequest;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;

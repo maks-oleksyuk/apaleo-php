@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 
 final readonly class GetReservationServiceOffersRequest extends Request
 {

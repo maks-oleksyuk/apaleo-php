@@ -6,8 +6,8 @@ namespace Oleksyuk\Apaleo\Resource\Availability\Property\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\TimeSliceTemplate;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 
 final readonly class GetHouseOverbookingRequest extends Request
 {

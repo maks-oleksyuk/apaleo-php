@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Booking\Offer\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Amount;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Service;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** A bookable extra offered for a stay (or reservation); see BookReservationService to actually book it. */

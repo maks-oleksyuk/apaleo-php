@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum;
+namespace Oleksyuk\Apaleo\Resource\Shared\Enum;
 
-enum PricingMode: string
+enum UnitCondition: string
 {
-    case Included = 'Included';
-    case Additional = 'Additional';
+    case Clean = 'Clean';
+    case CleanToBeInspected = 'CleanToBeInspected';
+    case Dirty = 'Dirty';
     case Unknown = '__unknown__';
 
     public static function fromApi(string $value): self

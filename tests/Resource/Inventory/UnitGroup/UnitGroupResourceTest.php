@@ -12,9 +12,9 @@ use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\CreateUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\ReplaceUnitGroup;
-use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\UnitGroupFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\UnitGroupResource;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 

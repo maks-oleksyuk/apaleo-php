@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Finance\Invoice\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedCompany;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\TaxDetail;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\CreateInvoiceAction;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\BankAccount;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** What InvoiceResource::create() would produce for the folio, and whether it would work ($createInvoiceAction, $createInvoiceWarning). */

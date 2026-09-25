@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Reports;
 
 use Oleksyuk\Apaleo\Http\RequestPipeline;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitGroupType;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Reports\DTO\ArrivalsReport;
 use Oleksyuk\Apaleo\Resource\Reports\DTO\CompanyInvoice;
 use Oleksyuk\Apaleo\Resource\Reports\DTO\OrderedService;
 use Oleksyuk\Apaleo\Resource\Reports\DTO\PropertyPerformanceReport;
 use Oleksyuk\Apaleo\Resource\Reports\DTO\RevenuesReportItem;
-use Oleksyuk\Apaleo\Resource\Reports\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Resource\Reports\Requests\GetArrivalsReportRequest;
 use Oleksyuk\Apaleo\Resource\Reports\Requests\GetPropertyPerformanceReportRequest;
 use Oleksyuk\Apaleo\Resource\Reports\Requests\GetRevenuesReportRequest;
 use Oleksyuk\Apaleo\Resource\Reports\Requests\ListCompanyInvoicesVatRequest;
 use Oleksyuk\Apaleo\Resource\Reports\Requests\ListOrderedServicesRequest;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\ResponseData;
 

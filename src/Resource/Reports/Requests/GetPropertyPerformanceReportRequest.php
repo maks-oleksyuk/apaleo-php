@@ -6,9 +6,9 @@ namespace Oleksyuk\Apaleo\Resource\Reports\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitGroupType;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
-use Oleksyuk\Apaleo\Resource\Reports\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 
 final readonly class GetPropertyPerformanceReportRequest extends Request
 {

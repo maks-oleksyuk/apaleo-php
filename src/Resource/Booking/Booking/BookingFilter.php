@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Booking;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 
 final readonly class BookingFilter
 {

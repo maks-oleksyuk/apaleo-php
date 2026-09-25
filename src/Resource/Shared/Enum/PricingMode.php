@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\RatePlan\Service\Enum;
+namespace Oleksyuk\Apaleo\Resource\Shared\Enum;
 
-enum PricingUnit: string
+enum PricingMode: string
 {
-    case Room = 'Room';
-    case Person = 'Person';
+    case Included = 'Included';
+    case Additional = 'Additional';
     case Unknown = '__unknown__';
 
     public static function fromApi(string $value): self

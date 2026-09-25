@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Offer\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Offer\Enum\PricingMode;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Amount;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedService;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedService;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\PricingMode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** A service included in a time slice's offer (package element), as opposed to {@see ServiceOffer} (a bookable extra). */

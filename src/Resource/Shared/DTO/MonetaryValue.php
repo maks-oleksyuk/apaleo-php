@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO;
+namespace Oleksyuk\Apaleo\Resource\Shared\DTO;
 
 use Oleksyuk\Apaleo\Support\ResponseData;
 

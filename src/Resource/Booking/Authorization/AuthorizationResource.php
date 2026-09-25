@@ -15,7 +15,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Authorization\Requests\CreateAuthorizationB
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Requests\GetAuthorizationRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Requests\ListAuthorizationsRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Requests\RefreshAuthorizationRequest;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;

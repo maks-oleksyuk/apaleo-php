@@ -7,7 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Availability\Service;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\Service\DTO\ServiceAvailabilityTimeSlice;
 use Oleksyuk\Apaleo\Resource\Availability\Service\Requests\ListServiceAvailabilityRequest;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;

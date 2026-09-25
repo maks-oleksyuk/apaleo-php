@@ -10,9 +10,9 @@ use Oleksyuk\Apaleo\Resource\Booking\Offer\DTO\OfferFee;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\DTO\OfferNoShowFee;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\DTO\OfferValidationMessage;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\DTO\ServiceOffer;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\TaxDetail;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** An offer for amending an existing reservation's stay; see OfferResource for offers on a brand-new stay. */

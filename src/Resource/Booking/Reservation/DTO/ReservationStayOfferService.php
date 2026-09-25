@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Offer\Enum\PricingMode;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Amount;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedService;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedService;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\PricingMode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class ReservationStayOfferService

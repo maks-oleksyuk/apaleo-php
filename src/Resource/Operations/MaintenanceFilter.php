@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Operations;
 
-use Oleksyuk\Apaleo\Resource\Operations\Enum\MaintenanceType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\MaintenanceType;
 
 final readonly class MaintenanceFilter
 {

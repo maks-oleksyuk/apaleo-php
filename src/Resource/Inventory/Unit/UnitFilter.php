@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Inventory\Unit;
 
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitArchiveFilter;
-use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 
 final readonly class UnitFilter
 {

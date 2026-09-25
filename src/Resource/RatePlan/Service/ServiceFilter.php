@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Service;
 
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ServiceType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 
 final readonly class ServiceFilter
 {

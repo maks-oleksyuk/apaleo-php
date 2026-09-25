@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO;
 
-use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 
 final readonly class CreateUnit
 {

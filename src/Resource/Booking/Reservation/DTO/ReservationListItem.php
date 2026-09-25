@@ -9,18 +9,18 @@ use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Action;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Booker;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Commission;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedCompany;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedMarketSegment;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedProperty;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedRatePlan;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnit;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\ExternalReferences;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Guest;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\RegisteredCard;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedMarketSegment;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedProperty;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedUnitGroup;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class ReservationListItem

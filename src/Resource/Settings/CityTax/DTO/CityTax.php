@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\CityTax\DTO;
 
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Resource\Settings\CityTax\Enum\CityTaxType;
 use Oleksyuk\Apaleo\Resource\Settings\CityTax\Enum\TaxHandlingType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class CityTax

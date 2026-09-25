@@ -150,7 +150,7 @@ $data = $apaleo->send(new GetThingRequest('X'));
 ### Good to know
 
 - **Unknown enum values.** Every response enum has an `Unknown` (or `UnmappedValue`) case, so a value Apaleo adds later doesn't break parsing. You can't send it back: filters reject it.
-- **Separate schemas per API.** Booking, RatePlan and others each have their own `MonetaryValue`, `UnitGroupType` and so on, mirroring Apaleo's own per-API schemas. They are not shared.
+- **Shared types.** Types that are identical in every API that uses them (`MonetaryValue`, `EmbeddedProperty`, `ChannelCode`, `UnitGroupType`, ...) live once in `Oleksyuk\Apaleo\Resource\Shared`, so a value read from one API can be passed straight to another. Types whose shape differs per API (e.g. `GuaranteeType`) stay in that API's namespace.
 - **Money is a `float`.** JSON has already lost precision by the time the SDK sees it. Don't sum `amount` values directly: round with `round($x, 2)` or convert to minor units first.
 
 ## Development

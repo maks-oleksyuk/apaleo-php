@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\Booking\Shared\Enum;
+namespace Oleksyuk\Apaleo\Resource\Shared\Enum;
 
 enum TravelPurpose: string
 {

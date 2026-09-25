@@ -11,7 +11,7 @@ use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\OfferResource;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 

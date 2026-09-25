@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Rate\DTO;
 
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 
 /** One time slice for PUT /rate-plans/{id}/rates; $from/$to must match an existing slice exactly. */
 final readonly class ReplaceRate

@@ -12,7 +12,7 @@ use Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy\Enum\CancellationPolicy
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\FeeDetails;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\PercentValue;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\Period;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\VatType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 
 /**
  * @internal

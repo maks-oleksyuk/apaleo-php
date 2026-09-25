@@ -6,10 +6,10 @@ namespace Oleksyuk\Apaleo\Resource\Logs\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\ReservationValidationMessage;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\ReservationStatus;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** The full snapshot carried by a "ReservationAdded" change entry (event type Created). */

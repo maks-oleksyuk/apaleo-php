@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\Reports\Enum;
+namespace Oleksyuk\Apaleo\Resource\Shared\Enum;
 
-enum TravelPurpose: string
+enum TimeSliceTemplate: string
 {
-    case Business = 'Business';
-    case Leisure = 'Leisure';
+    case DayUse = 'DayUse';
+    case OverNight = 'OverNight';
     case Unknown = '__unknown__';
 
     public static function fromApi(string $value): self

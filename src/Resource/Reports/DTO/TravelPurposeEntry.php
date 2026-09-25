@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Reports\DTO;
 
-use Oleksyuk\Apaleo\Resource\Reports\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class TravelPurposeEntry

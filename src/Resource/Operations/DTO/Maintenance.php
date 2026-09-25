@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Operations\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnit;
-use Oleksyuk\Apaleo\Resource\Operations\Enum\MaintenanceType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\MaintenanceType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class Maintenance

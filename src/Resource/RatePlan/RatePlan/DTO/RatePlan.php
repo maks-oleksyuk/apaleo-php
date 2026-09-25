@@ -7,8 +7,10 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\GuaranteeType;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\PriceCalculationMode;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\AccountingConfig;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\EmbeddedProperty;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedMarketSegment;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedProperty;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedUnitGroup;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class RatePlan

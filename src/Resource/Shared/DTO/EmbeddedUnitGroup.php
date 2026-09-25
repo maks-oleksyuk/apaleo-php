@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\Booking\Shared\DTO;
+namespace Oleksyuk\Apaleo\Resource\Shared\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class EmbeddedUnitGroup

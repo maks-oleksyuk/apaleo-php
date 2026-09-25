@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO;
 
-use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\PricingMode;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\PricingMode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class IncludedService

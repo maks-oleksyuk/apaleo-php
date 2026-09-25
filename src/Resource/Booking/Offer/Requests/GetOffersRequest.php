@@ -6,9 +6,9 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Offer\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TimeSliceTemplate;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 
 final readonly class GetOffersRequest extends Request
 {

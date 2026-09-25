@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Finance\Folio\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedCompany;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\Enum\FolioAction;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\Enum\FolioStatus;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\Enum\FolioWarning;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FolioType;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class FolioListItem

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Amount;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedService;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedService;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** A service included in a rate plan (package element) — see {@see ReservationServiceItem} for extras booked separately. */

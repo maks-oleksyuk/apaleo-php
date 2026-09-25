@@ -6,8 +6,8 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation;
 
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\DateFilter;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\ReservationStatus;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 
 final readonly class ReservationFilter
 {

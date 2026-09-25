@@ -10,9 +10,9 @@ use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO\CreateRatePlan;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\DTO\PricingRule;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\GuaranteeType;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\PriceAdjustmentType;
-use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\RatePlanFilter;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 
 /**
  * @internal

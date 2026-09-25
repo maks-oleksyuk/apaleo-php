@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Offer\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class OfferUnitGroup

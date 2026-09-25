@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Offer\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\GuaranteeType;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class TimeSliceOfferItem

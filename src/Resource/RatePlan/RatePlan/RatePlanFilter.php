@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\RatePlan\RatePlan;
 
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\GuaranteeType;
-use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\TimeSliceTemplate;
-use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\UnitGroupType;
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 
 final readonly class RatePlanFilter
 {

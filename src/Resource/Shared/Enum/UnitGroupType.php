@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\Enum;
+namespace Oleksyuk\Apaleo\Resource\Shared\Enum;
 
 enum UnitGroupType: string
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Availability\UnitGroup\DTO;
 
 use Oleksyuk\Apaleo\Resource\Availability\Shared\DTO\BlockCounts;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Resource\Availability\Shared\DTO\Maintenance;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class UnitGroupAvailabilityItem

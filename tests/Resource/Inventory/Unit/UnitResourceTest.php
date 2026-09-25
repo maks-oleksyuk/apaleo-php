@@ -13,10 +13,10 @@ use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\CreateUnit;
-use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\UnitFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\UnitResource;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 

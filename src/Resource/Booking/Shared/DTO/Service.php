@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Shared\DTO;
 
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\PricingUnit;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\PricingUnit;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class Service

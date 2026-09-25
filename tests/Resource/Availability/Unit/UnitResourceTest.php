@@ -10,8 +10,8 @@ use Nyholm\Psr7\Response;
 use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Resource\Availability\Unit\UnitResource;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 

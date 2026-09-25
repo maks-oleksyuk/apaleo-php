@@ -11,8 +11,8 @@ use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Availability\UnitGroup\UnitGroupResource;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 

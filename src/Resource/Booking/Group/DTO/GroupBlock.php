@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Booking\Group\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\BlockStatus;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedMarketSegment;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedProperty;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedRatePlan;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedUnitGroup;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedMarketSegment;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedProperty;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedUnitGroup;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** The block summary embedded in a {@see Group}; see BlockResource::get() for the full block (time slices, actions). */

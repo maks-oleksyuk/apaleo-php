@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Reports\DTO;
 
-use Oleksyuk\Apaleo\Resource\Availability\Shared\DTO\EmbeddedUnitGroup;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedUnitGroup;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class PropertyPerformancePerUnitGroup

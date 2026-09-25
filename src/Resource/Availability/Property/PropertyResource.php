@@ -9,8 +9,8 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\Property\DTO\HouseOverbookingTimeSlice;
 use Oleksyuk\Apaleo\Resource\Availability\Property\Requests\GetHouseOverbookingRequest;
 use Oleksyuk\Apaleo\Resource\Availability\Property\Requests\UpdateHouseOverbookingRequest;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\TimeSliceTemplate;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class PropertyResource

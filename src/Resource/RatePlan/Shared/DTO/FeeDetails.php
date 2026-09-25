@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO;
 
-use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\VatType;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** A cancellation or no-show fee: either a fixed amount or a percentage of the stay. */

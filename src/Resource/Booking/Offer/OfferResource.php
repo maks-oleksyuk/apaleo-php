@@ -12,9 +12,9 @@ use Oleksyuk\Apaleo\Resource\Booking\Offer\Requests\GetOffersRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\Requests\GetRatePlanOffersRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\Requests\GetServiceOffersRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\Requests\OfferIndexRequest;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\ChannelCode;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TimeSliceTemplate;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 
 final readonly class OfferResource
 {

@@ -7,7 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Availability\UnitGroup\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\Request;
-use Oleksyuk\Apaleo\Resource\Availability\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 
 final readonly class UpdateUnitGroupAvailabilityRequest extends Request
 {

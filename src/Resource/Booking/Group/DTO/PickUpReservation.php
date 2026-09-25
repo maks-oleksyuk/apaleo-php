@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Group\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\BookReservationService;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Guest;
-use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\TravelPurpose;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
 
 final readonly class PickUpReservation
 {
