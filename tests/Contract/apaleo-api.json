@@ -1,0 +1,1891 @@
+{
+    "DELETE /booking/v1/blocks/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /booking/v1/groups/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /booking/v1/reservations/{id}/services": {
+        "query": {
+            "serviceId": true
+        },
+        "idempotencyKey": false
+    },
+    "DELETE /finance/v1/folios/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /finance/v1/routings/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /inventory/v1/properties/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /inventory/v1/unit-attributes/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /inventory/v1/unit-groups/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /inventory/v1/units/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /operations/v1/maintenances/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /rateplan/v1/cancellation-policies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /rateplan/v1/companies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /rateplan/v1/no-show-policies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /rateplan/v1/rate-plans": {
+        "query": {
+            "ratePlanIds": true
+        },
+        "idempotencyKey": false
+    },
+    "DELETE /rateplan/v1/rate-plans/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /rateplan/v1/rate-plans/{id}/rates": {
+        "query": {
+            "from": true,
+            "to": true
+        },
+        "idempotencyKey": false
+    },
+    "DELETE /rateplan/v1/services/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /settings/v1/age-categories/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /settings/v1/city-tax/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /settings/v1/market-segments/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /settings/v1/properties/{propertyId}/time-slice-definitions/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "DELETE /settings/v1/sub-accounts/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /account/v1/accounts": {
+        "query": {
+            "accountCodes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /account/v1/accounts/current": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /availability/v1/properties/{id}": {
+        "query": {
+            "from": true,
+            "timeSliceTemplate": true,
+            "to": true,
+            "unitGroupType": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /availability/v1/reservations/{id}/units": {
+        "query": {
+            "from": false,
+            "includeOutOfService": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "to": false,
+            "unitAttributeIds": false,
+            "unitCondition": false,
+            "unitGroupId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /availability/v1/services": {
+        "query": {
+            "channelCodes": false,
+            "from": true,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": true,
+            "timeSliceDefinitionIds": false,
+            "timeSliceTemplate": false,
+            "to": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /availability/v1/unit-groups": {
+        "query": {
+            "adults": false,
+            "childrenAges": false,
+            "from": true,
+            "onlySellable": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": true,
+            "timeSliceDefinitionIds": false,
+            "timeSliceTemplate": false,
+            "to": true,
+            "unitGroupIds": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /availability/v1/units": {
+        "query": {
+            "from": true,
+            "includeOutOfService": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": true,
+            "to": true,
+            "unitAttributeIds": false,
+            "unitCondition": false,
+            "unitGroupId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/authorizations": {
+        "query": {
+            "bookingIds": false,
+            "dateField": false,
+            "expand": false,
+            "from": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "reservationIds": false,
+            "sort": false,
+            "status": false,
+            "targetTypes": false,
+            "to": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/authorizations/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/blocks": {
+        "query": {
+            "expand": false,
+            "from": false,
+            "groupId": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "ratePlanIds": false,
+            "status": false,
+            "timeSliceDefinitionIds": false,
+            "timeSliceTemplate": false,
+            "to": false,
+            "unitGroupIds": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/blocks/$count": {
+        "query": {
+            "from": false,
+            "groupId": false,
+            "propertyIds": false,
+            "ratePlanIds": false,
+            "status": false,
+            "timeSliceDefinitionIds": false,
+            "timeSliceTemplate": false,
+            "to": false,
+            "unitGroupIds": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/blocks/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/bookings": {
+        "query": {
+            "bookingIds": false,
+            "channelCode": false,
+            "expand": false,
+            "externalCode": false,
+            "groupId": false,
+            "hasActivePaymentAccount": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "reservationId": false,
+            "textSearch": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/bookings/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/groups": {
+        "query": {
+            "expand": false,
+            "from": false,
+            "hasActivePaymentAccount": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "textSearch": false,
+            "to": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/groups/$count": {
+        "query": {
+            "from": false,
+            "hasActivePaymentAccount": false,
+            "propertyIds": false,
+            "textSearch": false,
+            "to": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/groups/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/offer-index": {
+        "query": {
+            "channelCode": true,
+            "from": true,
+            "pageNumber": false,
+            "pageSize": false,
+            "ratePlanId": true,
+            "to": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/offers": {
+        "query": {
+            "adults": true,
+            "arrival": true,
+            "channelCode": false,
+            "childrenAges": false,
+            "corporateCode": false,
+            "departure": true,
+            "includeUnavailable": false,
+            "promoCode": false,
+            "propertyId": true,
+            "timeSliceDefinitionIds": false,
+            "timeSliceTemplate": false,
+            "unitGroupIds": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/payment-accounts": {
+        "query": {
+            "bookingIds": false,
+            "dateField": false,
+            "expand": false,
+            "from": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "payerInteractions": false,
+            "paymentAccountIds": false,
+            "paymentLinkUrls": false,
+            "propertyIds": false,
+            "reservationIds": false,
+            "sort": false,
+            "status": false,
+            "targetTypes": false,
+            "to": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/payment-accounts/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/rate-plan-offers": {
+        "query": {
+            "adults": true,
+            "arrival": true,
+            "channelCode": false,
+            "childrenAges": false,
+            "departure": true,
+            "includeUnavailable": false,
+            "overridePrices": false,
+            "ratePlanId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/reservations": {
+        "query": {
+            "allFoliosHaveInvoice": false,
+            "balanceFilter": false,
+            "blockIds": false,
+            "bookingId": false,
+            "channelCode": false,
+            "companyIds": false,
+            "dateFilter": false,
+            "expand": false,
+            "externalCode": false,
+            "externalReferences": false,
+            "from": false,
+            "hasActivePaymentAccount": false,
+            "isPreCheckedIn": false,
+            "marketSegmentIds": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "ratePlanIds": false,
+            "sort": false,
+            "sources": false,
+            "status": false,
+            "textSearch": false,
+            "to": false,
+            "unitGroupIds": false,
+            "unitGroupTypes": false,
+            "unitIds": false,
+            "validationMessageCategory": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/reservations/$count": {
+        "query": {
+            "allFoliosHaveInvoice": false,
+            "balanceFilter": false,
+            "blockIds": false,
+            "bookingId": false,
+            "channelCode": false,
+            "companyIds": false,
+            "dateFilter": false,
+            "externalCode": false,
+            "externalReferences": false,
+            "from": false,
+            "hasActivePaymentAccount": false,
+            "isPreCheckedIn": false,
+            "marketSegmentIds": false,
+            "propertyIds": false,
+            "ratePlanIds": false,
+            "sources": false,
+            "status": false,
+            "textSearch": false,
+            "to": false,
+            "unitGroupIds": false,
+            "unitGroupTypes": false,
+            "unitIds": false,
+            "validationMessageCategory": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/reservations/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/reservations/{id}/offers": {
+        "query": {
+            "adults": false,
+            "arrival": false,
+            "channelCode": false,
+            "childrenAges": false,
+            "corporateCode": false,
+            "departure": false,
+            "includeUnavailable": false,
+            "promoCode": false,
+            "requote": false,
+            "unitGroupIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/reservations/{id}/service-offers": {
+        "query": {
+            "channelCode": false,
+            "includeUnavailable": false,
+            "onlyDefaultDates": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/reservations/{id}/services": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/service-offers": {
+        "query": {
+            "adults": true,
+            "arrival": true,
+            "channelCode": false,
+            "childrenAges": false,
+            "departure": true,
+            "includeUnavailable": false,
+            "onlyDefaultDates": false,
+            "ratePlanId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/types/sources": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /booking/v1/types/{type}/allowed-values": {
+        "query": {
+            "countryCode": true,
+            "pageNumber": false,
+            "pageSize": false,
+            "sort": false,
+            "textSearch": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/accounts/child-accounts": {
+        "query": {
+            "accountingSchema": false,
+            "includeArchived": false,
+            "languageCode": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "parent": true,
+            "propertyId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/accounts/schema": {
+        "query": {
+            "accountingSchema": false,
+            "depth": false,
+            "includeArchived": false,
+            "languageCode": false,
+            "propertyId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/accounts/{number}": {
+        "query": {
+            "accountingSchema": false,
+            "includeArchived": false,
+            "languageCode": false,
+            "propertyId": true,
+            "transactionLimit": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/external-accounts": {
+        "query": {
+            "folioId": true,
+            "languageCode": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "parent": false,
+            "propertyId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/folios": {
+        "query": {
+            "balanceFilter": false,
+            "bookingIds": false,
+            "companyIds": false,
+            "createdFrom": false,
+            "createdTo": false,
+            "excludeClosed": false,
+            "expand": false,
+            "externalFolioCode": false,
+            "hasInvoices": false,
+            "isEmpty": false,
+            "onlyMain": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "reservationIds": false,
+            "sort": false,
+            "status": false,
+            "textSearch": false,
+            "type": false,
+            "updatedFrom": false,
+            "updatedTo": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/folios/$count": {
+        "query": {
+            "balanceFilter": false,
+            "bookingIds": false,
+            "companyIds": false,
+            "createdFrom": false,
+            "createdTo": false,
+            "excludeClosed": false,
+            "externalFolioCode": false,
+            "hasInvoices": false,
+            "isEmpty": false,
+            "onlyMain": false,
+            "propertyIds": false,
+            "reservationIds": false,
+            "status": false,
+            "textSearch": false,
+            "type": false,
+            "updatedFrom": false,
+            "updatedTo": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/folios/{folioId}/payments": {
+        "query": {
+            "expand": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "statusCodes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/folios/{folioId}/payments/{paymentId}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/folios/{folioId}/refunds": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false,
+            "statusCodes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/folios/{folioId}/refunds/{refundId}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/folios/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/global-accounts": {
+        "query": {
+            "accountingSchema": false,
+            "includeArchived": false,
+            "languageCode": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "parent": true,
+            "propertyId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/guest-accounts": {
+        "query": {
+            "languageCode": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "parent": false,
+            "propertyId": true,
+            "reservationId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/invoices": {
+        "query": {
+            "bookingIds": false,
+            "checkedOutOnAccountsReceivable": false,
+            "companyIds": false,
+            "dateFilter": false,
+            "expand": false,
+            "folioIds": false,
+            "nameSearch": false,
+            "number": false,
+            "outstandingPaymentFilter": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "paymentSettled": false,
+            "propertyIds": false,
+            "recipientType": false,
+            "reservationIds": false,
+            "status": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/invoices/preview": {
+        "query": {
+            "expand": false,
+            "folioId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/invoices/preview-pdf": {
+        "query": {
+            "folioId": true,
+            "languageCode": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/invoices/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/invoices/{id}/pdf": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/routings": {
+        "query": {
+            "bookingIds": false,
+            "destinationFolioIds": false,
+            "expand": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "routingIds": false,
+            "sourceFolioIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/routings/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/types/currencies": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/types/payment-methods": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/types/service-types": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /finance/v1/types/vat": {
+        "query": {
+            "atDate": false,
+            "isoCountryCode": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/properties": {
+        "query": {
+            "countryCode": false,
+            "expand": false,
+            "includeArchived": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "status": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/properties/$count": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/properties/{id}": {
+        "query": {
+            "expand": false,
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/types/countries": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/unit-attributes": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/unit-attributes/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/unit-groups": {
+        "query": {
+            "expand": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/unit-groups/$count": {
+        "query": {
+            "propertyId": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/unit-groups/{id}": {
+        "query": {
+            "expand": false,
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/units": {
+        "query": {
+            "condition": false,
+            "expand": false,
+            "isOccupied": false,
+            "maintenanceType": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false,
+            "status": false,
+            "textSearch": false,
+            "unitAttributeIds": false,
+            "unitGroupId": false,
+            "unitGroupIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/units/$count": {
+        "query": {
+            "condition": false,
+            "isOccupied": false,
+            "maintenanceType": false,
+            "propertyId": false,
+            "status": false,
+            "textSearch": false,
+            "unitAttributeIds": false,
+            "unitGroupId": false,
+            "unitGroupIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /inventory/v1/units/{id}": {
+        "query": {
+            "expand": false,
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /logs/v1/booking/reservation": {
+        "query": {
+            "clientIds": false,
+            "dateFilter": false,
+            "eventTypes": false,
+            "expand": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "reservationIds": false,
+            "subjectIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /logs/v1/finance/folio": {
+        "query": {
+            "clientIds": false,
+            "dateFilter": false,
+            "eventTypes": false,
+            "folioIds": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "subjectIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /logs/v1/finance/night-audit": {
+        "query": {
+            "dateFilter": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "statuses": false,
+            "subjectIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /logs/v1/finance/transactions-export": {
+        "query": {
+            "dateFilter": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false,
+            "subjectIds": false,
+            "types": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /operations/v1/maintenances": {
+        "query": {
+            "expand": false,
+            "from": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false,
+            "to": false,
+            "types": false,
+            "unitId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /operations/v1/maintenances/$count": {
+        "query": {
+            "from": false,
+            "propertyId": false,
+            "to": false,
+            "types": false,
+            "unitId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /operations/v1/maintenances/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/cancellation-policies": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/cancellation-policies/{id}": {
+        "query": {
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/companies": {
+        "query": {
+            "corporateCodes": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false,
+            "ratePlanIds": false,
+            "textSearch": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/companies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/corporate-codes/codes": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/no-show-policies": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/no-show-policies/{id}": {
+        "query": {
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/promo-codes/codes": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/rate-plans": {
+        "query": {
+            "baseRatePlanIds": false,
+            "cancellationPolicyIds": false,
+            "channelCodes": false,
+            "companyIds": false,
+            "derivationLevelFilter": false,
+            "expand": false,
+            "includeArchived": false,
+            "includedServiceIds": false,
+            "isDerived": false,
+            "minGuaranteeTypes": false,
+            "noShowPolicyIds": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "promoCodes": false,
+            "propertyId": false,
+            "ratePlanCodes": false,
+            "timeSliceDefinitionIds": false,
+            "timeSliceTemplate": false,
+            "unitGroupIds": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/rate-plans/$count": {
+        "query": {
+            "baseRatePlanIds": false,
+            "cancellationPolicyIds": false,
+            "channelCodes": false,
+            "companyIds": false,
+            "derivationLevelFilter": false,
+            "includeArchived": false,
+            "includedServiceIds": false,
+            "isDerived": false,
+            "minGuaranteeTypes": false,
+            "noShowPolicyIds": false,
+            "promoCodes": false,
+            "propertyId": false,
+            "ratePlanCodes": false,
+            "timeSliceDefinitionIds": false,
+            "timeSliceTemplate": false,
+            "unitGroupIds": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/rate-plans/{id}": {
+        "query": {
+            "expand": false,
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/rate-plans/{id}/rates": {
+        "query": {
+            "from": true,
+            "pageNumber": false,
+            "pageSize": false,
+            "to": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/rate-plans/{id}/rates/$count": {
+        "query": {
+            "from": true,
+            "to": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/services": {
+        "query": {
+            "channelCodes": false,
+            "expand": false,
+            "onlySoldAsExtras": false,
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false,
+            "serviceTypes": false,
+            "textSearch": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/services/$count": {
+        "query": {
+            "channelCodes": false,
+            "onlySoldAsExtras": false,
+            "propertyId": false,
+            "serviceTypes": false,
+            "textSearch": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /rateplan/v1/services/{id}": {
+        "query": {
+            "expand": false,
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /reports/v1/reports/arrivals": {
+        "query": {
+            "month": true,
+            "propertyId": true,
+            "year": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /reports/v1/reports/company-invoices-vat": {
+        "query": {
+            "companyIds": false,
+            "dateFilter": false,
+            "propertyId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /reports/v1/reports/ordered-services": {
+        "query": {
+            "from": true,
+            "propertyId": true,
+            "serviceIds": true,
+            "to": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /reports/v1/reports/property-performance": {
+        "query": {
+            "channelCodes": false,
+            "companyIds": false,
+            "expand": false,
+            "from": true,
+            "marketSegmentIds": false,
+            "propertyId": true,
+            "ratePlanIds": false,
+            "sources": false,
+            "timeSliceDefinitionIds": false,
+            "to": true,
+            "travelPurpose": false,
+            "unitGroupIds": false,
+            "unitGroupTypes": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /reports/v1/reports/revenues": {
+        "query": {
+            "from": true,
+            "languageCode": false,
+            "propertyId": true,
+            "to": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/age-categories": {
+        "query": {
+            "propertyId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/age-categories/{id}": {
+        "query": {
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/capture-policies": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/capture-policies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/city-tax": {
+        "query": {
+            "propertyId": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/city-tax/{id}": {
+        "query": {
+            "languages": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/features/{propertyId}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/invoice-address": {
+        "query": {
+            "propertyIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/languages": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/market-segments": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/market-segments/$count": {
+        "query": {
+            "propertyIds": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/market-segments/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/properties/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/properties/{propertyId}/time-slice-definitions": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/properties/{propertyId}/time-slice-definitions/{id}": {
+        "query": {
+            "expand": false
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/sub-accounts": {
+        "query": {
+            "pageNumber": false,
+            "pageSize": false,
+            "propertyId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/sub-accounts/$count": {
+        "query": {
+            "propertyId": true
+        },
+        "idempotencyKey": false
+    },
+    "GET /settings/v1/sub-accounts/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /booking/v1/blocks/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /booking/v1/groups/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /finance/v1/folios/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /inventory/v1/properties/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /inventory/v1/unit-attributes/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /inventory/v1/unit-groups/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /inventory/v1/units/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /operations/v1/maintenances/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /rateplan/v1/rate-plans/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /rateplan/v1/services/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /settings/v1/market-segments/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "HEAD /settings/v1/sub-accounts/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /availability/v1/properties/{id}": {
+        "query": {
+            "from": true,
+            "timeSliceTemplate": true,
+            "to": true,
+            "unitGroupType": true
+        },
+        "idempotencyKey": false
+    },
+    "PATCH /availability/v1/unit-groups/{id}": {
+        "query": {
+            "from": true,
+            "timeSliceTemplate": true,
+            "to": true
+        },
+        "idempotencyKey": false
+    },
+    "PATCH /booking/v1/blocks/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /booking/v1/bookings/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /booking/v1/groups/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /booking/v1/reservations/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /finance/v1/folios/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /finance/v1/routings/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /inventory/v1/properties/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /inventory/v1/unit-attributes/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /inventory/v1/units": {
+        "query": {
+            "unitIds": true
+        },
+        "idempotencyKey": false
+    },
+    "PATCH /inventory/v1/units/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /operations/v1/maintenances/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /rateplan/v1/cancellation-policies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /rateplan/v1/companies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /rateplan/v1/no-show-policies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /rateplan/v1/rate-plans": {
+        "query": {
+            "ratePlanIds": true
+        },
+        "idempotencyKey": false
+    },
+    "PATCH /rateplan/v1/rate-plans/{id}/rates": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /rateplan/v1/rates": {
+        "query": {
+            "from": true,
+            "ratePlanIds": true,
+            "to": true,
+            "weekDays": false
+        },
+        "idempotencyKey": false
+    },
+    "PATCH /rateplan/v1/services/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /settings/v1/age-categories/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /settings/v1/capture-policies/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /settings/v1/city-tax/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /settings/v1/features/{propertyId}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /settings/v1/invoice-address": {
+        "query": {
+            "propertyIds": true
+        },
+        "idempotencyKey": false
+    },
+    "PATCH /settings/v1/market-segments/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /settings/v1/properties/{propertyId}/time-slice-definitions/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PATCH /settings/v1/sub-accounts/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "POST /account/v1/accounts": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/authorizations/by-authorization": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/authorizations/by-link": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/authorizations/by-payment-account": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/authorizations/by-terminal": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/blocks": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/bookings": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/bookings/$force": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/bookings/{id}/reservations": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/bookings/{id}/reservations/$force": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/groups": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/groups/{id}/reservations": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/payment-accounts/by-authorization": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/payment-accounts/by-link": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/payment-accounts/by-stored-payment-method": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /booking/v1/payment-accounts/by-terminal": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/accounts/aggregate": {
+        "query": {
+            "accountNumber": false,
+            "accountType": false,
+            "accountingSchema": false,
+            "from": true,
+            "languageCode": false,
+            "propertyId": true,
+            "to": true
+        },
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/accounts/aggregate-daily": {
+        "query": {
+            "accountNumber": false,
+            "accountType": false,
+            "accountingSchema": false,
+            "from": true,
+            "languageCode": false,
+            "propertyId": true,
+            "reference": false,
+            "to": true
+        },
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/accounts/aggregate-pairs-daily": {
+        "query": {
+            "accountNumber": false,
+            "accountType": false,
+            "accountingSchema": false,
+            "from": true,
+            "languageCode": false,
+            "propertyId": true,
+            "reference": false,
+            "to": true
+        },
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/accounts/export": {
+        "query": {
+            "accountNumber": false,
+            "accountType": false,
+            "accountingSchema": false,
+            "from": true,
+            "languageCode": false,
+            "propertyId": true,
+            "to": true
+        },
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/accounts/export-daily": {
+        "query": {
+            "accountNumber": false,
+            "accountType": false,
+            "accountingSchema": false,
+            "from": true,
+            "languageCode": false,
+            "propertyId": true,
+            "reference": false,
+            "to": true
+        },
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/accounts/export-gross-daily": {
+        "query": {
+            "accountingSchema": false,
+            "from": true,
+            "propertyId": true,
+            "reference": false,
+            "to": true
+        },
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/allowances": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/bulk-allowances": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/cancellation-fee": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/charges": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/charges/{chargeId}/allowances": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/charges/{chargeId}/split": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/correct": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/no-show-fee": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/payments/{paymentId}/split": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folio-actions/{folioId}/transitory-charges": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folios": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folios/{folioId}/payments": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folios/{folioId}/payments/by-authorization": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folios/{folioId}/payments/by-link": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folios/{folioId}/payments/by-payment-account": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folios/{folioId}/payments/by-terminal": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folios/{folioId}/payments/{paymentId}/refunds": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/folios/{folioId}/refunds": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/invoices": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /finance/v1/routings": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /inventory/v1/properties": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /inventory/v1/property-actions/{id}/clone": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /inventory/v1/unit-attributes": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /inventory/v1/unit-groups": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /inventory/v1/units": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /inventory/v1/units/bulk": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /operations/v1/maintenances": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /operations/v1/maintenances/bulk": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /rateplan/v1/cancellation-policies": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /rateplan/v1/companies": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /rateplan/v1/no-show-policies": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /rateplan/v1/rate-plans": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /rateplan/v1/services": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /settings/v1/age-categories": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /settings/v1/city-tax": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /settings/v1/market-segments": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /settings/v1/properties/{propertyId}/time-slice-definitions": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "POST /settings/v1/sub-accounts": {
+        "query": {},
+        "idempotencyKey": true
+    },
+    "PUT /account/v1/account-actions/current/set-live": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /account/v1/account-actions/current/suspend": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /account/v1/accounts/current": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/authorization-actions/{authorizationId}/cancel": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/authorization-actions/{authorizationId}/expire-payment-link": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/authorization-actions/{authorizationId}/refresh": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/block-actions/{id}/amend": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/block-actions/{id}/cancel": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/block-actions/{id}/confirm": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/block-actions/{id}/cutoff-optional": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/block-actions/{id}/release": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/block-actions/{id}/set-to-optional": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/block-actions/{id}/start-optional": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/block-actions/{id}/wash": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/payment-account-actions/{paymentAccountId}/cancel": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/payment-account-actions/{paymentAccountId}/expire-payment-link": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/add-city-tax": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/amend": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/amend/$force": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/assign-unit": {
+        "query": {
+            "unitConditions": false
+        },
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/assign-unit/{unitId}": {
+        "query": {
+            "from": false,
+            "lockUnit": false,
+            "to": false
+        },
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/book-service": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/book-service/$force": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/cancel": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/checkin": {
+        "query": {
+            "withCityTax": false
+        },
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/checkout": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/lock-unit": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/noshow": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/remove-city-tax": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/revert-checkin": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/unassign-units": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /booking/v1/reservation-actions/{id}/unlock-unit": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/folio-actions/bulk-move": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/folio-actions/{folioId}/close": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/folio-actions/{folioId}/move-all-charges": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/folio-actions/{folioId}/move-charges": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/folio-actions/{folioId}/move-payments": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/folio-actions/{folioId}/post-charges": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/folio-actions/{folioId}/reopen": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/folios/{folioId}/payments/{paymentId}/cancel": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/invoice-actions/{id}/cancel": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /finance/v1/invoice-actions/{id}/pay": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /inventory/v1/property-actions/{id}/archive": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /inventory/v1/property-actions/{id}/reset": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /inventory/v1/property-actions/{id}/set-live": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /inventory/v1/unit-actions/{id}/archive": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /inventory/v1/unit-groups/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /operations/v1/night-audit": {
+        "query": {
+            "propertyId": true,
+            "setReservationsToNoShow": false
+        },
+        "idempotencyKey": false
+    },
+    "PUT /operations/v1/units-condition": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /rateplan/v1/rate-plan-actions/{id}/archive": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /rateplan/v1/rate-plans/{id}": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /rateplan/v1/rate-plans/{id}/rates": {
+        "query": {},
+        "idempotencyKey": false
+    },
+    "PUT /settings/v1/invoice-address": {
+        "query": {
+            "propertyIds": true
+        },
+        "idempotencyKey": false
+    },
+    "PUT /settings/v1/languages": {
+        "query": {},
+        "idempotencyKey": false
+    }
+}

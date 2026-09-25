@@ -112,3 +112,7 @@ tasks:
     cmds:
       - task: phpunit
         vars: { CLI_ARGS: '{{.CLI_ARGS}}' }
+
+  contract:update:
+    desc: 'Refresh the Apaleo OpenAPI snapshot used by ContractTest.'
+    cmd: '{{.PHP_BIN}} tests/Contract/update-snapshot.php'
