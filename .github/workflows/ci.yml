@@ -68,6 +68,8 @@ jobs:
       matrix:
         php: ['8.4', '8.5']
         deps: [highest, lowest]
+        include:
+          - { php: '8.5', deps: highest, coverage: true }
 
     steps:
       - name: '🛎 Checkout'
@@ -80,6 +82,24 @@ jobs:
         with:
           php: ${{ matrix.php }}
           prefer-lowest: ${{ matrix.deps == 'lowest' }}
+          coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
 
       - name: '🔬 Run tests'
-        run: task test -- --no-progress
+        run: task ${{ matrix.coverage && 'test:coverage' || 'test' }} -- --no-progress
+
+      - name: '☂️ Upload coverage to Codecov'
+        if: matrix.coverage
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: maks-oleksyuk/apaleo-php
+          directory: ./build/report
+
+      - name: '☂️ Upload test results to Codecov'
+        if: matrix.coverage
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: maks-oleksyuk/apaleo-php
+          directory: ./build/report
+          report_type: test_results

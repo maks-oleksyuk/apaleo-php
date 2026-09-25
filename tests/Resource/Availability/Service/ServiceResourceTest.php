@@ -4,40 +4,28 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Availability\Service;
 
-use Http\Mock\Client as MockClient;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
-use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\Service\ServiceResource;
+use Oleksyuk\Apaleo\Tests\Support\MockPipeline;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Availability')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class ServiceResourceTest extends TestCase
 {
-    private MockClient $httpClient;
+    use MockPipeline;
 
     private ServiceResource $services;
 
     protected function setUp(): void
     {
-        $this->httpClient = new MockClient();
-        $factory = new Psr17Factory();
-
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
-
-        $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider);
+        $pipeline = $this->createPipeline();
         $this->services = new ServiceResource($pipeline);
     }
 
@@ -77,13 +65,5 @@ final class ServiceResourceTest extends TestCase
         $result = $this->services->list('MUC', new \DateTimeImmutable('2026-09-20'), new \DateTimeImmutable('2026-09-22'));
 
         self::assertCount(0, $result);
-    }
-
-    private function lastRequest(): RequestInterface
-    {
-        $request = $this->httpClient->getLastRequest();
-        self::assertInstanceOf(RequestInterface::class, $request);
-
-        return $request;
     }
 }

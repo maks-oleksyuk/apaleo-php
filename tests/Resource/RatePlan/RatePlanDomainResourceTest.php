@@ -13,12 +13,15 @@ use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\PriceAdjustmentType;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\RatePlanFilter;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\RatePlan')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class RatePlanDomainResourceTest extends RatePlanTestCase
 {
     public function testGetMapsResponseToDto(): void

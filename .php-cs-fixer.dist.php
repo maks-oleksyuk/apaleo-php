@@ -23,5 +23,6 @@ return (new Config())
         'phpdoc_align' => false,
         'phpdoc_summary' => false,
         'yoda_style' => false,
+        'php_unit_test_class_requires_covers' => false, // coverage targets are declared with #[Covers*] attributes
     ])
     ->setFinder($finder);

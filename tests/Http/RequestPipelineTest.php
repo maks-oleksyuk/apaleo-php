@@ -7,17 +7,20 @@ namespace Oleksyuk\Apaleo\Tests\Http;
 use Http\Mock\Client as MockClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
+use Oleksyuk\Apaleo\Exception\ApaleoValidationException;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Tests\Support\FakeTokenProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -26,9 +29,9 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversClass(RequestPipeline::class)]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class RequestPipelineTest extends TestCase
 {
     private MockClient $httpClient;
@@ -40,12 +43,7 @@ final class RequestPipelineTest extends TestCase
         $this->httpClient = new MockClient();
         $factory = new Psr17Factory();
 
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
+        $tokenProvider = new FakeTokenProvider();
 
         $this->pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider);
     }
@@ -113,12 +111,7 @@ final class RequestPipelineTest extends TestCase
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{}'));
 
         $factory = new Psr17Factory();
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
+        $tokenProvider = new FakeTokenProvider();
         $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider, 'https://api.apaleo.com/');
 
         $pipeline->send($this->requestWithQuery([]));
@@ -295,12 +288,7 @@ final class RequestPipelineTest extends TestCase
         };
 
         $factory = new Psr17Factory();
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
+        $tokenProvider = new FakeTokenProvider();
         $pipeline = new RequestPipeline($client, $factory, $factory, $tokenProvider);
 
         $this->expectException(ApaleoTransportException::class);
@@ -308,9 +296,69 @@ final class RequestPipelineTest extends TestCase
         $pipeline->send($this->requestWithQuery([]));
     }
 
-    /**
-     * @param array<string, mixed> $query
-     */
+    public function testSendRawReturnsTheBodyUntouched(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/pdf'], '%PDF-1.7 binary'));
+
+        self::assertSame('%PDF-1.7 binary', $this->pipeline->sendRaw($this->requestWithQuery([])));
+    }
+
+    public function testSendRawStillMapsErrorsToExceptions(): void
+    {
+        $this->httpClient->addResponse(new Response(404, ['Content-Type' => 'application/json'], '{"detail":"no invoice"}'));
+
+        $this->expectException(ApaleoNotFoundException::class);
+        $this->expectExceptionMessage('no invoice');
+
+        $this->pipeline->sendRaw($this->requestWithQuery([]));
+    }
+
+    public function testNonJsonErrorBodyIsExcerptedIntoTheMessage(): void
+    {
+        $this->httpClient->addResponse(new Response(500, ['Content-Type' => 'text/plain'], 'upstream exploded'));
+
+        $this->expectException(ApaleoServerException::class);
+        $this->expectExceptionMessage('Apaleo API error (HTTP 500): upstream exploded');
+
+        $this->pipeline->send($this->requestWithQuery([]));
+    }
+
+    public function test400WithMessagesMapsToValidationExceptionCarryingThem(): void
+    {
+        $this->httpClient->addResponse(new Response(400, ['Content-Type' => 'application/json'], '{"messages":["Code: The Code field is required.",5]}'));
+
+        try {
+            $this->pipeline->send($this->requestWithQuery([]));
+            self::fail('Expected ApaleoValidationException');
+        } catch (ApaleoValidationException $apaleoValidationException) {
+            self::assertSame(['Code: The Code field is required.'], $apaleoValidationException->messages);
+            self::assertSame('Code: The Code field is required.', $apaleoValidationException->getMessage());
+        }
+    }
+
+    /** @param array<string, string> $headers */
+    #[DataProvider('provide429WithoutUsableRetryAfterHasNoDelayCases')]
+    public function test429WithoutUsableRetryAfterHasNoDelay(array $headers): void
+    {
+        $this->httpClient->addResponse(new Response(429, ['Content-Type' => 'application/json', ...$headers], '{}'));
+
+        try {
+            $this->pipeline->send($this->requestWithQuery([]));
+            self::fail('Expected ApaleoRateLimitException');
+        } catch (ApaleoRateLimitException $apaleoRateLimitException) {
+            self::assertNull($apaleoRateLimitException->retryAfterSeconds);
+        }
+    }
+
+    /** @return iterable<string, array{array<string, string>}> */
+    public static function provide429WithoutUsableRetryAfterHasNoDelayCases(): iterable
+    {
+        yield 'absent' => [[]];
+
+        yield 'garbage' => [['Retry-After' => 'soon']];
+    }
+
+    /** @param array<string, mixed> $query */
     private function requestWithQuery(array $query): Request
     {
         return new readonly class($query) extends Request {

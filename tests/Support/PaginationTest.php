@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Tests\Support;
 
 use Oleksyuk\Apaleo\Support\Pagination;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversClass(Pagination::class)]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class PaginationTest extends TestCase
 {
     public function testNullIsAllowed(): void

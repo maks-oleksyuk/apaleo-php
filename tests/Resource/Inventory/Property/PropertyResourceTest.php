@@ -4,30 +4,28 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Inventory\Property;
 
-use Http\Mock\Client as MockClient;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
-use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\Address;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\CreateProperty;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\PropertyFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\PropertyResource;
+use Oleksyuk\Apaleo\Tests\Support\MockPipeline;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Inventory')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class PropertyResourceTest extends TestCase
 {
-    private MockClient $httpClient;
+    use MockPipeline;
 
     private PropertyResource $properties;
 
@@ -36,17 +34,7 @@ final class PropertyResourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->httpClient = new MockClient();
-        $factory = new Psr17Factory();
-
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
-
-        $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider);
+        $pipeline = $this->createPipeline();
         $this->properties = new PropertyResource($pipeline);
 
         $this->fullPropertyFixture = [
@@ -285,13 +273,5 @@ final class PropertyResourceTest extends TestCase
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }
-    }
-
-    private function lastRequest(): RequestInterface
-    {
-        $request = $this->httpClient->getLastRequest();
-        self::assertInstanceOf(RequestInterface::class, $request);
-
-        return $request;
     }
 }

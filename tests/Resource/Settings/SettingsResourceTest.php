@@ -21,12 +21,15 @@ use Oleksyuk\Apaleo\Resource\Settings\TimeSliceDefinition\DTO\CreateTimeSliceDef
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Settings')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class SettingsResourceTest extends SettingsTestCase
 {
     public function testCapturePolicyListAndUpdate(): void

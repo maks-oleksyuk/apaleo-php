@@ -3,6 +3,7 @@
 # apaleo-php
 
 [![CI](https://img.shields.io/github/actions/workflow/status/maks-oleksyuk/apaleo-php/ci.yml?branch=main&style=flat&label=CI)](//github.com/maks-oleksyuk/apaleo-php/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/maks-oleksyuk/apaleo-php?style=flat&logo=codecov&logoColor=white)](//codecov.io/gh/maks-oleksyuk/apaleo-php)
 [![Latest Version](https://img.shields.io/packagist/v/oleksyuk/apaleo-php.svg?style=flat&logo=packagist&logoColor=white&color=F28D1A)](//packagist.org/packages/oleksyuk/apaleo-php)
 [![PHP Version](https://img.shields.io/badge/PHP-8.4%2B-777bb4?style=flat&logo=php&logoColor=white)](composer.json)
 [![Total Downloads](https://img.shields.io/packagist/dt/oleksyuk/apaleo-php.svg?style=flat&logo=packagist&logoColor=white&color=F28D1A)](//packagist.org/packages/oleksyuk/apaleo-php/stats)
@@ -167,7 +168,8 @@ For a binary endpoint (PDF, CSV), use `sendRaw()`: it returns the body as-is, wh
 ## Development
 
 ```bash
-task lint   # PHPStan (max level), PHP CS Fixer, Rector, composer validate
-task test   # PHPUnit
-task fix    # auto-fix CS Fixer / Rector issues
+task lint            # PHPStan (max level), PHP CS Fixer, Rector, composer validate
+task test            # PHPUnit
+task test:coverage   # PHPUnit + coverage report in build/ (needs Xdebug or PCOV)
+task fix             # auto-fix CS Fixer / Rector issues
 ```

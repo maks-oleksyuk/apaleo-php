@@ -18,12 +18,15 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ServiceType;
 use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\PricingUnit;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\RatePlan')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class ServiceAndCompanyResourceTest extends RatePlanTestCase
 {
     public function testGetServiceMapsFullModel(): void

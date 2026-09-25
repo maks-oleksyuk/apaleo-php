@@ -4,28 +4,26 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Account;
 
-use Http\Mock\Client as MockClient;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
-use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Account\AccountResource;
 use Oleksyuk\Apaleo\Resource\Account\DTO\CreateAccount;
 use Oleksyuk\Apaleo\Resource\Account\DTO\ReplaceAccount;
 use Oleksyuk\Apaleo\Resource\Account\Enum\AccountType;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\Address;
+use Oleksyuk\Apaleo\Tests\Support\MockPipeline;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Account')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class AccountResourceTest extends TestCase
 {
-    private MockClient $httpClient;
+    use MockPipeline;
 
     private AccountResource $account;
 
@@ -34,17 +32,7 @@ final class AccountResourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->httpClient = new MockClient();
-        $factory = new Psr17Factory();
-
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
-
-        $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider);
+        $pipeline = $this->createPipeline();
         $this->account = new AccountResource($pipeline);
 
         $this->accountFixture = [
@@ -159,13 +147,5 @@ final class AccountResourceTest extends TestCase
         $request = $this->lastRequest();
         self::assertSame('PUT', $request->getMethod());
         self::assertStringEndsWith('/account-actions/current/set-live', (string) $request->getUri());
-    }
-
-    private function lastRequest(): RequestInterface
-    {
-        $request = $this->httpClient->getLastRequest();
-        self::assertInstanceOf(RequestInterface::class, $request);
-
-        return $request;
     }
 }

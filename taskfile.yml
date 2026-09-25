@@ -113,6 +113,16 @@ tasks:
       - task: phpunit
         vars: { CLI_ARGS: '{{.CLI_ARGS}}' }
 
+  test:coverage:
+    desc: 'Run tests with code coverage (needs Xdebug or PCOV); reports land in build/.'
+    aliases: [t:c]
+    env:
+      XDEBUG_MODE: coverage
+    cmds:
+      - task: phpunit
+        vars:
+          CLI_ARGS: '--coverage-html build/coverage --coverage-clover build/report/coverage.xml --log-junit build/report/junit.xml {{.CLI_ARGS}}'
+
   contract:update:
     desc: 'Refresh the Apaleo OpenAPI snapshot used by ContractTest.'
     cmd: '{{.PHP_BIN}} tests/Contract/update-snapshot.php'

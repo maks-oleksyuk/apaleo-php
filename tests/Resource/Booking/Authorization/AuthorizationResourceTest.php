@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Booking\Authorization;
 
-use Http\Mock\Client as MockClient;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
-use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\AuthorizationFilter;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\AuthorizationResource;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
@@ -18,17 +13,20 @@ use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationTargetType;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\PayerInteraction;
 use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Tests\Support\MockPipeline;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Booking')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class AuthorizationResourceTest extends TestCase
 {
-    private MockClient $httpClient;
+    use MockPipeline;
 
     private AuthorizationResource $authorizations;
 
@@ -37,17 +35,7 @@ final class AuthorizationResourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->httpClient = new MockClient();
-        $factory = new Psr17Factory();
-
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
-
-        $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider);
+        $pipeline = $this->createPipeline();
         $this->authorizations = new AuthorizationResource($pipeline);
 
         $this->fullAuthorizationFixture = [
@@ -217,13 +205,5 @@ final class AuthorizationResourceTest extends TestCase
         $body = json_decode((string) $request->getBody(), true);
         self::assertSame(50.0, (float) $body['amount']['amount']);
         self::assertSame('EUR', $body['amount']['currency']);
-    }
-
-    private function lastRequest(): RequestInterface
-    {
-        $request = $this->httpClient->getLastRequest();
-        self::assertInstanceOf(RequestInterface::class, $request);
-
-        return $request;
     }
 }

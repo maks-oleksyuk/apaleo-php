@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Tests\Http;
 
 use Oleksyuk\Apaleo\Http\JsonPatch;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversClass(JsonPatch::class)]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class JsonPatchTest extends TestCase
 {
     public function testBuildsOperationsInOrder(): void

@@ -16,12 +16,15 @@ use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FolioType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Finance')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class RoutingAccountAndTypesTest extends FinanceTestCase
 {
     public function testRoutingListAndCreate(): void

@@ -25,12 +25,15 @@ use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
 use Oleksyuk\Apaleo\Resource\Reports\Enum\Title;
 use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Finance')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class FolioResourceTest extends FinanceTestCase
 {
     public function testGetFolioMapsFullModel(): void

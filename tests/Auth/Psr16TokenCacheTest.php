@@ -6,14 +6,16 @@ namespace Oleksyuk\Apaleo\Tests\Auth;
 
 use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\Psr16TokenCache;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversClass(Psr16TokenCache::class)]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class Psr16TokenCacheTest extends TestCase
 {
     public function testSetThenGetRoundTripsTheToken(): void
@@ -41,6 +43,14 @@ final class Psr16TokenCacheTest extends TestCase
     {
         $cache = $this->inMemoryPsr16Cache();
         $cache->set('key', 'not-an-array');
+
+        self::assertNull(new Psr16TokenCache($cache)->get('key'));
+    }
+
+    public function testGetReturnsNullWhenTheCachedTimestampIsUnparsable(): void
+    {
+        $cache = $this->inMemoryPsr16Cache();
+        $cache->set('key', ['value' => 'abc', 'expiresAt' => 'not a date at all']);
 
         self::assertNull(new Psr16TokenCache($cache)->get('key'));
     }

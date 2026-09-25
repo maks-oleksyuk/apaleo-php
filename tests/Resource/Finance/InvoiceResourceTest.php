@@ -14,12 +14,15 @@ use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceStatus;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceType;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\InvoiceFilter;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Finance')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class InvoiceResourceTest extends FinanceTestCase
 {
     public function testGetInvoiceMapsDocument(): void

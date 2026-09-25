@@ -6,13 +6,15 @@ namespace Oleksyuk\Apaleo\Tests\Support;
 
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Paginator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversClass(Paginator::class)]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class PaginatorTest extends TestCase
 {
     public function testWalksAllPagesUntilTotalCountIsReached(): void

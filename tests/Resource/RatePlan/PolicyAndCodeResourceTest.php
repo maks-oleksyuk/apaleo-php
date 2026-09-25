@@ -13,12 +13,15 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\FeeDetails;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\PercentValue;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\DTO\Period;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\RatePlan')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class PolicyAndCodeResourceTest extends RatePlanTestCase
 {
     public function testCancellationPolicyGetAndCreate(): void

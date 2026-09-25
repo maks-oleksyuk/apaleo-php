@@ -11,12 +11,15 @@ use Oleksyuk\Apaleo\Resource\RatePlan\Rate\DTO\RateRestrictions;
 use Oleksyuk\Apaleo\Resource\RatePlan\Rate\DTO\ReplaceRate;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\DayOfWeek;
 use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\RatePlan')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class RateResourceTest extends RatePlanTestCase
 {
     public function testListMapsRatesAndSendsDateRange(): void

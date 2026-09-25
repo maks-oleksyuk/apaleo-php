@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Booking\Block;
 
-use Http\Mock\Client as MockClient;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
-use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Block\BlockFilter;
 use Oleksyuk\Apaleo\Resource\Booking\Block\BlockResource;
 use Oleksyuk\Apaleo\Resource\Booking\Block\DTO\CreateBlock;
@@ -20,18 +15,21 @@ use Oleksyuk\Apaleo\Resource\Booking\Block\DTO\ReplaceBlock;
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\BlockStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\OptionalCutoffBehavior;
 use Oleksyuk\Apaleo\Resource\Shared\DTO\MonetaryValue;
+use Oleksyuk\Apaleo\Tests\Support\MockPipeline;
+use PHPUnit\Framework\Attributes\CoversNamespace;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Booking')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class BlockResourceTest extends TestCase
 {
-    private MockClient $httpClient;
+    use MockPipeline;
 
     private BlockResource $blocks;
 
@@ -40,17 +38,7 @@ final class BlockResourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->httpClient = new MockClient();
-        $factory = new Psr17Factory();
-
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
-
-        $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider);
+        $pipeline = $this->createPipeline();
         $this->blocks = new BlockResource($pipeline);
 
         $this->fullBlockFixture = [
@@ -260,13 +248,5 @@ final class BlockResourceTest extends TestCase
         $this->blocks->startOptional('MUC-HSGTDG', new \DateTimeImmutable('2026-09-22T00:00:00+02:00'));
 
         self::assertStringContainsString('/start-optional', (string) $this->lastRequest()->getUri());
-    }
-
-    private function lastRequest(): RequestInterface
-    {
-        $request = $this->httpClient->getLastRequest();
-        self::assertInstanceOf(RequestInterface::class, $request);
-
-        return $request;
     }
 }

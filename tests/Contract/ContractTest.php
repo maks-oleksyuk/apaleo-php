@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Contract;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,9 +15,8 @@ use PHPUnit\Framework\TestCase;
  * Reads the Request sources rather than instantiating them, so it needs no fixture per class.
  *
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class ContractTest extends TestCase
 {
     /** POSTs that only read (export/aggregate): an idempotency key would add nothing. */

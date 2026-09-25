@@ -4,42 +4,30 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Reports;
 
-use Http\Mock\Client as MockClient;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
-use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Reports\Enum\Gender;
 use Oleksyuk\Apaleo\Resource\Reports\Enum\Title;
 use Oleksyuk\Apaleo\Resource\Reports\ReportsResource;
+use Oleksyuk\Apaleo\Tests\Support\MockPipeline;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Reports')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class ReportsResourceTest extends TestCase
 {
-    private MockClient $httpClient;
+    use MockPipeline;
 
     private ReportsResource $reports;
 
     protected function setUp(): void
     {
-        $this->httpClient = new MockClient();
-        $factory = new Psr17Factory();
-
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
-
-        $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider);
+        $pipeline = $this->createPipeline();
         $this->reports = new ReportsResource($pipeline);
     }
 
@@ -190,13 +178,5 @@ final class ReportsResourceTest extends TestCase
         self::assertCount(1, $result->children);
         self::assertSame('Accommodation', $result->children[0]->account->name);
         self::assertSame([], $result->children[0]->children);
-    }
-
-    private function lastRequest(): RequestInterface
-    {
-        $request = $this->httpClient->getLastRequest();
-        self::assertInstanceOf(RequestInterface::class, $request);
-
-        return $request;
     }
 }

@@ -4,28 +4,26 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Inventory\UnitGroup;
 
-use Http\Mock\Client as MockClient;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
-use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\CreateUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\ReplaceUnitGroup;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\UnitGroupFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\UnitGroupResource;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Tests\Support\MockPipeline;
+use PHPUnit\Framework\Attributes\CoversNamespace;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Inventory')]
+#[CoversNamespace('Oleksyuk\Apaleo\Resource\Shared')]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class UnitGroupResourceTest extends TestCase
 {
-    private MockClient $httpClient;
+    use MockPipeline;
 
     private UnitGroupResource $unitGroups;
 
@@ -34,17 +32,7 @@ final class UnitGroupResourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->httpClient = new MockClient();
-        $factory = new Psr17Factory();
-
-        $tokenProvider = new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
-            {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
-            }
-        };
-
-        $pipeline = new RequestPipeline($this->httpClient, $factory, $factory, $tokenProvider);
+        $pipeline = $this->createPipeline();
         $this->unitGroups = new UnitGroupResource($pipeline);
 
         $this->fixture = [
@@ -166,13 +154,5 @@ final class UnitGroupResourceTest extends TestCase
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }
-    }
-
-    private function lastRequest(): RequestInterface
-    {
-        $request = $this->httpClient->getLastRequest();
-        self::assertInstanceOf(RequestInterface::class, $request);
-
-        return $request;
     }
 }

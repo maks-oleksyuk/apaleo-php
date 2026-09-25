@@ -8,13 +8,13 @@ use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationTargetType;
 use Oleksyuk\Apaleo\Resource\Logs\DTO\ReservationChangedChange;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversNothing]
 final class EnumFallbackTest extends TestCase
 {
     /**

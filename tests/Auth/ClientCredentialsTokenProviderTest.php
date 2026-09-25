@@ -13,6 +13,8 @@ use Oleksyuk\Apaleo\Auth\InMemoryTokenCache;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -22,9 +24,9 @@ use Symfony\Component\Clock\MockClock;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversClass(ClientCredentialsTokenProvider::class)]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class ClientCredentialsTokenProviderTest extends TestCase
 {
     private MockClient $httpClient;

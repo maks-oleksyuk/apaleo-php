@@ -10,18 +10,26 @@ use Nyholm\Psr7\Response;
 use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
+use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Tests\Support\FakeTokenProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversClass(RequestPipeline::class)]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class RequestPipelineSendManyTest extends TestCase
 {
     public function testWithoutAsyncClientFallsBackToSendingOneByOne(): void
@@ -183,14 +191,128 @@ final class RequestPipelineSendManyTest extends TestCase
         $pipeline->sendMany([$this->requestTo('/one')]);
     }
 
-    private function fakeTokenProvider(): TokenProvider
+    public function testAsyncPathSendsTheRequestBodyAsJson(): void
     {
-        return new class implements TokenProvider {
-            public function getToken(bool $forceRefresh = false): AccessToken
+        $seenBody = null;
+        $asyncClient = new MockHttpClient(static function (string $method, string $url, array $options) use (&$seenBody): MockResponse {
+            $seenBody = $options['body'] ?? null;
+
+            return new MockResponse('{}', ['http_code' => 200, 'response_headers' => ['Content-Type' => 'application/json']]);
+        });
+
+        $factory = new Psr17Factory();
+        $pipeline = new RequestPipeline(new MockClient(), $factory, $factory, $this->fakeTokenProvider(), asyncHttpClient: $asyncClient);
+
+        $pipeline->sendMany([new readonly class extends Request {
+            public function method(): Method
             {
-                return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
+                return Method::POST;
+            }
+
+            public function endpoint(): string
+            {
+                return '/x';
+            }
+
+            public function body(): array
+            {
+                return ['a' => 1];
+            }
+        }]);
+
+        self::assertSame('{"a":1}', $seenBody);
+    }
+
+    #[DataProvider('provideAsyncTransportErrorsSurfaceAsTransportExceptionsCases')]
+    public function testAsyncTransportErrorsSurfaceAsTransportExceptions(string $failingStage): void
+    {
+        $response = new readonly class($failingStage) implements ResponseInterface {
+            public function __construct(private string $failingStage) {}
+
+            public function getStatusCode(): int
+            {
+                $this->failAt('status');
+
+                return 200;
+            }
+
+            public function getHeaders(bool $throw = true): array
+            {
+                $this->failAt('headers');
+
+                return [];
+            }
+
+            public function getContent(bool $throw = true): string
+            {
+                $this->failAt('content');
+
+                return '{}';
+            }
+
+            /** @return array<string, mixed> */
+            public function toArray(bool $throw = true): array
+            {
+                return [];
+            }
+
+            public function cancel(): void {}
+
+            public function getInfo(?string $type = null): mixed
+            {
+                return null;
+            }
+
+            private function failAt(string $stage): void
+            {
+                if ($stage === $this->failingStage) {
+                    throw new \RuntimeException('connection reset');
+                }
             }
         };
+        $asyncClient = new readonly class($response) implements HttpClientInterface {
+            public function __construct(private ResponseInterface $response) {}
+
+            /** @param array<string, mixed> $options */
+            public function request(string $method, string $url, array $options = []): ResponseInterface
+            {
+                return $this->response;
+            }
+
+            public function stream(iterable|ResponseInterface $responses, ?float $timeout = null): ResponseStreamInterface
+            {
+                throw new \LogicException('not used');
+            }
+
+            /** @param array<string, mixed> $options */
+            public function withOptions(array $options): static
+            {
+                return $this;
+            }
+        };
+
+        $factory = new Psr17Factory();
+        $pipeline = new RequestPipeline(new MockClient(), $factory, $factory, $this->fakeTokenProvider(), asyncHttpClient: $asyncClient);
+
+        $this->expectException(ApaleoTransportException::class);
+        $this->expectExceptionMessage('connection reset');
+
+        $pipeline->sendMany([$this->requestTo('/one')]);
+    }
+
+    /** @return iterable<string, array{string}> */
+    public static function provideAsyncTransportErrorsSurfaceAsTransportExceptionsCases(): iterable
+    {
+        yield 'reading the status' => ['status'];
+
+        yield 'reading the body' => ['content'];
+
+        yield 'reading the headers' => ['headers'];
+    }
+
+    private function fakeTokenProvider(): TokenProvider
+    {
+        return new FakeTokenProvider();
     }
 
     /**

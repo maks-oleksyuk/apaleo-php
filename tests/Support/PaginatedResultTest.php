@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Tests\Support;
 
 use Oleksyuk\Apaleo\Support\PaginatedResult;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[CoversClass(PaginatedResult::class)]
+#[UsesNamespace('Oleksyuk\Apaleo')]
 final class PaginatedResultTest extends TestCase
 {
     public function testCountReflectsThisPageNotTotalCount(): void
@@ -45,5 +47,14 @@ final class PaginatedResultTest extends TestCase
         $this->expectException(\LogicException::class);
 
         $result[0] = 'b';
+    }
+
+    public function testArrayAccessCannotUnsetItems(): void
+    {
+        $result = new PaginatedResult(items: ['a'], totalCount: 1);
+
+        $this->expectException(\LogicException::class);
+
+        unset($result[0]);
     }
 }
