@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Finance;
 
+use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Resource\Finance\Account\Enum\AccountType;
 use Oleksyuk\Apaleo\Resource\Finance\Account\Enum\TransactionCommand;
 use Oleksyuk\Apaleo\Resource\Finance\Account\TransactionFilter;
@@ -86,10 +87,69 @@ final class RoutingAccountAndTypesTest extends FinanceTestCase
         self::assertStringEndsWith('/finance/v1/accounts/schema?propertyId=MUC&depth=2', $this->lastUri());
     }
 
+    public function testAccountListsHitTheirEndpoints(): void
+    {
+        $account = ['accountNumber' => 'G-1', 'name' => 'Guest', 'type' => 'Receivables', 'hasChildren' => false, 'isArchived' => false];
+        $calls = [
+            '/finance/v1/global-accounts?propertyId=MUC&parent=R&pageSize=10' => fn (): PaginatedResult => $this->api->accounts()->globalAccounts('MUC', 'R', pageSize: 10),
+            '/finance/v1/accounts/child-accounts?propertyId=MUC&parent=R&includeArchived=true' => fn (): PaginatedResult => $this->api->accounts()->childAccounts('MUC', 'R', includeArchived: true),
+            '/finance/v1/guest-accounts?propertyId=MUC&reservationId=R1' => fn (): PaginatedResult => $this->api->accounts()->guestAccounts('MUC', 'R1'),
+            '/finance/v1/external-accounts?propertyId=MUC&folioId=F1&languageCode=de' => fn (): PaginatedResult => $this->api->accounts()->externalAccounts('MUC', 'F1', languageCode: 'de'),
+        ];
+
+        foreach ($calls as $uri => $call) {
+            $this->respond(['accounts' => [$account], 'count' => 1]);
+            $result = $call();
+
+            self::assertSame(1, $result->totalCount);
+            self::assertSame(AccountType::Receivables, $result[0]->type);
+            self::assertSame('GET', $this->lastRequest()->getMethod());
+            self::assertStringEndsWith($uri, $this->lastUri());
+        }
+    }
+
+    public function testTransactionExportsAndAggregations(): void
+    {
+        $account = ['name' => 'Guest', 'number' => '1', 'type' => 'Receivables'];
+        $filter = new TransactionFilter('MUC', new \DateTimeImmutable('2026-03-01T00:00:00+00:00'), new \DateTimeImmutable('2026-03-02T00:00:00+00:00'), reference: 'F1', accountNumber: '1', languageCode: 'de');
+
+        $this->respond(['transactions' => []]);
+        self::assertSame([], $this->api->accounts()->export($filter));
+        self::assertStringEndsWith('/finance/v1/accounts/export?propertyId=MUC&from=2026-03-01T00:00:00+00:00&to=2026-03-02T00:00:00+00:00&accountNumber=1&languageCode=de', $this->lastUri());
+
+        $this->respond(['transactions' => [[
+            'timestamp' => '2026-03-01T10:00:00Z', 'date' => '2026-03-01', 'command' => 'PostCharge',
+            'debitedAccount' => $account, 'creditedAccount' => $account, 'currency' => 'EUR', 'grossAmount' => 107, 'netAmount' => 100,
+            'taxes' => [], 'receipt' => ['type' => 'Reservation', 'number' => 'R1'], 'sourceEntryNumber' => 'E1', 'reference' => 'F1', 'referenceType' => 'Guest',
+        ]]]);
+        $gross = $this->api->accounts()->exportGrossDaily($filter);
+        self::assertSame(107.0, $gross[0]->grossAmount);
+        // accountNumber and languageCode aren't parameters of export-gross-daily
+        self::assertStringEndsWith('/finance/v1/accounts/export-gross-daily?propertyId=MUC&from=2026-03-01&to=2026-03-02&reference=F1', $this->lastUri());
+
+        $total = ['creditedAmount' => ['amount' => 1, 'currency' => 'EUR'], 'debitedAmount' => ['amount' => 1, 'currency' => 'EUR'], 'balance' => ['amount' => 0, 'currency' => 'EUR']];
+        $this->respond(['aggregations' => [$total + ['account' => $account]], 'total' => $total]);
+        self::assertCount(1, $this->api->accounts()->aggregateDaily($filter)->aggregations);
+        self::assertStringEndsWith('/finance/v1/accounts/aggregate-daily?propertyId=MUC&from=2026-03-01&to=2026-03-02&reference=F1&accountNumber=1&languageCode=de', $this->lastUri());
+
+        $this->respond(['accountTransactionPairs' => [['debitedAccount' => $account, 'creditedAccount' => $account, 'amount' => ['amount' => 5, 'currency' => 'EUR']]]]);
+        self::assertSame(5.0, $this->api->accounts()->aggregatePairsDaily($filter)[0]->amount->amount);
+        self::assertSame('POST', $this->lastRequest()->getMethod());
+        self::assertStringContainsString('/finance/v1/accounts/aggregate-pairs-daily?', $this->lastUri());
+    }
+
     public function testTypes(): void
     {
         $this->respond(['paymentMethods' => ['Cash', 'SomethingNew']]);
         self::assertSame([PaymentMethod::Cash, PaymentMethod::Unknown], $this->api->types()->paymentMethods());
+
+        $this->respond(['isoCurrencies' => ['EUR', 'USD']]);
+        self::assertSame(['EUR', 'USD'], $this->api->types()->currencies());
+        self::assertStringEndsWith('/finance/v1/types/currencies', $this->lastUri());
+
+        $this->respond(['serviceTypes' => ['Accommodation', 'SomethingNew']]);
+        self::assertSame([FinanceServiceType::Accommodation, FinanceServiceType::Unknown], $this->api->types()->serviceTypes());
+        self::assertStringEndsWith('/finance/v1/types/service-types', $this->lastUri());
 
         $this->respond(['vatTypes' => [['type' => 'Normal', 'percent' => 19]]]);
         $vat = $this->api->types()->vatTypes('DE', new \DateTimeImmutable('2026-01-01'));

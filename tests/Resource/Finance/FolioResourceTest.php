@@ -6,8 +6,11 @@ namespace Oleksyuk\Apaleo\Tests\Resource\Finance;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\PersonAddress;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\BulkAllowanceItem;
+use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\BulkMoveItem;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\CreateCharge;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\CreateFolio;
+use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\CreateFolioAllowance;
+use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\CreateTransitoryCharge;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\FolioDebitor;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\FolioItemSelection;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\Split;
@@ -139,6 +142,59 @@ final class FolioResourceTest extends FinanceTestCase
         $this->api->folios()->close('F1');
         self::assertStringEndsWith('/finance/v1/folio-actions/F1/close', $this->lastUri());
         self::assertSame('PUT', $this->lastRequest()->getMethod());
+    }
+
+    public function testFeesAllowancesAndTransitoryCharges(): void
+    {
+        $this->respond(['id' => 'C20', 'feeChargeIds' => []]);
+        $fee = $this->api->folios()->addCancellationFee('F1', new MonetaryValue(80, 'EUR'), 'key-1');
+        self::assertSame('C20', $fee->id);
+        self::assertSame('POST', $this->lastRequest()->getMethod());
+        self::assertStringEndsWith('/finance/v1/folio-actions/F1/cancellation-fee', $this->lastUri());
+        self::assertSame('key-1', $this->lastRequest()->getHeaderLine('Idempotency-Key'));
+        self::assertSame(['amount' => 80, 'currency' => 'EUR'], $this->lastBody());
+
+        $this->respond(['id' => 'T1']);
+        self::assertSame('T1', $this->api->folios()->addTransitoryCharge('F1', new CreateTransitoryCharge('Theatre', new MonetaryValue(40, 'EUR'), FinanceServiceType::Other, quantity: 2, businessDate: new \DateTimeImmutable('2026-03-01'))));
+        self::assertStringEndsWith('/finance/v1/folio-actions/F1/transitory-charges', $this->lastUri());
+        self::assertSame(['name' => 'Theatre', 'amount' => ['amount' => 40, 'currency' => 'EUR'], 'serviceType' => 'Other', 'quantity' => 2, 'businessDate' => '2026-03-01'], $this->lastBody());
+
+        $this->respond(['id' => 'A7']);
+        self::assertSame('A7', $this->api->folios()->addChargeAllowance('F1', 'C1', 'Noise', new MonetaryValue(10, 'EUR')));
+        self::assertStringEndsWith('/finance/v1/folio-actions/F1/charges/C1/allowances', $this->lastUri());
+        self::assertSame(['reason' => 'Noise', 'amount' => ['amount' => 10, 'currency' => 'EUR']], $this->lastBody());
+
+        $this->respond(['id' => 'A8']);
+        self::assertSame('A8', $this->api->folios()->addFolioAllowance('F1', new CreateFolioAllowance('Goodwill', new MonetaryValue(15, 'EUR'), FinanceServiceType::Accommodation, VatType::Reduced)));
+        self::assertStringEndsWith('/finance/v1/folio-actions/F1/allowances', $this->lastUri());
+        self::assertSame(['reason' => 'Goodwill', 'amount' => ['amount' => 15, 'currency' => 'EUR'], 'serviceType' => 'Accommodation', 'vatType' => 'Reduced'], $this->lastBody());
+    }
+
+    public function testMovesAndReopenPostChargesActions(): void
+    {
+        $this->respond([], 204);
+        $this->api->folios()->moveAllCharges('F1', 'F2', 'Merge');
+        self::assertSame('PUT', $this->lastRequest()->getMethod());
+        self::assertStringEndsWith('/finance/v1/folio-actions/F1/move-all-charges', $this->lastUri());
+        self::assertSame(['targetFolioId' => 'F2', 'reason' => 'Merge'], $this->lastBody());
+
+        $this->respond([], 204);
+        $this->api->folios()->bulkMoveCharges([new BulkMoveItem('F1', 'F2', ['C1']), new BulkMoveItem('F3', 'F2')], 'Group bill');
+        self::assertStringEndsWith('/finance/v1/folio-actions/bulk-move', $this->lastUri());
+        self::assertSame(['items' => [['sourceFolioId' => 'F1', 'targetFolioId' => 'F2', 'chargeIds' => ['C1']], ['sourceFolioId' => 'F3', 'targetFolioId' => 'F2']], 'reason' => 'Group bill'], $this->lastBody());
+
+        $this->respond([], 204);
+        $this->api->folios()->movePayments('F1', 'F2', 'Wrong guest', ['P1']);
+        self::assertStringEndsWith('/finance/v1/folio-actions/F1/move-payments', $this->lastUri());
+        self::assertSame(['targetFolioId' => 'F2', 'reason' => 'Wrong guest', 'paymentIds' => ['P1']], $this->lastBody());
+
+        foreach (['reopen' => 'reopen', 'postCharges' => 'post-charges'] as $method => $action) {
+            $this->respond([], 204);
+            $this->api->folios()->{$method}('F1');
+            self::assertSame('PUT', $this->lastRequest()->getMethod());
+            self::assertStringEndsWith("/finance/v1/folio-actions/F1/{$action}", $this->lastUri());
+            self::assertSame('', (string) $this->lastRequest()->getBody());
+        }
     }
 
     /** @return array<string, mixed> */
