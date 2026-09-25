@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Enum\AllowedValueType;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Requests\ListAllowedValuesRequest;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Requests\ListSourcesRequest;
+use Oleksyuk\Apaleo\Support\Pagination;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class TypesResource
@@ -35,6 +36,8 @@ final readonly class TypesResource
         ?int $pageNumber = null,
         ?int $pageSize = null,
     ): array {
+        Pagination::assertValidPageSize($pageSize);
+
         $data = $this->pipeline->send(new ListAllowedValuesRequest($type, $countryCode, $textSearch, $pageNumber, $pageSize));
 
         return ResponseData::stringListOrEmpty($data, 'allowedValues');

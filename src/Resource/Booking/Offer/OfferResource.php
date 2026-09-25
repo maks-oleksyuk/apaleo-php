@@ -15,6 +15,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Offer\Requests\OfferIndexRequest;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Support\Pagination;
 
 final readonly class OfferResource
 {
@@ -25,6 +26,8 @@ final readonly class OfferResource
     /** A rate plan's offers across every time slice in [$from, $to) — no property/adults/etc needed, just the rate plan. */
     public function index(string $ratePlanId, \DateTimeImmutable $from, \DateTimeImmutable $to, ChannelCode $channelCode, ?int $pageNumber = null, ?int $pageSize = null): TimeSlices
     {
+        Pagination::assertValidPageSize($pageSize);
+
         $data = $this->pipeline->send(new OfferIndexRequest($ratePlanId, $from, $to, $channelCode, $pageNumber, $pageSize));
 
         return TimeSlices::fromArray($data);
