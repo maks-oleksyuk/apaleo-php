@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Group\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Action;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\Booker;
+use Oleksyuk\Apaleo\Resource\Shared\DTO\EmbeddedMarketSegment;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class Group
@@ -21,6 +22,7 @@ final readonly class Group
         public ?\DateTimeImmutable $from,
         public ?\DateTimeImmutable $to,
         public ?Booker $booker,
+        public ?EmbeddedMarketSegment $marketSegment,
         public ?string $comment,
         public ?string $bookerComment,
         public bool $hasActivePaymentAccount,
@@ -40,6 +42,7 @@ final readonly class Group
             from: ResponseData::nullableDateTime($data, 'from'),
             to: ResponseData::nullableDateTime($data, 'to'),
             booker: ResponseData::nullableNested($data, 'booker', Booker::fromArray(...)),
+            marketSegment: ResponseData::nullableNested($data, 'marketSegment', EmbeddedMarketSegment::fromArray(...)),
             comment: ResponseData::nullableString($data, 'comment'),
             bookerComment: ResponseData::nullableString($data, 'bookerComment'),
             hasActivePaymentAccount: ResponseData::bool($data, 'hasActivePaymentAccount'),

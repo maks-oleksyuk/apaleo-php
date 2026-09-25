@@ -41,6 +41,7 @@ final class GroupResourceTest extends TestCase
             'id' => 'XPGMSXGF',
             'name' => 'apaleo Summer Festival 2027',
             'booker' => ['lastName' => 'Doe'],
+            'marketSegment' => ['id' => 'MS1', 'code' => 'CORP', 'name' => 'Corporate'],
             'hasActivePaymentAccount' => false,
             'created' => '2026-09-18T11:31:09+02:00',
             'modified' => '2026-09-18T11:31:09+02:00',
@@ -70,9 +71,18 @@ final class GroupResourceTest extends TestCase
 
         self::assertSame('XPGMSXGF', $group->id);
         self::assertSame('Doe', $group->booker?->lastName);
+        self::assertSame('CORP', $group->marketSegment?->code);
         self::assertSame(['MUC'], $group->propertyIds);
         self::assertCount(1, $group->blocks);
         self::assertSame('MUC-HSGTDG', $group->blocks[0]->id);
+    }
+
+    public function testMarketSegmentIsNullWhenTheGroupHasNone(): void
+    {
+        unset($this->fullGroupFixture['marketSegment']);
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode($this->fullGroupFixture)));
+
+        self::assertNull($this->groups->get('XPGMSXGF')->marketSegment);
     }
 
     public function testExistsReturnsTrueOn200(): void
