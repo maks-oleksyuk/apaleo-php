@@ -13,6 +13,7 @@ final readonly class ClonePropertyRequest extends Request
     public function __construct(
         private string $propertyId,
         private CreateProperty $overrides,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -23,6 +24,11 @@ final readonly class ClonePropertyRequest extends Request
     public function endpoint(): string
     {
         return '/inventory/v1/property-actions/'.rawurlencode($this->propertyId).'/clone';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

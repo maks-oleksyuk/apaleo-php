@@ -61,9 +61,9 @@ final readonly class UnitGroupResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateUnitGroup $data): string
+    public function create(CreateUnitGroup $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateUnitGroupRequest($data));
+        $response = $this->pipeline->send(new CreateUnitGroupRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

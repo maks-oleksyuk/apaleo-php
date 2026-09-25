@@ -13,6 +13,7 @@ final readonly class CreatePaymentAccountByAuthorizationRequest extends Request
     public function __construct(
         private PaymentAccountTarget $target,
         private string $transactionReference,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -23,6 +24,11 @@ final readonly class CreatePaymentAccountByAuthorizationRequest extends Request
     public function endpoint(): string
     {
         return '/booking/v1/payment-accounts/by-authorization';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

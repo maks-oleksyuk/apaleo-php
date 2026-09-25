@@ -69,9 +69,9 @@ final readonly class MarketSegmentResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateMarketSegment $data): string
+    public function create(CreateMarketSegment $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateMarketSegmentRequest($data));
+        $response = $this->pipeline->send(new CreateMarketSegmentRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

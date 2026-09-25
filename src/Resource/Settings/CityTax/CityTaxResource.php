@@ -42,9 +42,9 @@ final readonly class CityTaxResource
         );
     }
 
-    public function create(CreateCityTax $data): string
+    public function create(CreateCityTax $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateCityTaxRequest($data));
+        $response = $this->pipeline->send(new CreateCityTaxRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

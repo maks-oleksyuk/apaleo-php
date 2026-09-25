@@ -76,9 +76,9 @@ final readonly class GroupResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateGroup $group): string
+    public function create(CreateGroup $group, ?string $idempotencyKey = null): string
     {
-        $data = $this->pipeline->send(new CreateGroupRequest($group));
+        $data = $this->pipeline->send(new CreateGroupRequest($group, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }
@@ -94,9 +94,9 @@ final readonly class GroupResource
     }
 
     /** @param list<PickUpReservation> $reservations */
-    public function pickUpReservations(string $groupId, array $reservations): ReservationsCreated
+    public function pickUpReservations(string $groupId, array $reservations, ?string $idempotencyKey = null): ReservationsCreated
     {
-        $data = $this->pipeline->send(new PickUpReservationsRequest($groupId, $reservations));
+        $data = $this->pipeline->send(new PickUpReservationsRequest($groupId, $reservations, $idempotencyKey));
 
         return ReservationsCreated::fromArray($data);
     }

@@ -65,9 +65,9 @@ final readonly class PropertyResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateProperty $data): string
+    public function create(CreateProperty $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreatePropertyRequest($data));
+        $response = $this->pipeline->send(new CreatePropertyRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }
@@ -82,9 +82,9 @@ final readonly class PropertyResource
         $this->pipeline->send(new DeletePropertyRequest($propertyId));
     }
 
-    public function clone(string $propertyId, CreateProperty $overrides): string
+    public function clone(string $propertyId, CreateProperty $overrides, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new ClonePropertyRequest($propertyId, $overrides));
+        $response = $this->pipeline->send(new ClonePropertyRequest($propertyId, $overrides, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

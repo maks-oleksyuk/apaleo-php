@@ -12,6 +12,7 @@ final readonly class CreateBlockRequest extends Request
 {
     public function __construct(
         private CreateBlock $block,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -22,6 +23,11 @@ final readonly class CreateBlockRequest extends Request
     public function endpoint(): string
     {
         return '/booking/v1/blocks';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

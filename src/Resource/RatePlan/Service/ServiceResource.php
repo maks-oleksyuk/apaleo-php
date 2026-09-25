@@ -77,9 +77,9 @@ final readonly class ServiceResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateService $data): string
+    public function create(CreateService $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateServiceRequest($data));
+        $response = $this->pipeline->send(new CreateServiceRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

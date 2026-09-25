@@ -12,6 +12,7 @@ final readonly class CreateRatePlanRequest extends Request
 {
     public function __construct(
         private CreateRatePlan $data,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -22,6 +23,11 @@ final readonly class CreateRatePlanRequest extends Request
     public function endpoint(): string
     {
         return '/rateplan/v1/rate-plans';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

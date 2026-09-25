@@ -45,9 +45,9 @@ final readonly class NoShowPolicyResource
         );
     }
 
-    public function create(CreateNoShowPolicy $data): string
+    public function create(CreateNoShowPolicy $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateNoShowPolicyRequest($data));
+        $response = $this->pipeline->send(new CreateNoShowPolicyRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

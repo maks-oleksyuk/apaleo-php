@@ -18,6 +18,7 @@ final readonly class CreatePaymentAccountByStoredPaymentMethodRequest extends Re
         private string $storedPaymentMethodId,
         private ?bool $isVirtual = null,
         private ?PaymentAccountDetails $accountDetails = null,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -28,6 +29,11 @@ final readonly class CreatePaymentAccountByStoredPaymentMethodRequest extends Re
     public function endpoint(): string
     {
         return '/booking/v1/payment-accounts/by-stored-payment-method';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

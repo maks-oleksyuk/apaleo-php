@@ -80,9 +80,9 @@ final readonly class BlockResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateBlock $block): string
+    public function create(CreateBlock $block, ?string $idempotencyKey = null): string
     {
-        $data = $this->pipeline->send(new CreateBlockRequest($block));
+        $data = $this->pipeline->send(new CreateBlockRequest($block, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }

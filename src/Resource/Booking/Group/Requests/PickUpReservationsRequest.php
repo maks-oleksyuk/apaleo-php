@@ -14,6 +14,7 @@ final readonly class PickUpReservationsRequest extends Request
     public function __construct(
         private string $groupId,
         private array $reservations,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -24,6 +25,11 @@ final readonly class PickUpReservationsRequest extends Request
     public function endpoint(): string
     {
         return '/booking/v1/groups/'.rawurlencode($this->groupId).'/reservations';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

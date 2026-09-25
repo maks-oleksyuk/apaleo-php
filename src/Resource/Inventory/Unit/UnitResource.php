@@ -64,9 +64,9 @@ final readonly class UnitResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateUnit $data): string
+    public function create(CreateUnit $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateUnitRequest($data));
+        $response = $this->pipeline->send(new CreateUnitRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }
@@ -76,9 +76,9 @@ final readonly class UnitResource
      *
      * @return list<string>
      */
-    public function bulkCreate(array $units): array
+    public function bulkCreate(array $units, ?string $idempotencyKey = null): array
     {
-        $response = $this->pipeline->send(new BulkCreateUnitsRequest($units));
+        $response = $this->pipeline->send(new BulkCreateUnitsRequest($units, $idempotencyKey));
 
         return ResponseData::stringList($response, 'ids');
     }

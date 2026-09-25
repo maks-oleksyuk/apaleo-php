@@ -56,9 +56,9 @@ final readonly class PaymentAccountResource
         );
     }
 
-    public function createByAuthorization(PaymentAccountTarget $target, string $transactionReference): string
+    public function createByAuthorization(PaymentAccountTarget $target, string $transactionReference, ?string $idempotencyKey = null): string
     {
-        $data = $this->pipeline->send(new CreatePaymentAccountByAuthorizationRequest($target, $transactionReference));
+        $data = $this->pipeline->send(new CreatePaymentAccountByAuthorizationRequest($target, $transactionReference, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }
@@ -72,8 +72,9 @@ final readonly class PaymentAccountResource
         ?string $description = null,
         ?string $payerEmail = null,
         ?string $returnUrl = null,
+        ?string $idempotencyKey = null,
     ): string {
-        $data = $this->pipeline->send(new CreatePaymentAccountByLinkRequest($target, $propertyId, $countryCode, $expiresAt, $description, $payerEmail, $returnUrl));
+        $data = $this->pipeline->send(new CreatePaymentAccountByLinkRequest($target, $propertyId, $countryCode, $expiresAt, $description, $payerEmail, $returnUrl, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }
@@ -85,15 +86,16 @@ final readonly class PaymentAccountResource
         string $storedPaymentMethodId,
         ?bool $isVirtual = null,
         ?PaymentAccountDetails $accountDetails = null,
+        ?string $idempotencyKey = null,
     ): string {
-        $data = $this->pipeline->send(new CreatePaymentAccountByStoredPaymentMethodRequest($target, $payerReference, $storedPaymentMethodId, $isVirtual, $accountDetails));
+        $data = $this->pipeline->send(new CreatePaymentAccountByStoredPaymentMethodRequest($target, $payerReference, $storedPaymentMethodId, $isVirtual, $accountDetails, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }
 
-    public function createByTerminal(PaymentAccountTarget $target, string $propertyId, string $terminalId): string
+    public function createByTerminal(PaymentAccountTarget $target, string $propertyId, string $terminalId, ?string $idempotencyKey = null): string
     {
-        $data = $this->pipeline->send(new CreatePaymentAccountByTerminalRequest($target, $propertyId, $terminalId));
+        $data = $this->pipeline->send(new CreatePaymentAccountByTerminalRequest($target, $propertyId, $terminalId, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }

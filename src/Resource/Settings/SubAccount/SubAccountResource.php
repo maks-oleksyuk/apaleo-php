@@ -65,9 +65,9 @@ final readonly class SubAccountResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateSubAccount $data): string
+    public function create(CreateSubAccount $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateSubAccountRequest($data));
+        $response = $this->pipeline->send(new CreateSubAccountRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

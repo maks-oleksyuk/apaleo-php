@@ -45,9 +45,9 @@ final readonly class UnitAttributeResource
         );
     }
 
-    public function create(CreateUnitAttributeDefinition $data): string
+    public function create(CreateUnitAttributeDefinition $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateUnitAttributeRequest($data));
+        $response = $this->pipeline->send(new CreateUnitAttributeRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

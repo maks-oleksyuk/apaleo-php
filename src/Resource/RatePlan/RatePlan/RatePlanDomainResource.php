@@ -81,9 +81,9 @@ final readonly class RatePlanDomainResource
         return ResponseData::int($data, 'count');
     }
 
-    public function create(CreateRatePlan $data): string
+    public function create(CreateRatePlan $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateRatePlanRequest($data));
+        $response = $this->pipeline->send(new CreateRatePlanRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

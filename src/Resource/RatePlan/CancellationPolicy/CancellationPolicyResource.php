@@ -45,9 +45,9 @@ final readonly class CancellationPolicyResource
         );
     }
 
-    public function create(CreateCancellationPolicy $data): string
+    public function create(CreateCancellationPolicy $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateCancellationPolicyRequest($data));
+        $response = $this->pipeline->send(new CreateCancellationPolicyRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

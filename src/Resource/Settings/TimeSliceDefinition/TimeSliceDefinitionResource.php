@@ -45,9 +45,9 @@ final readonly class TimeSliceDefinitionResource
         );
     }
 
-    public function create(string $propertyId, CreateTimeSliceDefinition $data): string
+    public function create(string $propertyId, CreateTimeSliceDefinition $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateTimeSliceDefinitionRequest($propertyId, $data));
+        $response = $this->pipeline->send(new CreateTimeSliceDefinitionRequest($propertyId, $data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

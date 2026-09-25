@@ -57,9 +57,9 @@ final readonly class AuthorizationResource
         );
     }
 
-    public function createByAuthorization(AuthorizationTarget $target, MonetaryValue $amount, string $transactionReference): string
+    public function createByAuthorization(AuthorizationTarget $target, MonetaryValue $amount, string $transactionReference, ?string $idempotencyKey = null): string
     {
-        $data = $this->pipeline->send(new CreateAuthorizationByAuthorizationRequest($target, $amount, $transactionReference));
+        $data = $this->pipeline->send(new CreateAuthorizationByAuthorizationRequest($target, $amount, $transactionReference, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }
@@ -73,22 +73,23 @@ final readonly class AuthorizationResource
         ?string $description = null,
         ?string $payerEmail = null,
         ?string $returnUrl = null,
+        ?string $idempotencyKey = null,
     ): string {
-        $data = $this->pipeline->send(new CreateAuthorizationByLinkRequest($target, $amount, $countryCode, $expiresAt, $description, $payerEmail, $returnUrl));
+        $data = $this->pipeline->send(new CreateAuthorizationByLinkRequest($target, $amount, $countryCode, $expiresAt, $description, $payerEmail, $returnUrl, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }
 
-    public function createByPaymentAccount(AuthorizationTarget $target, MonetaryValue $amount, ?string $paymentAccountId = null): string
+    public function createByPaymentAccount(AuthorizationTarget $target, MonetaryValue $amount, ?string $paymentAccountId = null, ?string $idempotencyKey = null): string
     {
-        $data = $this->pipeline->send(new CreateAuthorizationByPaymentAccountRequest($target, $amount, $paymentAccountId));
+        $data = $this->pipeline->send(new CreateAuthorizationByPaymentAccountRequest($target, $amount, $paymentAccountId, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }
 
-    public function createByTerminal(AuthorizationTarget $target, MonetaryValue $amount, string $terminalId): string
+    public function createByTerminal(AuthorizationTarget $target, MonetaryValue $amount, string $terminalId, ?string $idempotencyKey = null): string
     {
-        $data = $this->pipeline->send(new CreateAuthorizationByTerminalRequest($target, $amount, $terminalId));
+        $data = $this->pipeline->send(new CreateAuthorizationByTerminalRequest($target, $amount, $terminalId, $idempotencyKey));
 
         return ResponseData::string($data, 'id');
     }

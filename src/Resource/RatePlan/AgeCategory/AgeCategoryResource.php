@@ -42,9 +42,9 @@ final readonly class AgeCategoryResource
         );
     }
 
-    public function create(CreateAgeCategory $data): string
+    public function create(CreateAgeCategory $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateAgeCategoryRequest($data));
+        $response = $this->pipeline->send(new CreateAgeCategoryRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }

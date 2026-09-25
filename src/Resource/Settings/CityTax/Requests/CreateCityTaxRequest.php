@@ -12,6 +12,7 @@ final readonly class CreateCityTaxRequest extends Request
 {
     public function __construct(
         private CreateCityTax $data,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -22,6 +23,11 @@ final readonly class CreateCityTaxRequest extends Request
     public function endpoint(): string
     {
         return '/settings/v1/city-tax';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

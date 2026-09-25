@@ -15,6 +15,7 @@ final readonly class BulkCreateUnitsRequest extends Request
      */
     public function __construct(
         private array $units,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -25,6 +26,11 @@ final readonly class BulkCreateUnitsRequest extends Request
     public function endpoint(): string
     {
         return '/inventory/v1/units/bulk';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

@@ -12,6 +12,7 @@ final readonly class CreateUnitAttributeRequest extends Request
 {
     public function __construct(
         private CreateUnitAttributeDefinition $data,
+        private ?string $idempotencyKey = null,
     ) {}
 
     public function method(): Method
@@ -22,6 +23,11 @@ final readonly class CreateUnitAttributeRequest extends Request
     public function endpoint(): string
     {
         return '/inventory/v1/unit-attributes';
+    }
+
+    public function headers(): array
+    {
+        return $this->idempotencyKey !== null ? ['Idempotency-Key' => $this->idempotencyKey] : [];
     }
 
     public function body(): array

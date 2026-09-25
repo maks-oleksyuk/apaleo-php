@@ -123,7 +123,12 @@ foreach (Paginator::all(fn (int $page) => $apaleo->inventory()->units()->list(pa
 
 ### Idempotency
 
-`bookings()->create()` and `addReservations()` accept an `$idempotencyKey`: pass the same key when retrying a `POST` so Apaleo doesn't apply it twice.
+Every method that creates something (bookings, reservations, authorizations, payments, charges, folios, blocks, groups, inventory, rate plans, settings...) accepts an optional `$idempotencyKey`. Pass the same key when retrying a `POST` after a timeout, so Apaleo doesn't apply it twice: without one, a retried authorization can charge a guest's card twice.
+
+```php
+$key = bin2hex(random_bytes(16)); // generate once per logical operation, reuse on retry
+$apaleo->booking()->authorizations()->createByTerminal($target, $amount, $terminalId, idempotencyKey: $key);
+```
 
 ### Requests the SDK doesn't cover
 

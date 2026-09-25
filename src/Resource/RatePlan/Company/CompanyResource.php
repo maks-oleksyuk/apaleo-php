@@ -46,9 +46,9 @@ final readonly class CompanyResource
         );
     }
 
-    public function create(CreateCompany $data): string
+    public function create(CreateCompany $data, ?string $idempotencyKey = null): string
     {
-        $response = $this->pipeline->send(new CreateCompanyRequest($data));
+        $response = $this->pipeline->send(new CreateCompanyRequest($data, $idempotencyKey));
 
         return ResponseData::string($response, 'id');
     }
