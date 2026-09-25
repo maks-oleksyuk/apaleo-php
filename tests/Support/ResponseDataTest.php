@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Tests\Support;
 
 use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
 use Oleksyuk\Apaleo\Support\ResponseData;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,6 +40,23 @@ final class ResponseDataTest extends TestCase
         $this->expectException(ApaleoUnexpectedResponseException::class);
 
         ResponseData::date(['d' => '2026-02-30'], 'd');
+    }
+
+    #[TestWith([''])]
+    #[TestWith(['   '])]
+    #[TestWith(['tomorrow'])]
+    #[TestWith(['2026-09-22'])]
+    public function testDateTimeRejectsNonIsoValues(string $value): void
+    {
+        $this->expectException(ApaleoUnexpectedResponseException::class);
+
+        ResponseData::dateTime(['d' => $value], 'd');
+    }
+
+    public function testNullableDateTimeIsNullForBlankButParsesIso(): void
+    {
+        self::assertNull(ResponseData::nullableDateTime(['d' => ''], 'd'));
+        self::assertSame('2026-09-22T10:00:00+02:00', ResponseData::nullableDateTime(['d' => '2026-09-22T10:00:00+02:00'], 'd')?->format(DATE_ATOM));
     }
 
     public function testStringsAreTrimmed(): void

@@ -67,13 +67,7 @@ final class ResponseData
      */
     public static function dateTime(array $data, string $key): \DateTimeImmutable
     {
-        $value = self::string($data, $key);
-
-        try {
-            return new \DateTimeImmutable($value);
-        } catch (\Exception $exception) {
-            throw new ApaleoUnexpectedResponseException("Invalid date-time for field \"{$key}\" in Apaleo API response: \"{$value}\".", $exception->getCode(), previous: $exception);
-        }
+        return self::parseDateTime($key, self::string($data, $key));
     }
 
     /**
@@ -102,16 +96,9 @@ final class ResponseData
      */
     public static function nullableDateTime(array $data, string $key): ?\DateTimeImmutable
     {
-        $value = $data[$key] ?? null;
-        if (!\is_string($value)) {
-            return null;
-        }
+        $value = self::nullableString($data, $key);
 
-        try {
-            return new \DateTimeImmutable($value);
-        } catch (\Exception $exception) {
-            throw new ApaleoUnexpectedResponseException("Invalid date-time for field \"{$key}\" in Apaleo API response: \"{$value}\".", $exception->getCode(), previous: $exception);
-        }
+        return $value !== null ? self::parseDateTime($key, $value) : null;
     }
 
     /**
@@ -288,6 +275,23 @@ final class ResponseData
         }
 
         return $result;
+    }
+
+    /**
+     * ISO 8601 only: the DateTimeImmutable constructor alone would also accept "" (now) or "tomorrow".
+     */
+    private static function parseDateTime(string $key, string $value): \DateTimeImmutable
+    {
+        $message = "Invalid date-time for field \"{$key}\" in Apaleo API response: \"{$value}\".";
+        if (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/', $value) !== 1) {
+            throw new ApaleoUnexpectedResponseException($message);
+        }
+
+        try {
+            return new \DateTimeImmutable($value);
+        } catch (\Exception $exception) {
+            throw new ApaleoUnexpectedResponseException($message, 0, previous: $exception);
+        }
     }
 
     private static function parseDate(string $key, string $value): \DateTimeImmutable
