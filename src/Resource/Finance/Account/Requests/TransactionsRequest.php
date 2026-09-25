@@ -29,6 +29,11 @@ final readonly class TransactionsRequest extends Request
 
     public function query(): array
     {
-        return $this->filter->toQuery(str_ends_with($this->operation, '-daily'));
+        $query = $this->filter->toQuery(str_ends_with($this->operation, '-daily'));
+
+        // export-gross-daily takes only propertyId, from, to, reference and accountingSchema.
+        return $this->operation === 'export-gross-daily'
+            ? array_diff_key($query, array_flip(['accountNumber', 'accountType', 'languageCode']))
+            : $query;
     }
 }
