@@ -105,6 +105,15 @@ final readonly class ApaleoClient
     }
 
     /**
+     * Same as send(), but returns the body as-is: for binary endpoints (PDF, CSV) the SDK doesn't
+     * cover yet. Override Request::accept() with the media type you expect.
+     */
+    public function sendRaw(Request $request): string
+    {
+        return $this->pipeline->sendRaw($request);
+    }
+
+    /**
      * Batch escape hatch: sends several low-level Request objects concurrently, e.g.
      * `new ListReservationsRequest(...)`. Decode each result with the matching DTO's fromArray().
      *

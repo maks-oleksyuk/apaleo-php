@@ -107,7 +107,7 @@ Everything the SDK throws implements `ApaleoExceptionInterface`, so one `catch` 
 | `ApaleoTransportException`          | timeout, DNS, connection refused: no HTTP status, `statusCode` doesn't exist |
 | `ApaleoUnexpectedResponseException` | a `2xx` with a non-JSON or malformed body                                    |
 
-The HTTP ones extend `ApaleoException` and carry `statusCode`, `apaleoErrorType` and `rawResponse`. Invalid arguments (an `Unknown` enum value in a filter, a body that can't be JSON-encoded) throw `\InvalidArgumentException` before anything is sent.
+The HTTP ones extend `ApaleoException` and carry `statusCode` (also returned by `getCode()`), `apaleoErrorType` and `rawResponse`. Invalid arguments (an `Unknown` enum value in a filter, a body that can't be JSON-encoded) throw `\InvalidArgumentException` before anything is sent.
 
 ### Pagination
 
@@ -149,6 +149,8 @@ final readonly class GetThingRequest extends Request
 
 $data = $apaleo->send(new GetThingRequest('X'));
 ```
+
+For a binary endpoint (PDF, CSV), use `sendRaw()`: it returns the body as-is, while errors still map to the usual exceptions. Override `Request::accept()` with the media type you expect.
 
 `sendMany()` runs the requests concurrently (see `asyncHttpClient` above) and is all-or-nothing: if one fails, its exception is thrown and the other results are lost.
 
