@@ -121,6 +121,8 @@ foreach (Paginator::all(fn (int $page) => $apaleo->inventory()->units()->list(pa
 }
 ```
 
+Pages are offsets, so don't change what the filter matches while walking them: if you archive or re-status items as you go, the next page shifts and skips some. Collect the IDs first, then act on them.
+
 ### Idempotency
 
 Every method that creates something (bookings, reservations, authorizations, payments, charges, folios, blocks, groups, inventory, rate plans, settings...) accepts an optional `$idempotencyKey`. Pass the same key when retrying a `POST` after a timeout, so Apaleo doesn't apply it twice: without one, a retried authorization can charge a guest's card twice.
@@ -158,6 +160,8 @@ For a binary endpoint (PDF, CSV), use `sendRaw()`: it returns the body as-is, wh
 
 - **Unknown enum values.** Every response enum has an `Unknown` (or `UnmappedValue`) case, so a value Apaleo adds later doesn't break parsing. You can't send it back: filters reject it.
 - **Shared types.** Types that are identical in every API that uses them (`MonetaryValue`, `EmbeddedProperty`, `ChannelCode`, `UnitGroupType`, ...) live once in `Oleksyuk\Apaleo\Resource\Shared`, so a value read from one API can be passed straight to another. Types whose shape differs per API (e.g. `GuaranteeType`) stay in that API's namespace.
+- **Strings are trimmed.** Many fields are typed in by hotel staff and carry stray whitespace. Optional strings that end up empty become `null`.
+- **Dates.** Date-only fields (`serviceDate`, `arrival` in offers, ...) are midnight UTC `DateTimeImmutable`s, so `format('Y-m-d')` gives back the same day in any `date.timezone`. Date-time fields keep Apaleo's offset.
 - **Money is a `float`.** JSON has already lost precision by the time the SDK sees it. Don't sum `amount` values directly: round with `round($x, 2)` or convert to minor units first.
 
 ## Development
