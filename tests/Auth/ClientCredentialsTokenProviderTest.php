@@ -11,6 +11,7 @@ use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\ClientCredentialsTokenProvider;
 use Oleksyuk\Apaleo\Auth\InMemoryTokenCache;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
+use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -159,6 +160,19 @@ final class ClientCredentialsTokenProviderTest extends TestCase
         $this->expectExceptionMessage('Invalid client credentials');
 
         $this->provider->getToken();
+    }
+
+    public function test429MapsToRateLimitExceptionWithRetryAfter(): void
+    {
+        $this->httpClient->addResponse(new Response(429, ['Content-Type' => 'text/plain', 'Retry-After' => '7'], 'Too many requests'));
+
+        try {
+            $this->provider->getToken();
+            self::fail('Expected ApaleoRateLimitException');
+        } catch (ApaleoRateLimitException $apaleoRateLimitException) {
+            self::assertSame(7, $apaleoRateLimitException->retryAfterSeconds);
+            self::assertSame(429, $apaleoRateLimitException->statusCode);
+        }
     }
 
     public function test5xxMapsToServerException(): void

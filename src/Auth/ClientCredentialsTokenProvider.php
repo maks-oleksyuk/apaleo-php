@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Auth;
 
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
+use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use Oleksyuk\Apaleo\Support\ResponseData;
@@ -79,6 +80,16 @@ final readonly class ClientCredentialsTokenProvider implements TokenProvider
             $errorType = \is_string($data['error'] ?? null) ? $data['error'] : null;
             $description = $data['error_description'] ?? null;
             $message = \is_string($description) ? $description : ('Failed to obtain Apaleo access token'.($errorType !== null ? ": {$errorType}" : ''));
+
+            if ($status === 429) {
+                throw new ApaleoRateLimitException(
+                    message: $message,
+                    statusCode: $status,
+                    retryAfterSeconds: ApaleoRateLimitException::parseRetryAfter($response->getHeaderLine('Retry-After')),
+                    apaleoErrorType: $errorType,
+                    rawResponse: $data,
+                );
+            }
 
             $exceptionClass = $status >= 500 ? ApaleoServerException::class : ApaleoAuthException::class;
 

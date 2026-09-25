@@ -41,6 +41,23 @@ final class ExceptionsTest extends TestCase
         self::assertSame(429, $exception->statusCode);
     }
 
+    public function testRetryAfterParsesDeltaSecondsAndHttpDates(): void
+    {
+        self::assertSame(120, ApaleoRateLimitException::parseRetryAfter('120'));
+
+        $seconds = ApaleoRateLimitException::parseRetryAfter(new \DateTimeImmutable('+2 minutes')->format('D, d M Y H:i:s \G\M\T'));
+        self::assertGreaterThan(0, $seconds);
+        self::assertLessThanOrEqual(120, $seconds);
+
+        self::assertSame(0, ApaleoRateLimitException::parseRetryAfter('Wed, 21 Oct 2015 07:28:00 GMT'));
+    }
+
+    public function testRetryAfterIsNullWhenAbsentOrUnparsable(): void
+    {
+        self::assertNull(ApaleoRateLimitException::parseRetryAfter(''));
+        self::assertNull(ApaleoRateLimitException::parseRetryAfter('soon'));
+    }
+
     public function testValidationExceptionCarriesTheIndividualMessages(): void
     {
         $exception = new ApaleoValidationException('Code: required.', 422, messages: ['Code: required.']);
