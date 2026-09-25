@@ -49,7 +49,7 @@ final class ContractTest extends TestCase
             $known = [];
             $required = null;
             foreach ($request['operations'] as $operation) {
-                $query = self::spec()[$operation]['query'];
+                $query = $this->spec()[$operation]['query'];
                 $known += $query;
                 $requiredHere = array_keys(array_filter($query));
                 $required = $required === null ? $requiredHere : array_intersect($required, $requiredHere);
@@ -80,7 +80,7 @@ final class ContractTest extends TestCase
             }
 
             foreach ($request['operations'] as $operation) {
-                if (self::spec()[$operation]['idempotencyKey']) {
+                if ($this->spec()[$operation]['idempotencyKey']) {
                     $offenders[] = "{$request['class']} ({$operation})";
                 }
             }
@@ -90,7 +90,7 @@ final class ContractTest extends TestCase
     }
 
     /** @return array<string, array{query: array<string, bool>, idempotencyKey: bool}> */
-    private static function spec(): array
+    private function spec(): array
     {
         if (self::$spec === null) {
             /** @var array<string, array{query: array<string, bool>, idempotencyKey: bool}> $spec */
@@ -187,7 +187,7 @@ final class ContractTest extends TestCase
     {
         $segments = explode('/', $path);
         $matches = [];
-        foreach (array_keys(self::spec()) as $operation) {
+        foreach (array_keys($this->spec()) as $operation) {
             [$specMethod, $specPath] = explode(' ', $operation, 2);
             $specSegments = explode('/', (string) preg_replace('/\{[^}]+\}/', '{}', $specPath));
             if ($specMethod !== $method || \count($specSegments) !== \count($segments)) {
