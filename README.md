@@ -36,7 +36,7 @@ foreach ($properties as $property) {
 }
 ```
 
-`ApaleoClient::create()` auto-discovers a PSR-18 client and PSR-17 factories for you. To wire your own instead (e.g. inside a DI container), use the constructor directly:
+`ApaleoClient::create()` auto-discovers a PSR-18 client and PSR-17 factories for you. To wire your own instead (e.g., inside a DI container), use the constructor directly:
 
 ```php
 use Oleksyuk\Apaleo\ApaleoClient;
@@ -80,6 +80,78 @@ $apaleo = new ApaleoClient($psr18, $psr18, $psr18, $tokenProvider, asyncHttpClie
 Passing `asyncHttpClient` also lets `sendMany()` run its requests concurrently. With Guzzle, use its `Middleware::retry()` with the same rules.
 
 See [`apaleo-bundle`](//github.com/maks-oleksyuk/apaleo-bundle) for a ready-made Symfony integration (autowired service, cached token, HTTP client with this timeout and retry policy).
+
+### Token cache
+
+`ApaleoClient::create()` keeps the access token in memory, which under PHP-FPM means a new token request on every HTTP request. Share it through any PSR-16 cache:
+
+```php
+use Oleksyuk\Apaleo\Auth\Psr16TokenCache;
+
+$apaleo = ApaleoClient::create('your-client-id', 'your-client-secret', new Psr16TokenCache($psr16Cache));
+```
+
+On a `401` the SDK drops the cached token, fetches a new one and retries the request at once.
+
+### Errors
+
+Everything the SDK throws implements `ApaleoExceptionInterface`, so one `catch` covers it:
+
+| Exception                           | When                                                                         |
+|-------------------------------------|------------------------------------------------------------------------------|
+| `ApaleoValidationException`         | `400` / `422`, with `messages`                                               |
+| `ApaleoAuthException`               | `401` / `403`                                                                |
+| `ApaleoNotFoundException`           | `404`                                                                        |
+| `ApaleoRateLimitException`          | `429`, with `Retry-After`                                                    |
+| `ApaleoServerException`             | `5xx`, including HTML bodies from a proxy                                    |
+| `ApaleoTransportException`          | timeout, DNS, connection refused: no HTTP status, `statusCode` doesn't exist |
+| `ApaleoUnexpectedResponseException` | a `2xx` with a non-JSON or malformed body                                    |
+
+The HTTP ones extend `ApaleoException` and carry `statusCode`, `apaleoErrorType` and `rawResponse`. Invalid arguments (an `Unknown` enum value in a filter, a body that can't be JSON-encoded) throw `\InvalidArgumentException` before anything is sent.
+
+### Pagination
+
+`list()` returns a `PaginatedResult` (`items`, `totalCount`). `pageSize` is at most 500. To walk every page lazily:
+
+```php
+use Oleksyuk\Apaleo\Support\Paginator;
+
+foreach (Paginator::all(fn (int $page) => $apaleo->inventory()->units()->list(pageNumber: $page, pageSize: 500)) as $unit) {
+    // ...
+}
+```
+
+### Idempotency
+
+`bookings()->create()` and `addReservations()` accept an `$idempotencyKey`: pass the same key when retrying a `POST` so Apaleo doesn't apply it twice.
+
+### Requests the SDK doesn't cover
+
+`send()` and `sendMany()` take low-level `Request` objects, either SDK ones or your own subclass, and return the decoded body:
+
+```php
+use Oleksyuk\Apaleo\Http\Enum\Method;
+use Oleksyuk\Apaleo\Http\Request;
+
+final readonly class GetThingRequest extends Request
+{
+    public function __construct(private string $id) {}
+
+    public function method(): Method { return Method::GET; }
+
+    public function endpoint(): string { return '/some/v1/things/'.rawurlencode($this->id); }
+}
+
+$data = $apaleo->send(new GetThingRequest('X'));
+```
+
+`sendMany()` runs the requests concurrently (see `asyncHttpClient` above) and is all-or-nothing: if one fails, its exception is thrown and the other results are lost.
+
+### Good to know
+
+- **Unknown enum values.** Every response enum has an `Unknown` (or `UnmappedValue`) case, so a value Apaleo adds later doesn't break parsing. You can't send it back: filters reject it.
+- **Separate schemas per API.** Booking, RatePlan and others each have their own `MonetaryValue`, `UnitGroupType` and so on, mirroring Apaleo's own per-API schemas. They are not shared.
+- **Money is a `float`.** JSON has already lost precision by the time the SDK sees it. Don't sum `amount` values directly: round with `round($x, 2)` or convert to minor units first.
 
 ## Development
 
