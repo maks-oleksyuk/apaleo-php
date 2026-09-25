@@ -279,6 +279,13 @@ final readonly class RequestPipeline
         $body = $request->body();
         if ($body !== null) {
             $this->assertNoUnknownEnum($body);
+            // Float arithmetic noise (0.1 + 0.2 → 0.30000000000000004) would reach Apaleo verbatim;
+            // 10 decimals drops it without touching any precision a price or percentage really has.
+            array_walk_recursive($body, static function (mixed &$value): void {
+                if (\is_float($value)) {
+                    $value = round($value, 10);
+                }
+            });
         }
 
         return $body;
@@ -304,7 +311,7 @@ final readonly class RequestPipeline
     {
         $flat = trim((string) preg_replace('/\s+/u', ' ', strip_tags($rawBody)));
 
-        // /u keeps the cut on a UTF-8 character boundary without requiring ext-mbstring.
+        // /u keeps the cut on a UTF-8 character boundary.
         return (string) preg_replace('/^(.{200}).+$/su', '$1…', $flat);
     }
 

@@ -259,6 +259,31 @@ final class RequestPipelineTest extends TestCase
         $this->pipeline->send($request);
     }
 
+    public function testFloatNoiseIsStrippedFromTheBody(): void
+    {
+        $this->httpClient->addResponse(new Response(201, ['Content-Type' => 'application/json'], '{}'));
+        $request = new readonly class extends Request {
+            public function method(): Method
+            {
+                return Method::POST;
+            }
+
+            public function endpoint(): string
+            {
+                return '/x';
+            }
+
+            public function body(): array
+            {
+                return ['amount' => ['amount' => 0.1 + 0.2, 'currency' => 'EUR'], 'percent' => 12.345];
+            }
+        };
+
+        $this->pipeline->send($request);
+
+        self::assertSame('{"amount":{"amount":0.3,"currency":"EUR"},"percent":12.345}', (string) $this->lastRequest()->getBody());
+    }
+
     public function testTransportFailureMapsToTransportException(): void
     {
         $client = new class implements ClientInterface {
