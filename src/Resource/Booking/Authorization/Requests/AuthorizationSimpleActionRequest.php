@@ -10,6 +10,7 @@ use Oleksyuk\Apaleo\Http\Request;
 /** Shared shape for the authorization-actions endpoints that take no body: cancel, expire-payment-link. */
 final readonly class AuthorizationSimpleActionRequest extends Request
 {
+    /** @param 'cancel'|'expire-payment-link' $action */
     public function __construct(
         private string $authorizationId,
         private string $action,

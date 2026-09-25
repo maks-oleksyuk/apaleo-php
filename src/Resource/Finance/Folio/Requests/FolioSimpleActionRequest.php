@@ -10,6 +10,7 @@ use Oleksyuk\Apaleo\Http\Request;
 /** Shared shape for the folio-actions endpoints that take no body: close, reopen, post-charges. */
 final readonly class FolioSimpleActionRequest extends Request
 {
+    /** @param 'close'|'post-charges'|'reopen' $action */
     public function __construct(
         private string $folioId,
         private string $action,

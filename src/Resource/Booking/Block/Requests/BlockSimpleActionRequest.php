@@ -10,6 +10,7 @@ use Oleksyuk\Apaleo\Http\Request;
 /** Shared shape for the block-actions endpoints that take no body: cancel, confirm, release, wash. */
 final readonly class BlockSimpleActionRequest extends Request
 {
+    /** @param 'cancel'|'confirm'|'release'|'wash' $action */
     public function __construct(
         private string $blockId,
         private string $action,

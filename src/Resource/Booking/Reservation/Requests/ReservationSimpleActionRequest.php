@@ -10,6 +10,7 @@ use Oleksyuk\Apaleo\Http\Request;
 /** Shared shape for the reservation-actions endpoints that take no query params or body: checkout, cancel, noshow, revert-checkin, add-city-tax, remove-city-tax, lock-unit, unlock-unit, unassign-units. */
 final readonly class ReservationSimpleActionRequest extends Request
 {
+    /** @param 'add-city-tax'|'cancel'|'checkout'|'lock-unit'|'noshow'|'remove-city-tax'|'revert-checkin'|'unassign-units'|'unlock-unit' $action */
     public function __construct(
         private string $reservationId,
         private string $action,
