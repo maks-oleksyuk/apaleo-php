@@ -34,15 +34,13 @@ final readonly class GroupBlock
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $marketSegment = ResponseData::nested($data, 'marketSegment');
-
         return new self(
             id: ResponseData::string($data, 'id'),
             status: BlockStatus::fromApi(ResponseData::string($data, 'status')),
             property: EmbeddedProperty::fromArray(ResponseData::nested($data, 'property')),
             ratePlan: EmbeddedRatePlan::fromArray(ResponseData::nested($data, 'ratePlan')),
             unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
-            marketSegment: $marketSegment !== [] ? EmbeddedMarketSegment::fromArray($marketSegment) : null,
+            marketSegment: ResponseData::nullableNested($data, 'marketSegment', EmbeddedMarketSegment::fromArray(...)),
             grossDailyRate: MonetaryValue::fromArray(ResponseData::nested($data, 'grossDailyRate')),
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),

@@ -17,11 +17,9 @@ final readonly class InvoiceSender
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $address = ResponseData::nested($data, 'address');
-
         return new self(
             name: ResponseData::string($data, 'name'),
-            address: $address !== [] ? Address::fromArray($address) : null,
+            address: ResponseData::nullableNested($data, 'address', Address::fromArray(...)),
         );
     }
 }

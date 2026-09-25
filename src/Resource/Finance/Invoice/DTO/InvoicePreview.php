@@ -45,33 +45,29 @@ final readonly class InvoicePreview
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $to = ResponseData::nested($data, 'to');
-        $bankAccount = ResponseData::nested($data, 'bankAccount');
-        $outstandingPayment = ResponseData::nested($data, 'outstandingPayment');
-        $company = ResponseData::nested($data, 'company');
         $lineItems = ResponseData::nested($data, 'lineItems');
 
         return new self(
             createInvoiceAction: CreateInvoiceAction::fromApi(ResponseData::string($data, 'createInvoiceAction')),
-            createInvoiceWarning: CreateInvoiceWarning::fromNested($data, 'createInvoiceWarning'),
+            createInvoiceWarning: ResponseData::nullableNested($data, 'createInvoiceWarning', CreateInvoiceWarning::fromArray(...)),
             invoiceDate: ResponseData::date($data, 'invoiceDate'),
             folioId: ResponseData::string($data, 'folioId'),
             propertyId: ResponseData::string($data, 'propertyId'),
             propertyCountryCode: ResponseData::string($data, 'propertyCountryCode'),
             languageCode: ResponseData::string($data, 'languageCode'),
-            to: $to !== [] ? InvoiceRecipient::fromArray($to) : null,
+            to: ResponseData::nullableNested($data, 'to', InvoiceRecipient::fromArray(...)),
             from: InvoiceSender::fromArray(ResponseData::nested($data, 'from')),
             commercialInformation: CommercialInfo::fromArray(ResponseData::nested($data, 'commercialInformation')),
-            bankAccount: $bankAccount !== [] ? BankAccount::fromArray($bankAccount) : null,
+            bankAccount: ResponseData::nullableNested($data, 'bankAccount', BankAccount::fromArray(...)),
             paymentTerms: ResponseData::nullableString($data, 'paymentTerms'),
             lineItems: array_map(InvoiceLineItem::fromArray(...), ResponseData::nestedList($lineItems, 'lineItems')),
             subTotal: MonetaryValue::fromArray(ResponseData::nested($lineItems, 'subTotal')),
             payments: array_map(InvoicePayment::fromArray(...), ResponseData::nestedList($data, 'payments')),
-            outstandingPayment: $outstandingPayment !== [] ? MonetaryValue::fromArray($outstandingPayment) : null,
+            outstandingPayment: ResponseData::nullableNested($data, 'outstandingPayment', MonetaryValue::fromArray(...)),
             taxDetails: array_map(TaxDetail::fromArray(...), ResponseData::nestedList($data, 'taxDetails')),
             total: MonetaryValue::fromArray(ResponseData::nested($data, 'total')),
-            stayInfo: StayInfo::fromNested($data, 'stayInfo'),
-            company: $company !== [] ? EmbeddedCompany::fromArray($company) : null,
+            stayInfo: ResponseData::nullableNested($data, 'stayInfo', StayInfo::fromArray(...)),
+            company: ResponseData::nullableNested($data, 'company', EmbeddedCompany::fromArray(...)),
         );
     }
 }

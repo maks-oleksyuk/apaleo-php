@@ -23,10 +23,8 @@ final readonly class ReservationStayOffers
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $property = ResponseData::nested($data, 'property');
-
         return new self(
-            property: $property !== [] ? EmbeddedProperty::fromArray($property) : null,
+            property: ResponseData::nullableNested($data, 'property', EmbeddedProperty::fromArray(...)),
             offers: array_map(ReservationStayOffer::fromArray(...), ResponseData::nestedList($data, 'offers')),
         );
     }

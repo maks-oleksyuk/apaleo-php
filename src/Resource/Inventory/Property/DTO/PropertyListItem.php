@@ -36,7 +36,6 @@ final readonly class PropertyListItem
     public static function fromArray(array $data): self
     {
         $status = ResponseData::string($data, 'status');
-        $bankAccount = ResponseData::nested($data, 'bankAccount');
 
         return new self(
             id: ResponseData::string($data, 'id'),
@@ -50,7 +49,7 @@ final readonly class PropertyListItem
             commercialRegisterEntry: ResponseData::string($data, 'commercialRegisterEntry'),
             taxId: ResponseData::string($data, 'taxId'),
             location: Address::fromArray(ResponseData::nested($data, 'location')),
-            bankAccount: $bankAccount !== [] ? BankAccount::fromArray($bankAccount) : null,
+            bankAccount: ResponseData::nullableNested($data, 'bankAccount', BankAccount::fromArray(...)),
             paymentTerms: ResponseData::localizedText($data, 'paymentTerms'),
             timeZone: ResponseData::string($data, 'timeZone'),
             currencyCode: ResponseData::string($data, 'currencyCode'),

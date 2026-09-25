@@ -57,9 +57,6 @@ final readonly class Invoice
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $bankAccount = ResponseData::nested($data, 'bankAccount');
-        $outstandingPayment = ResponseData::nested($data, 'outstandingPayment');
-        $company = ResponseData::nested($data, 'company');
         $cancellationReason = ResponseData::nullableString($data, 'cancellationReasonCode');
         $lineItems = ResponseData::nested($data, 'lineItems');
 
@@ -79,16 +76,16 @@ final readonly class Invoice
             to: InvoiceRecipient::fromArray(ResponseData::nested($data, 'to')),
             from: InvoiceSender::fromArray(ResponseData::nested($data, 'from')),
             commercialInformation: CommercialInfo::fromArray(ResponseData::nested($data, 'commercialInformation')),
-            bankAccount: $bankAccount !== [] ? BankAccount::fromArray($bankAccount) : null,
+            bankAccount: ResponseData::nullableNested($data, 'bankAccount', BankAccount::fromArray(...)),
             paymentTerms: ResponseData::nullableString($data, 'paymentTerms'),
             lineItems: array_map(InvoiceLineItem::fromArray(...), ResponseData::nestedList($lineItems, 'lineItems')),
             subTotal: MonetaryValue::fromArray(ResponseData::nested($lineItems, 'subTotal')),
             payments: array_map(InvoicePayment::fromArray(...), ResponseData::nestedList($data, 'payments')),
-            outstandingPayment: $outstandingPayment !== [] ? MonetaryValue::fromArray($outstandingPayment) : null,
+            outstandingPayment: ResponseData::nullableNested($data, 'outstandingPayment', MonetaryValue::fromArray(...)),
             taxDetails: array_map(TaxDetail::fromArray(...), ResponseData::nestedList($data, 'taxDetails')),
             total: MonetaryValue::fromArray(ResponseData::nested($data, 'total')),
-            stayInfo: StayInfo::fromNested($data, 'stayInfo'),
-            company: $company !== [] ? EmbeddedCompany::fromArray($company) : null,
+            stayInfo: ResponseData::nullableNested($data, 'stayInfo', StayInfo::fromArray(...)),
+            company: ResponseData::nullableNested($data, 'company', EmbeddedCompany::fromArray(...)),
             relatedInvoiceNumber: ResponseData::nullableString($data, 'relatedInvoiceNumber'),
             writeOffReason: ResponseData::nullableString($data, 'writeOffReason'),
             cancellationReasonCode: $cancellationReason !== null ? InvoiceCancellationReason::fromApi($cancellationReason) : null,

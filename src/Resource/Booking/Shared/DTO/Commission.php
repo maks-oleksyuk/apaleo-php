@@ -17,11 +17,9 @@ final readonly class Commission
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $before = ResponseData::nested($data, 'beforeCommissionAmount');
-
         return new self(
             commissionAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'commissionAmount')),
-            beforeCommissionAmount: $before !== [] ? MonetaryValue::fromArray($before) : null,
+            beforeCommissionAmount: ResponseData::nullableNested($data, 'beforeCommissionAmount', MonetaryValue::fromArray(...)),
         );
     }
 

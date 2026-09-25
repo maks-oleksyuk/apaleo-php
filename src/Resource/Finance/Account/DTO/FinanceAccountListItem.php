@@ -25,8 +25,6 @@ final readonly class FinanceAccountListItem
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $vat = ResponseData::nested($data, 'vat');
-
         return new self(
             accountNumber: ResponseData::string($data, 'accountNumber'),
             name: ResponseData::string($data, 'name'),
@@ -34,7 +32,7 @@ final readonly class FinanceAccountListItem
             parentNumber: ResponseData::nullableString($data, 'parentNumber'),
             hasChildren: ResponseData::bool($data, 'hasChildren'),
             isArchived: ResponseData::bool($data, 'isArchived'),
-            vat: $vat !== [] ? VatRate::fromArray($vat) : null,
+            vat: ResponseData::nullableNested($data, 'vat', VatRate::fromArray(...)),
             subAccounts: array_map(self::fromArray(...), ResponseData::nestedList($data, 'subAccounts')),
         );
     }

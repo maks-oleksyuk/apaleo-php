@@ -33,7 +33,6 @@ final readonly class Authorization
     public static function fromArray(array $data): self
     {
         $externalReference = ResponseData::nested($data, 'externalReference');
-        $remainingBalance = ResponseData::nested($data, 'remainingBalance');
 
         return new self(
             id: ResponseData::string($data, 'id'),
@@ -42,7 +41,7 @@ final readonly class Authorization
             updated: ResponseData::dateTime($data, 'updated'),
             externalPaymentTransactionId: $externalReference !== [] ? ResponseData::nullableString($externalReference, 'paymentTransactionId') : null,
             amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
-            remainingBalance: $remainingBalance !== [] ? MonetaryValue::fromArray($remainingBalance) : null,
+            remainingBalance: ResponseData::nullableNested($data, 'remainingBalance', MonetaryValue::fromArray(...)),
             status: AuthorizationStatus::fromApi(ResponseData::string($data, 'status')),
             failureReason: ResponseData::nullableString($data, 'failureReason'),
             payerInteraction: PayerInteraction::fromApi(ResponseData::string($data, 'payerInteraction')),

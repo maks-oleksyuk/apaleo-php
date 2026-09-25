@@ -60,11 +60,6 @@ final readonly class RatePlanListItem
     public static function fromArray(array $data): self
     {
         $priceCalculationMode = ResponseData::nullableString($data, 'priceCalculationMode');
-        $noShowPolicy = ResponseData::nested($data, 'noShowPolicy');
-        $restrictions = ResponseData::nested($data, 'restrictions');
-        $pricingRule = ResponseData::nested($data, 'pricingRule');
-        $ratesRange = ResponseData::nested($data, 'ratesRange');
-        $marketSegment = ResponseData::nested($data, 'marketSegment');
 
         return new self(
             id: ResponseData::string($data, 'id'),
@@ -76,24 +71,24 @@ final readonly class RatePlanListItem
             property: EmbeddedProperty::fromArray(ResponseData::nested($data, 'property')),
             unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
             cancellationPolicy: EmbeddedCancellationPolicy::fromArray(ResponseData::nested($data, 'cancellationPolicy')),
-            noShowPolicy: $noShowPolicy !== [] ? EmbeddedNoShowPolicy::fromArray($noShowPolicy) : null,
+            noShowPolicy: ResponseData::nullableNested($data, 'noShowPolicy', EmbeddedNoShowPolicy::fromArray(...)),
             timeSliceDefinition: EmbeddedTimeSliceDefinition::fromArray(ResponseData::nested($data, 'timeSliceDefinition')),
             channelCodes: array_map(ChannelCode::fromApi(...), ResponseData::stringListOrEmpty($data, 'channelCodes')),
             promoCodes: ResponseData::stringListOrEmpty($data, 'promoCodes'),
-            restrictions: $restrictions !== [] ? BookingRestrictions::fromArray($restrictions) : null,
+            restrictions: ResponseData::nullableNested($data, 'restrictions', BookingRestrictions::fromArray(...)),
             bookingPeriods: array_map(BookingPeriod::fromArray(...), ResponseData::nestedList($data, 'bookingPeriods')),
             isBookable: ResponseData::bool($data, 'isBookable'),
             isSubjectToCityTax: ResponseData::bool($data, 'isSubjectToCityTax'),
-            pricingRule: $pricingRule !== [] ? PricingRule::fromArray($pricingRule) : null,
+            pricingRule: ResponseData::nullableNested($data, 'pricingRule', PricingRule::fromArray(...)),
             isDerived: ResponseData::bool($data, 'isDerived'),
             derivationLevel: ResponseData::nullableInt($data, 'derivationLevel') ?? 0,
             surcharges: array_map(Surcharge::fromArray(...), ResponseData::nestedList($data, 'surcharges')),
             ageCategories: array_map(RatePlanAgeCategory::fromArray(...), ResponseData::nestedList($data, 'ageCategories')),
             includedServices: array_map(IncludedService::fromArray(...), ResponseData::nestedList($data, 'includedServices')),
             companies: array_map(RatePlanCompany::fromArray(...), ResponseData::nestedList($data, 'companies')),
-            ratesRange: $ratesRange !== [] ? RatesRange::fromArray($ratesRange) : null,
+            ratesRange: ResponseData::nullableNested($data, 'ratesRange', RatesRange::fromArray(...)),
             accountingConfigs: array_map(AccountingConfig::fromArray(...), ResponseData::nestedList($data, 'accountingConfigs')),
-            marketSegment: $marketSegment !== [] ? EmbeddedMarketSegment::fromArray($marketSegment) : null,
+            marketSegment: ResponseData::nullableNested($data, 'marketSegment', EmbeddedMarketSegment::fromArray(...)),
             isArchived: ResponseData::bool($data, 'isArchived'),
         );
     }

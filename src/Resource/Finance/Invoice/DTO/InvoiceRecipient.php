@@ -21,11 +21,9 @@ final readonly class InvoiceRecipient
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $address = ResponseData::nested($data, 'address');
-
         return new self(
             name: ResponseData::nullableString($data, 'name'),
-            address: $address !== [] ? PersonAddress::fromArray($address) : null,
+            address: ResponseData::nullableNested($data, 'address', PersonAddress::fromArray(...)),
             companyName: ResponseData::nullableString($data, 'companyName'),
             companyTaxId: ResponseData::nullableString($data, 'companyTaxId'),
             reference: ResponseData::nullableString($data, 'reference'),

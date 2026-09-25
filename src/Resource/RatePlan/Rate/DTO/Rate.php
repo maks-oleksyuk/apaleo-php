@@ -23,17 +23,13 @@ final readonly class Rate
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $price = ResponseData::nested($data, 'price');
-        $includedServicesPrice = ResponseData::nested($data, 'includedServicesPrice');
-        $restrictions = ResponseData::nested($data, 'restrictions');
-
         return new self(
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
-            price: $price !== [] ? MonetaryValue::fromArray($price) : null,
-            includedServicesPrice: $includedServicesPrice !== [] ? MonetaryValue::fromArray($includedServicesPrice) : null,
+            price: ResponseData::nullableNested($data, 'price', MonetaryValue::fromArray(...)),
+            includedServicesPrice: ResponseData::nullableNested($data, 'includedServicesPrice', MonetaryValue::fromArray(...)),
             calculatedPrices: array_map(CalculatedRate::fromArray(...), ResponseData::nestedList($data, 'calculatedPrices')),
-            restrictions: $restrictions !== [] ? RateRestrictions::fromArray($restrictions) : null,
+            restrictions: ResponseData::nullableNested($data, 'restrictions', RateRestrictions::fromArray(...)),
         );
     }
 }

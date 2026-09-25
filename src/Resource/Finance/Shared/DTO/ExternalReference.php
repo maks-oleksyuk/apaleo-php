@@ -15,13 +15,11 @@ final readonly class ExternalReference
     ) {}
 
     /** @param array<string, mixed> $data */
-    public static function fromNested(array $data, string $key): ?self
+    public static function fromArray(array $data): self
     {
-        $reference = ResponseData::nested($data, $key);
-
-        return $reference !== [] ? new self(
-            merchantReference: ResponseData::string($reference, 'merchantReference'),
-            pspReference: ResponseData::string($reference, 'pspReference'),
-        ) : null;
+        return new self(
+            merchantReference: ResponseData::string($data, 'merchantReference'),
+            pspReference: ResponseData::string($data, 'pspReference'),
+        );
     }
 }

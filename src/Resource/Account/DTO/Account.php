@@ -25,15 +25,13 @@ final readonly class Account
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $location = ResponseData::nested($data, 'location');
-
         return new self(
             code: ResponseData::string($data, 'code'),
             name: ResponseData::string($data, 'name'),
             description: ResponseData::nullableString($data, 'description'),
             defaultLanguage: ResponseData::string($data, 'defaultLanguage'),
             logoUrl: ResponseData::nullableString($data, 'logoUrl'),
-            location: $location !== [] ? Address::fromArray($location) : null,
+            location: ResponseData::nullableNested($data, 'location', Address::fromArray(...)),
             type: AccountType::fromApi(ResponseData::string($data, 'type')),
             additionallySupportedCountries: ResponseData::stringListOrEmpty($data, 'additionallySupportedCountries'),
         );

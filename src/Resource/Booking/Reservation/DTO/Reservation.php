@@ -96,17 +96,7 @@ final readonly class Reservation
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $unit = ResponseData::nested($data, 'unit');
-        $primaryGuest = ResponseData::nested($data, 'primaryGuest');
-        $booker = ResponseData::nested($data, 'booker');
-        $registeredCard = ResponseData::nested($data, 'registeredCard');
-        $cancellationFee = ResponseData::nested($data, 'cancellationFee');
-        $noShowFee = ResponseData::nested($data, 'noShowFee');
         $travelPurpose = ResponseData::nullableString($data, 'travelPurpose');
-        $company = ResponseData::nested($data, 'company');
-        $commission = ResponseData::nested($data, 'commission');
-        $marketSegment = ResponseData::nested($data, 'marketSegment');
-        $externalReferences = ResponseData::nested($data, 'externalReferences');
 
         return new self(
             id: ResponseData::string($data, 'id'),
@@ -118,7 +108,7 @@ final readonly class Reservation
             checkOutTime: ResponseData::nullableDateTime($data, 'checkOutTime'),
             cancellationTime: ResponseData::nullableDateTime($data, 'cancellationTime'),
             noShowTime: ResponseData::nullableDateTime($data, 'noShowTime'),
-            unit: $unit !== [] ? EmbeddedUnit::fromArray($unit) : null,
+            unit: ResponseData::nullableNested($data, 'unit', EmbeddedUnit::fromArray(...)),
             property: EmbeddedProperty::fromArray(ResponseData::nested($data, 'property')),
             ratePlan: EmbeddedRatePlan::fromArray(ResponseData::nested($data, 'ratePlan')),
             unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
@@ -134,33 +124,33 @@ final readonly class Reservation
             externalCode: ResponseData::nullableString($data, 'externalCode'),
             channelCode: ChannelCode::fromApi(ResponseData::string($data, 'channelCode')),
             source: ResponseData::nullableString($data, 'source'),
-            primaryGuest: $primaryGuest !== [] ? Guest::fromArray($primaryGuest) : null,
+            primaryGuest: ResponseData::nullableNested($data, 'primaryGuest', Guest::fromArray(...)),
             additionalGuests: array_map(Guest::fromArray(...), ResponseData::nestedList($data, 'additionalGuests')),
-            booker: $booker !== [] ? Booker::fromArray($booker) : null,
+            booker: ResponseData::nullableNested($data, 'booker', Booker::fromArray(...)),
             hasActivePaymentAccount: ResponseData::bool($data, 'hasActivePaymentAccount'),
-            registeredCard: $registeredCard !== [] ? RegisteredCard::fromArray($registeredCard) : null,
+            registeredCard: ResponseData::nullableNested($data, 'registeredCard', RegisteredCard::fromArray(...)),
             timeSlices: array_map(TimeSlice::fromArray(...), ResponseData::nestedList($data, 'timeSlices')),
             services: array_map(ReservationServiceItem::fromArray(...), ResponseData::nestedList($data, 'services')),
             guaranteeType: GuaranteeType::fromApi(ResponseData::string($data, 'guaranteeType')),
-            cancellationFee: $cancellationFee !== [] ? ReservationCancellationFee::fromArray($cancellationFee) : null,
-            noShowFee: $noShowFee !== [] ? ReservationNoShowFee::fromArray($noShowFee) : null,
+            cancellationFee: ResponseData::nullableNested($data, 'cancellationFee', ReservationCancellationFee::fromArray(...)),
+            noShowFee: ResponseData::nullableNested($data, 'noShowFee', ReservationNoShowFee::fromArray(...)),
             travelPurpose: $travelPurpose !== null ? TravelPurpose::fromApi($travelPurpose) : null,
             balance: MonetaryValue::fromArray(ResponseData::nested($data, 'balance')),
             assignedUnits: array_map(ReservationAssignedUnit::fromArray(...), ResponseData::nestedList($data, 'assignedUnits')),
             validationMessages: array_map(ReservationValidationMessage::fromArray(...), ResponseData::nestedList($data, 'validationMessages')),
             actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
-            company: $company !== [] ? EmbeddedCompany::fromArray($company) : null,
+            company: ResponseData::nullableNested($data, 'company', EmbeddedCompany::fromArray(...)),
             corporateCode: ResponseData::nullableString($data, 'corporateCode'),
             allFoliosHaveInvoice: ResponseData::bool($data, 'allFoliosHaveInvoice'),
             taxDetails: array_map(TaxDetail::fromArray(...), ResponseData::nestedList($data, 'taxDetails')),
             hasCityTax: ResponseData::bool($data, 'hasCityTax'),
-            commission: $commission !== [] ? Commission::fromArray($commission) : null,
+            commission: ResponseData::nullableNested($data, 'commission', Commission::fromArray(...)),
             promoCode: ResponseData::nullableString($data, 'promoCode'),
             payableAmount: PayableAmount::fromArray(ResponseData::nested($data, 'payableAmount')),
             isPreCheckedIn: ResponseData::bool($data, 'isPreCheckedIn'),
             isOpenForCharges: ResponseData::bool($data, 'isOpenForCharges'),
-            marketSegment: $marketSegment !== [] ? EmbeddedMarketSegment::fromArray($marketSegment) : null,
-            externalReferences: $externalReferences !== [] ? ExternalReferences::fromArray($externalReferences) : null,
+            marketSegment: ResponseData::nullableNested($data, 'marketSegment', EmbeddedMarketSegment::fromArray(...)),
+            externalReferences: ResponseData::nullableNested($data, 'externalReferences', ExternalReferences::fromArray(...)),
             isUnitAssignmentLocked: ResponseData::bool($data, 'isUnitAssignmentLocked'),
         );
     }

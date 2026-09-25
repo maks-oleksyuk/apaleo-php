@@ -54,10 +54,6 @@ final readonly class BookingReservation
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $registeredCard = ResponseData::nested($data, 'registeredCard');
-        $company = ResponseData::nested($data, 'company');
-        $externalReferences = ResponseData::nested($data, 'externalReferences');
-
         return new self(
             id: ResponseData::string($data, 'id'),
             status: ReservationStatus::fromApi(ResponseData::string($data, 'status')),
@@ -65,7 +61,7 @@ final readonly class BookingReservation
             channelCode: ChannelCode::fromApi(ResponseData::string($data, 'channelCode')),
             source: ResponseData::nullableString($data, 'source'),
             hasActivePaymentAccount: ResponseData::bool($data, 'hasActivePaymentAccount'),
-            registeredCard: $registeredCard !== [] ? RegisteredCard::fromArray($registeredCard) : null,
+            registeredCard: ResponseData::nullableNested($data, 'registeredCard', RegisteredCard::fromArray(...)),
             arrival: ResponseData::dateTime($data, 'arrival'),
             departure: ResponseData::dateTime($data, 'departure'),
             adults: ResponseData::int($data, 'adults'),
@@ -78,10 +74,10 @@ final readonly class BookingReservation
             guestComment: ResponseData::nullableString($data, 'guestComment'),
             cancellationFee: ReservationCancellationFee::fromArray(ResponseData::nested($data, 'cancellationFee')),
             noShowFee: ReservationNoShowFee::fromArray(ResponseData::nested($data, 'noShowFee')),
-            company: $company !== [] ? EmbeddedCompany::fromArray($company) : null,
+            company: ResponseData::nullableNested($data, 'company', EmbeddedCompany::fromArray(...)),
             isPreCheckedIn: ResponseData::bool($data, 'isPreCheckedIn'),
             isOpenForCharges: ResponseData::bool($data, 'isOpenForCharges'),
-            externalReferences: $externalReferences !== [] ? ExternalReferences::fromArray($externalReferences) : null,
+            externalReferences: ResponseData::nullableNested($data, 'externalReferences', ExternalReferences::fromArray(...)),
         );
     }
 }

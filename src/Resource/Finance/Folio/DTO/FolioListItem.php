@@ -51,7 +51,6 @@ final readonly class FolioListItem
     public static function fromArray(array $data): self
     {
         $type = ResponseData::nullableString($data, 'type');
-        $company = ResponseData::nested($data, 'company');
 
         return new self(
             id: ResponseData::string($data, 'id'),
@@ -60,10 +59,10 @@ final readonly class FolioListItem
             created: ResponseData::dateTime($data, 'created'),
             updated: ResponseData::dateTime($data, 'updated'),
             closingDate: ResponseData::nullableDate($data, 'closingDate'),
-            debitor: FolioDebitor::fromNested($data, 'debitor'),
+            debitor: ResponseData::nullableNested($data, 'debitor', FolioDebitor::fromArray(...)),
             reservationId: ResponseData::nullableString(ResponseData::nested($data, 'reservation'), 'id'),
             bookingId: ResponseData::nullableString($data, 'bookingId'),
-            company: $company !== [] ? EmbeddedCompany::fromArray($company) : null,
+            company: ResponseData::nullableNested($data, 'company', EmbeddedCompany::fromArray(...)),
             balance: MonetaryValue::fromArray(ResponseData::nested($data, 'balance')),
             isMainFolio: ResponseData::bool($data, 'isMainFolio'),
             isEmpty: ResponseData::bool($data, 'isEmpty'),

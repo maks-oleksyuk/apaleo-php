@@ -31,9 +31,6 @@ final readonly class Booker
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $address = ResponseData::nested($data, 'address');
-        $company = ResponseData::nested($data, 'company');
-
         return new self(
             lastName: ResponseData::string($data, 'lastName'),
             title: ResponseData::nullableString($data, 'title'),
@@ -42,13 +39,13 @@ final readonly class Booker
             middleInitial: ResponseData::nullableString($data, 'middleInitial'),
             email: ResponseData::nullableString($data, 'email'),
             phone: ResponseData::nullableString($data, 'phone'),
-            address: $address !== [] ? PersonAddress::fromArray($address) : null,
+            address: ResponseData::nullableNested($data, 'address', PersonAddress::fromArray(...)),
             nationalityCountryCode: ResponseData::nullableString($data, 'nationalityCountryCode'),
             identificationNumber: ResponseData::nullableString($data, 'identificationNumber'),
             identificationIssueDate: ResponseData::nullableString($data, 'identificationIssueDate'),
             identificationExpiryDate: ResponseData::nullableString($data, 'identificationExpiryDate'),
             identificationType: ResponseData::nullableString($data, 'identificationType'),
-            company: $company !== [] ? PersonCompany::fromArray($company) : null,
+            company: ResponseData::nullableNested($data, 'company', PersonCompany::fromArray(...)),
             preferredLanguage: ResponseData::nullableString($data, 'preferredLanguage'),
             birthDate: ResponseData::nullableString($data, 'birthDate'),
             birthPlace: ResponseData::nullableString($data, 'birthPlace'),

@@ -34,14 +34,12 @@ final readonly class Group
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $booker = ResponseData::nested($data, 'booker');
-
         return new self(
             id: ResponseData::string($data, 'id'),
             name: ResponseData::string($data, 'name'),
             from: ResponseData::nullableDateTime($data, 'from'),
             to: ResponseData::nullableDateTime($data, 'to'),
-            booker: $booker !== [] ? Booker::fromArray($booker) : null,
+            booker: ResponseData::nullableNested($data, 'booker', Booker::fromArray(...)),
             comment: ResponseData::nullableString($data, 'comment'),
             bookerComment: ResponseData::nullableString($data, 'bookerComment'),
             hasActivePaymentAccount: ResponseData::bool($data, 'hasActivePaymentAccount'),

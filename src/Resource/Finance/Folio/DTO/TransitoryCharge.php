@@ -40,8 +40,8 @@ final readonly class TransitoryCharge
             created: ResponseData::dateTime($data, 'created'),
             quantity: ResponseData::int($data, 'quantity'),
             receipt: ResponseData::nullableString($data, 'receipt'),
-            movedFrom: EmbeddedFolio::fromNested($data, 'movedFrom'),
-            movedTo: EmbeddedFolio::fromNested($data, 'movedTo'),
+            movedFrom: ResponseData::nullableNested($data, 'movedFrom', EmbeddedFolio::fromArray(...)),
+            movedTo: ResponseData::nullableNested($data, 'movedTo', EmbeddedFolio::fromArray(...)),
             movedReason: ResponseData::nullableString($data, 'movedReason'),
         );
     }

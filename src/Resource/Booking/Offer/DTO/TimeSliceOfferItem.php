@@ -26,18 +26,15 @@ final readonly class TimeSliceOfferItem
     public static function fromArray(array $data): self
     {
         $minGuaranteeType = ResponseData::nullableString($data, 'minGuaranteeType');
-        $minAdvance = ResponseData::nested($data, 'minAdvance');
-        $maxAdvance = ResponseData::nested($data, 'maxAdvance');
-        $restrictions = ResponseData::nested($data, 'restrictions');
 
         return new self(
             unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
             minGuaranteeType: $minGuaranteeType !== null ? GuaranteeType::fromApi($minGuaranteeType) : null,
-            minAdvance: $minAdvance !== [] ? Period::fromArray($minAdvance) : null,
-            maxAdvance: $maxAdvance !== [] ? Period::fromArray($maxAdvance) : null,
+            minAdvance: ResponseData::nullableNested($data, 'minAdvance', Period::fromArray(...)),
+            maxAdvance: ResponseData::nullableNested($data, 'maxAdvance', Period::fromArray(...)),
             available: ResponseData::int($data, 'available'),
             availableUnits: ResponseData::int($data, 'availableUnits'),
-            restrictions: $restrictions !== [] ? RateRestrictions::fromArray($restrictions) : null,
+            restrictions: ResponseData::nullableNested($data, 'restrictions', RateRestrictions::fromArray(...)),
             prices: array_map(PerOccupancyPriceItem::fromArray(...), ResponseData::nestedList($data, 'prices')),
         );
     }

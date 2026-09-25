@@ -31,8 +31,6 @@ final readonly class PaymentAccount
     public static function fromArray(array $data): self
     {
         $externalReference = ResponseData::nested($data, 'externalReference');
-        $paymentLink = ResponseData::nested($data, 'paymentLink');
-        $accountDetails = ResponseData::nested($data, 'accountDetails');
 
         return new self(
             id: ResponseData::string($data, 'id'),
@@ -43,8 +41,8 @@ final readonly class PaymentAccount
             status: PaymentAccountStatus::fromApi(ResponseData::string($data, 'status')),
             failureReason: ResponseData::nullableString($data, 'failureReason'),
             payerInteraction: PaymentAccountPayerInteraction::fromApi(ResponseData::string($data, 'payerInteraction')),
-            paymentLink: $paymentLink !== [] ? PaymentAccountLink::fromArray($paymentLink) : null,
-            accountDetails: $accountDetails !== [] ? PaymentAccountDetails::fromArray($accountDetails) : null,
+            paymentLink: ResponseData::nullableNested($data, 'paymentLink', PaymentAccountLink::fromArray(...)),
+            accountDetails: ResponseData::nullableNested($data, 'accountDetails', PaymentAccountDetails::fromArray(...)),
             isVirtual: ResponseData::bool($data, 'isVirtual'),
             actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
         );

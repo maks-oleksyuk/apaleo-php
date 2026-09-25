@@ -25,14 +25,12 @@ final readonly class AvailableUnitItem
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $unitGroup = ResponseData::nested($data, 'unitGroup');
-
         return new self(
             id: ResponseData::string($data, 'id'),
             name: ResponseData::string($data, 'name'),
             description: ResponseData::string($data, 'description'),
             property: EmbeddedProperty::fromArray(ResponseData::nested($data, 'property')),
-            unitGroup: $unitGroup !== [] ? EmbeddedUnitGroup::fromArray($unitGroup) : null,
+            unitGroup: ResponseData::nullableNested($data, 'unitGroup', EmbeddedUnitGroup::fromArray(...)),
             status: AvailableUnitItemStatus::fromArray(ResponseData::nested($data, 'status')),
             maxPersons: ResponseData::int($data, 'maxPersons'),
             attributes: array_map(UnitAttribute::fromArray(...), ResponseData::nestedList($data, 'attributes')),

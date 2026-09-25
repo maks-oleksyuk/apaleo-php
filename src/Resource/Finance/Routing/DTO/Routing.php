@@ -26,7 +26,6 @@ final readonly class Routing
     {
         $destination = ResponseData::nested($data, 'destinationFolio');
         $debitorType = ResponseData::nullableString($destination, 'debitorType');
-        $filter = ResponseData::nested($data, 'filter');
 
         return new self(
             id: ResponseData::string($data, 'id'),
@@ -34,7 +33,7 @@ final readonly class Routing
             propertyId: ResponseData::string($data, 'propertyId'),
             destinationFolioId: ResponseData::string($destination, 'id'),
             destinationDebitorType: $debitorType !== null ? DebitorType::fromApi($debitorType) : null,
-            filter: $filter !== [] ? RoutingChargeFilter::fromArray($filter) : null,
+            filter: ResponseData::nullableNested($data, 'filter', RoutingChargeFilter::fromArray(...)),
             actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
         );
     }

@@ -31,15 +31,12 @@ final readonly class Booking
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $booker = ResponseData::nested($data, 'booker');
-        $registeredCard = ResponseData::nested($data, 'registeredCard');
-
         return new self(
             id: ResponseData::string($data, 'id'),
             groupId: ResponseData::nullableString($data, 'groupId'),
-            booker: $booker !== [] ? Booker::fromArray($booker) : null,
+            booker: ResponseData::nullableNested($data, 'booker', Booker::fromArray(...)),
             hasActivePaymentAccount: ResponseData::bool($data, 'hasActivePaymentAccount'),
-            registeredCard: $registeredCard !== [] ? RegisteredCard::fromArray($registeredCard) : null,
+            registeredCard: ResponseData::nullableNested($data, 'registeredCard', RegisteredCard::fromArray(...)),
             comment: ResponseData::nullableString($data, 'comment'),
             bookerComment: ResponseData::nullableString($data, 'bookerComment'),
             created: ResponseData::dateTime($data, 'created'),

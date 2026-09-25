@@ -42,7 +42,6 @@ final readonly class Unit
         $property = ResponseData::nested($data, 'property');
         $unitGroup = ResponseData::nested($data, 'unitGroup');
         $connectingUnit = ResponseData::nested($data, 'connectingUnit');
-        $maintenance = ResponseData::nested($status, 'maintenance');
         $archived = ResponseData::nullableDateTime($data, 'archived');
 
         $condition = ResponseData::string($status, 'condition');
@@ -58,7 +57,7 @@ final readonly class Unit
             condition: UnitCondition::fromApi($condition),
             rawCondition: $condition,
             isOccupied: ResponseData::bool($status, 'isOccupied'),
-            maintenance: $maintenance !== [] ? UnitMaintenance::fromArray($maintenance) : null,
+            maintenance: ResponseData::nullableNested($status, 'maintenance', UnitMaintenance::fromArray(...)),
             isArchived: ResponseData::bool($data, 'isArchived'),
             archived: $archived,
             attributes: array_map(

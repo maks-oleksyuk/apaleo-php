@@ -46,13 +46,13 @@ final readonly class Refund
             refundDate: ResponseData::dateTime($data, 'refundDate'),
             businessDate: ResponseData::date($data, 'businessDate'),
             reason: ResponseData::nullableString($data, 'reason'),
-            externalReference: ExternalReference::fromNested($data, 'externalReference'),
+            externalReference: ResponseData::nullableNested($data, 'externalReference', ExternalReference::fromArray(...)),
             receipt: ResponseData::nullableString($data, 'receipt'),
             sourcePaymentId: ResponseData::nullableString($data, 'sourcePaymentId'),
             failureReason: ResponseData::nullableString($data, 'failureReason'),
             failureCode: $failureCode !== null ? PaymentFailureCode::fromApi($failureCode) : null,
-            movedFrom: EmbeddedFolio::fromNested($data, 'movedFrom'),
-            movedTo: EmbeddedFolio::fromNested($data, 'movedTo'),
+            movedFrom: ResponseData::nullableNested($data, 'movedFrom', EmbeddedFolio::fromArray(...)),
+            movedTo: ResponseData::nullableNested($data, 'movedTo', EmbeddedFolio::fromArray(...)),
             movedReason: ResponseData::nullableString($data, 'movedReason'),
         );
     }

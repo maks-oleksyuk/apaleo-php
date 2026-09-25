@@ -25,12 +25,4 @@ final readonly class Receipt
             type: $type !== null ? ReceiptType::fromApi($type) : null,
         );
     }
-
-    /** @param array<string, mixed> $data */
-    public static function fromNested(array $data, string $key): ?self
-    {
-        $receipt = ResponseData::nested($data, $key);
-
-        return $receipt !== [] ? self::fromArray($receipt) : null;
-    }
 }

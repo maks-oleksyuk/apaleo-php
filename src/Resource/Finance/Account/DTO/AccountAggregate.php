@@ -20,10 +20,8 @@ final readonly class AccountAggregate
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $account = ResponseData::nested($data, 'account');
-
         return new self(
-            account: $account !== [] ? ExportAccount::fromArray($account) : null,
+            account: ResponseData::nullableNested($data, 'account', ExportAccount::fromArray(...)),
             creditedAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'creditedAmount')),
             debitedAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'debitedAmount')),
             balance: MonetaryValue::fromArray(ResponseData::nested($data, 'balance')),

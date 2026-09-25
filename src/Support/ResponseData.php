@@ -204,6 +204,24 @@ final class ResponseData
     }
 
     /**
+     * Maps an optional nested object: missing, null or empty becomes null instead of a DTO
+     * built from nothing.
+     *
+     * @template T
+     *
+     * @param array<string, mixed>                $data
+     * @param callable(array<string, mixed>): T $map e.g. Address::fromArray(...)
+     *
+     * @return null|T
+     */
+    public static function nullableNested(array $data, string $key, callable $map): mixed
+    {
+        $value = self::nested($data, $key);
+
+        return $value !== [] ? $map($value) : null;
+    }
+
+    /**
      * Extracts a list field as an array of arrays; missing, malformed or non-array items are dropped.
      *
      * @param array<string, mixed> $data

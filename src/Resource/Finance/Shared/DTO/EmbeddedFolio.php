@@ -22,12 +22,4 @@ final readonly class EmbeddedFolio
             debitor: ResponseData::nullableString($data, 'debitor'),
         );
     }
-
-    /** @param array<string, mixed> $data */
-    public static function fromNested(array $data, string $key): ?self
-    {
-        $folio = ResponseData::nested($data, $key);
-
-        return $folio !== [] ? self::fromArray($folio) : null;
-    }
 }

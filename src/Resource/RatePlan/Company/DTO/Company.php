@@ -28,8 +28,6 @@ final readonly class Company
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $invoiceNetworkIdentity = ResponseData::nested($data, 'invoiceNetworkIdentity');
-
         return new self(
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
@@ -42,7 +40,7 @@ final readonly class Company
             taxId: ResponseData::nullableString($data, 'taxId'),
             additionalTaxId: ResponseData::nullableString($data, 'additionalTaxId'),
             additionalTaxId2: ResponseData::nullableString($data, 'additionalTaxId2'),
-            invoiceNetworkIdentity: $invoiceNetworkIdentity !== [] ? InvoiceNetworkIdentity::fromArray($invoiceNetworkIdentity) : null,
+            invoiceNetworkIdentity: ResponseData::nullableNested($data, 'invoiceNetworkIdentity', InvoiceNetworkIdentity::fromArray(...)),
             ratePlans: array_map(CompanyRatePlan::fromArray(...), ResponseData::nestedList($data, 'ratePlans')),
         );
     }

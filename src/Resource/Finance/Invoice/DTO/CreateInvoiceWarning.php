@@ -16,13 +16,11 @@ final readonly class CreateInvoiceWarning
     ) {}
 
     /** @param array<string, mixed> $data */
-    public static function fromNested(array $data, string $key): ?self
+    public static function fromArray(array $data): self
     {
-        $warning = ResponseData::nested($data, $key);
-
-        return $warning !== [] ? new self(
-            type: CreateInvoiceWarningType::fromApi(ResponseData::string($warning, 'type')),
-            message: ResponseData::nullableString($warning, 'message'),
-        ) : null;
+        return new self(
+            type: CreateInvoiceWarningType::fromApi(ResponseData::string($data, 'type')),
+            message: ResponseData::nullableString($data, 'message'),
+        );
     }
 }

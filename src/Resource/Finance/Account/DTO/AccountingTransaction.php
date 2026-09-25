@@ -39,7 +39,7 @@ final readonly class AccountingTransaction
             creditedAccount: ExportAccount::fromArray(ResponseData::nested($data, 'creditedAccount')),
             command: TransactionCommand::fromApi(ResponseData::string($data, 'command')),
             amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
-            receipt: Receipt::fromNested($data, 'receipt'),
+            receipt: ResponseData::nullableNested($data, 'receipt', Receipt::fromArray(...)),
             entryNumber: ResponseData::string($data, 'entryNumber'),
             entryGroupNumber: ResponseData::string($data, 'entryGroupNumber'),
             reference: ResponseData::string($data, 'reference'),

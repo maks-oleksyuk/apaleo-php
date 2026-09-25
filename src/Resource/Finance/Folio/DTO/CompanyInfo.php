@@ -20,14 +20,12 @@ final readonly class CompanyInfo
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $identity = ResponseData::nested($data, 'invoiceNetworkIdentity');
-
         return new self(
             name: ResponseData::string($data, 'name'),
             taxId: ResponseData::nullableString($data, 'taxId'),
             additionalTaxId: ResponseData::nullableString($data, 'additionalTaxId'),
             additionalTaxId2: ResponseData::nullableString($data, 'additionalTaxId2'),
-            invoiceNetworkIdentity: $identity !== [] ? InvoiceNetworkIdentity::fromArray($identity) : null,
+            invoiceNetworkIdentity: ResponseData::nullableNested($data, 'invoiceNetworkIdentity', InvoiceNetworkIdentity::fromArray(...)),
         );
     }
 

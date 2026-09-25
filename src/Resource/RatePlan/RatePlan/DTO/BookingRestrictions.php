@@ -19,12 +19,9 @@ final readonly class BookingRestrictions
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $minAdvance = ResponseData::nested($data, 'minAdvance');
-        $maxAdvance = ResponseData::nested($data, 'maxAdvance');
-
         return new self(
-            minAdvance: $minAdvance !== [] ? Period::fromArray($minAdvance) : null,
-            maxAdvance: $maxAdvance !== [] ? Period::fromArray($maxAdvance) : null,
+            minAdvance: ResponseData::nullableNested($data, 'minAdvance', Period::fromArray(...)),
+            maxAdvance: ResponseData::nullableNested($data, 'maxAdvance', Period::fromArray(...)),
             lateBookingUntil: ResponseData::nullableString($data, 'lateBookingUntil'),
         );
     }

@@ -47,7 +47,6 @@ final readonly class Block
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $marketSegment = ResponseData::nested($data, 'marketSegment');
         $optionalCutoffBehavior = ResponseData::nullableString($data, 'optionalCutoffBehavior');
 
         return new self(
@@ -61,7 +60,7 @@ final readonly class Block
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
             pickedReservations: ResponseData::int($data, 'pickedReservations'),
-            marketSegment: $marketSegment !== [] ? EmbeddedMarketSegment::fromArray($marketSegment) : null,
+            marketSegment: ResponseData::nullableNested($data, 'marketSegment', EmbeddedMarketSegment::fromArray(...)),
             promoCode: ResponseData::nullableString($data, 'promoCode'),
             corporateCode: ResponseData::nullableString($data, 'corporateCode'),
             created: ResponseData::dateTime($data, 'created'),

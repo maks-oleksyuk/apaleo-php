@@ -42,8 +42,6 @@ final readonly class InvoiceListItem
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $outstandingPayment = ResponseData::nested($data, 'outstandingPayment');
-        $company = ResponseData::nested($data, 'company');
         $cancellationReason = ResponseData::nullableString($data, 'cancellationReasonCode');
 
         return new self(
@@ -60,10 +58,10 @@ final readonly class InvoiceListItem
             propertyId: ResponseData::string($data, 'propertyId'),
             languageCode: ResponseData::string($data, 'languageCode'),
             subTotal: MonetaryValue::fromArray(ResponseData::nested($data, 'subTotal')),
-            outstandingPayment: $outstandingPayment !== [] ? MonetaryValue::fromArray($outstandingPayment) : null,
+            outstandingPayment: ResponseData::nullableNested($data, 'outstandingPayment', MonetaryValue::fromArray(...)),
             guestName: ResponseData::nullableString($data, 'guestName'),
             guestCompany: ResponseData::nullableString($data, 'guestCompany'),
-            company: $company !== [] ? EmbeddedCompany::fromArray($company) : null,
+            company: ResponseData::nullableNested($data, 'company', EmbeddedCompany::fromArray(...)),
             relatedInvoiceNumber: ResponseData::nullableString($data, 'relatedInvoiceNumber'),
             writeOffReason: ResponseData::nullableString($data, 'writeOffReason'),
             cancellationReasonCode: $cancellationReason !== null ? InvoiceCancellationReason::fromApi($cancellationReason) : null,

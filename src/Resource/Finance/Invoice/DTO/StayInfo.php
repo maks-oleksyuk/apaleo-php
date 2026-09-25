@@ -17,16 +17,14 @@ final readonly class StayInfo
     ) {}
 
     /** @param array<string, mixed> $data */
-    public static function fromNested(array $data, string $key): ?self
+    public static function fromArray(array $data): self
     {
-        $stay = ResponseData::nested($data, $key);
-
-        return $stay !== [] ? new self(
-            reservationId: ResponseData::string($stay, 'reservationId'),
-            guestName: ResponseData::string($stay, 'guestName'),
-            arrivalDate: ResponseData::date($stay, 'arrivalDate'),
-            departureDate: ResponseData::date($stay, 'departureDate'),
-            roomNumber: ResponseData::nullableString($stay, 'roomNumber'),
-        ) : null;
+        return new self(
+            reservationId: ResponseData::string($data, 'reservationId'),
+            guestName: ResponseData::string($data, 'guestName'),
+            arrivalDate: ResponseData::date($data, 'arrivalDate'),
+            departureDate: ResponseData::date($data, 'departureDate'),
+            roomNumber: ResponseData::nullableString($data, 'roomNumber'),
+        );
     }
 }

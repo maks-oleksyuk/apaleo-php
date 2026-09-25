@@ -59,6 +59,17 @@ final class ResponseDataTest extends TestCase
         self::assertSame('2026-09-22T10:00:00+02:00', ResponseData::nullableDateTime(['d' => '2026-09-22T10:00:00+02:00'], 'd')?->format(DATE_ATOM));
     }
 
+    public function testNullableNestedMapsPresentObjectsOnly(): void
+    {
+        $map = static fn (array $value): mixed => $value['id'] ?? null;
+        $data = ['obj' => ['id' => 'X'], 'empty' => [], 'null' => null];
+
+        self::assertSame('X', ResponseData::nullableNested($data, 'obj', $map));
+        self::assertNull(ResponseData::nullableNested($data, 'empty', $map));
+        self::assertNull(ResponseData::nullableNested($data, 'null', $map));
+        self::assertNull(ResponseData::nullableNested($data, 'missing', $map));
+    }
+
     public function testStringsAreTrimmed(): void
     {
         $data = [

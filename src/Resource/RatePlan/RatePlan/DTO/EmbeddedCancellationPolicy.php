@@ -20,14 +20,12 @@ final readonly class EmbeddedCancellationPolicy
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $period = ResponseData::nested($data, 'periodPriorToArrival');
-
         return new self(
             id: ResponseData::string($data, 'id'),
             code: ResponseData::nullableString($data, 'code'),
             name: ResponseData::nullableString($data, 'name'),
             description: ResponseData::nullableString($data, 'description'),
-            periodPriorToArrival: $period !== [] ? Period::fromArray($period) : null,
+            periodPriorToArrival: ResponseData::nullableNested($data, 'periodPriorToArrival', Period::fromArray(...)),
         );
     }
 }

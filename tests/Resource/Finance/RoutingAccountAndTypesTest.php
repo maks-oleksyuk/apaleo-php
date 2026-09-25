@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Tests\Resource\Finance;
 
-use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Resource\Finance\Account\Enum\AccountType;
 use Oleksyuk\Apaleo\Resource\Finance\Account\Enum\TransactionCommand;
 use Oleksyuk\Apaleo\Resource\Finance\Account\TransactionFilter;
@@ -16,6 +15,7 @@ use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FinanceServiceType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FolioType;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentMethod;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\VatType;
+use Oleksyuk\Apaleo\Support\PaginatedResult;
 
 /**
  * @internal

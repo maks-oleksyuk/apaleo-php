@@ -20,13 +20,10 @@ final readonly class FeeDetails
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $fixedValue = ResponseData::nested($data, 'fixedValue');
-        $percentValue = ResponseData::nested($data, 'percentValue');
-
         return new self(
             vatType: VatType::fromApi(ResponseData::string($data, 'vatType')),
-            fixedValue: $fixedValue !== [] ? MonetaryValue::fromArray($fixedValue) : null,
-            percentValue: $percentValue !== [] ? PercentValue::fromArray($percentValue) : null,
+            fixedValue: ResponseData::nullableNested($data, 'fixedValue', MonetaryValue::fromArray(...)),
+            percentValue: ResponseData::nullableNested($data, 'percentValue', PercentValue::fromArray(...)),
         );
     }
 

@@ -37,12 +37,12 @@ final readonly class FolioPayment
             amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
             paymentDate: ResponseData::nullableDateTime($data, 'paymentDate'),
             businessDate: ResponseData::date($data, 'businessDate'),
-            externalReference: ExternalReference::fromNested($data, 'externalReference'),
+            externalReference: ResponseData::nullableNested($data, 'externalReference', ExternalReference::fromArray(...)),
             receipt: ResponseData::nullableString($data, 'receipt'),
             sourcePaymentId: ResponseData::nullableString($data, 'sourcePaymentId'),
             depositEntryId: ResponseData::nullableString($data, 'depositEntryId'),
-            movedFrom: EmbeddedFolio::fromNested($data, 'movedFrom'),
-            movedTo: EmbeddedFolio::fromNested($data, 'movedTo'),
+            movedFrom: ResponseData::nullableNested($data, 'movedFrom', EmbeddedFolio::fromArray(...)),
+            movedTo: ResponseData::nullableNested($data, 'movedTo', EmbeddedFolio::fromArray(...)),
             movedReason: ResponseData::nullableString($data, 'movedReason'),
         );
     }

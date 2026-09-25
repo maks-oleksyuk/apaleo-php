@@ -50,10 +50,6 @@ final readonly class Guest
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $address = ResponseData::nested($data, 'address');
-        $company = ResponseData::nested($data, 'company');
-        $vehicleRegistration = ResponseData::nested($data, 'vehicleRegistration');
-
         return new self(
             lastName: ResponseData::string($data, 'lastName'),
             title: ResponseData::nullableString($data, 'title'),
@@ -63,7 +59,7 @@ final readonly class Guest
             secondLastName: ResponseData::nullableString($data, 'secondLastName'),
             email: ResponseData::nullableString($data, 'email'),
             phone: ResponseData::nullableString($data, 'phone'),
-            address: $address !== [] ? PersonAddress::fromArray($address) : null,
+            address: ResponseData::nullableNested($data, 'address', PersonAddress::fromArray(...)),
             nationalityCountryCode: ResponseData::nullableString($data, 'nationalityCountryCode'),
             identificationNumber: ResponseData::nullableString($data, 'identificationNumber'),
             identificationAdditionalNumber: ResponseData::nullableString($data, 'identificationAdditionalNumber'),
@@ -72,7 +68,7 @@ final readonly class Guest
             identificationIssuePlace: ResponseData::nullableString($data, 'identificationIssuePlace'),
             identificationType: ResponseData::nullableString($data, 'identificationType'),
             personalTaxId: ResponseData::nullableString($data, 'personalTaxId'),
-            company: $company !== [] ? PersonCompany::fromArray($company) : null,
+            company: ResponseData::nullableNested($data, 'company', PersonCompany::fromArray(...)),
             preferredLanguage: ResponseData::nullableString($data, 'preferredLanguage'),
             birthDate: ResponseData::nullableString($data, 'birthDate'),
             birthPlace: ResponseData::nullableString($data, 'birthPlace'),
@@ -84,7 +80,7 @@ final readonly class Guest
             borderCrossingDate: ResponseData::nullableString($data, 'borderCrossingDate'),
             nextDestination: ResponseData::nullableString($data, 'nextDestination'),
             relationshipToPrimaryGuest: ResponseData::nullableString($data, 'relationshipToPrimaryGuest'),
-            vehicleRegistration: $vehicleRegistration !== [] ? VehicleRegistration::fromArray($vehicleRegistration) : null,
+            vehicleRegistration: ResponseData::nullableNested($data, 'vehicleRegistration', VehicleRegistration::fromArray(...)),
         );
     }
 

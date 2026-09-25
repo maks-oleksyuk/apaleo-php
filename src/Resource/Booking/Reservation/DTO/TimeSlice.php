@@ -34,15 +34,13 @@ final readonly class TimeSlice
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        $unit = ResponseData::nested($data, 'unit');
-
         return new self(
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
             serviceDate: ResponseData::date($data, 'serviceDate'),
             ratePlan: EmbeddedRatePlan::fromArray(ResponseData::nested($data, 'ratePlan')),
             unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
-            unit: $unit !== [] ? EmbeddedUnit::fromArray($unit) : null,
+            unit: ResponseData::nullableNested($data, 'unit', EmbeddedUnit::fromArray(...)),
             baseAmount: Amount::fromArray(ResponseData::nested($data, 'baseAmount')),
             totalGrossAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'totalGrossAmount')),
             includedServices: array_map(ReservationService::fromArray(...), ResponseData::nestedList($data, 'includedServices')),
