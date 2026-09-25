@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Auth;
 
+use Psr\Clock\ClockInterface;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -15,6 +16,7 @@ final readonly class Psr16TokenCache implements TokenCache
 {
     public function __construct(
         private CacheInterface $cache,
+        private ClockInterface $clock = new SystemClock(),
     ) {}
 
     public function get(string $key): ?AccessToken
@@ -33,7 +35,7 @@ final readonly class Psr16TokenCache implements TokenCache
 
     public function set(string $key, AccessToken $token): void
     {
-        $ttl = max(1, $token->expiresAt->getTimestamp() - time());
+        $ttl = max(1, $token->expiresAt->getTimestamp() - $this->clock->now()->getTimestamp());
 
         $this->cache->set($key, [
             'value' => $token->value,
