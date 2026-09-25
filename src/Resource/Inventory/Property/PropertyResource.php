@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\Property;
 
+use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\DTO\CreateProperty;
@@ -16,6 +17,7 @@ use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\CreatePropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\DeletePropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\GetPropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ListPropertiesRequest;
+use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\PropertyExistsRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\ResetPropertyRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\SetPropertyLiveRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Requests\UpdatePropertyRequest;
@@ -35,6 +37,17 @@ final readonly class PropertyResource
         $data = $this->pipeline->send(new GetPropertyRequest($propertyId, $languages));
 
         return Property::fromArray($data);
+    }
+
+    public function exists(string $propertyId): bool
+    {
+        try {
+            $this->pipeline->send(new PropertyExistsRequest($propertyId));
+
+            return true;
+        } catch (ApaleoNotFoundException) {
+            return false;
+        }
     }
 
     /**

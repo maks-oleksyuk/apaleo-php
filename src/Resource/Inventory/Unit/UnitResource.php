@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\Unit;
 
+use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\DTO\CreateUnit;
@@ -17,6 +18,7 @@ use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\CreateUnitRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\DeleteUnitRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\GetUnitRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\ListUnitsRequest;
+use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\UnitExistsRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Requests\UpdateUnitRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
@@ -34,6 +36,17 @@ final readonly class UnitResource
         $data = $this->pipeline->send(new GetUnitRequest($unitId, $languages));
 
         return Unit::fromArray($data);
+    }
+
+    public function exists(string $unitId): bool
+    {
+        try {
+            $this->pipeline->send(new UnitExistsRequest($unitId));
+
+            return true;
+        } catch (ApaleoNotFoundException) {
+            return false;
+        }
     }
 
     /**

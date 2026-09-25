@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute;
 
+use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\DTO\CreateUnitAttributeDefinition;
@@ -12,6 +13,7 @@ use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\CreateUnitAttribut
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\DeleteUnitAttributeRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\GetUnitAttributeRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\ListUnitAttributesRequest;
+use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\UnitAttributeExistsRequest;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute\Requests\UpdateUnitAttributeRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
@@ -28,6 +30,17 @@ final readonly class UnitAttributeResource
         $data = $this->pipeline->send(new GetUnitAttributeRequest($unitAttributeId));
 
         return UnitAttributeDefinition::fromArray($data);
+    }
+
+    public function exists(string $unitAttributeId): bool
+    {
+        try {
+            $this->pipeline->send(new UnitAttributeExistsRequest($unitAttributeId));
+
+            return true;
+        } catch (ApaleoNotFoundException) {
+            return false;
+        }
     }
 
     /**
