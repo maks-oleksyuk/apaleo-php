@@ -259,7 +259,8 @@ final class RequestMappingTest extends TestCase
             // Named constructors only (e.g. Split::byPercent()/byAmount()): each one is a shape.
             $factories = array_values(array_filter(
                 $reflection->getMethods(\ReflectionMethod::IS_STATIC | \ReflectionMethod::IS_PUBLIC),
-                static fn (\ReflectionMethod $method): bool => $method->isStatic() && (string) $method->getReturnType() === $class,
+                // PHP 8.4 reports a `self` return type as "self", 8.5 as the class name.
+                static fn (\ReflectionMethod $method): bool => $method->isStatic() && \in_array((string) $method->getReturnType(), ['self', $class], true),
             ));
             $factory = $factories[$this->branch($path, \count($factories))];
             $object = $factory->invokeArgs(null, $this->arguments($factory, $reflection, $path));
