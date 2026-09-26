@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListUnitGroupAvailabilityRequest extends Request
 {
@@ -49,11 +50,11 @@ final readonly class ListUnitGroupAvailabilityRequest extends Request
             'from' => $this->from->format('Y-m-d'),
             'to' => $this->to->format('Y-m-d'),
             'timeSliceTemplate' => $this->timeSliceTemplate?->value,
-            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
-            'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,
-            'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
+            'unitGroupTypes' => Query::csv($this->unitGroupTypes),
+            'timeSliceDefinitionIds' => Query::csv($this->timeSliceDefinitionIds),
+            'unitGroupIds' => Query::csv($this->unitGroupIds),
             'adults' => $this->adults,
-            'childrenAges' => implode(',', $this->childrenAges) ?: null,
+            'childrenAges' => Query::csv($this->childrenAges),
             'onlySellable' => $this->onlySellable,
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,

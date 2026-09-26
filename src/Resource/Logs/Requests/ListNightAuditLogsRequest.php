@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Logs\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Logs\Enum\NightAuditStatus;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListNightAuditLogsRequest extends Request
 {
@@ -38,10 +39,10 @@ final readonly class ListNightAuditLogsRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'statuses' => implode(',', array_map(static fn (NightAuditStatus $s): string => $s->value, $this->statuses)) ?: null,
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'subjectIds' => implode(',', $this->subjectIds) ?: null,
-            'dateFilter' => implode(',', $this->dateFilter) ?: null,
+            'statuses' => Query::csv($this->statuses),
+            'propertyIds' => Query::csv($this->propertyIds),
+            'subjectIds' => Query::csv($this->subjectIds),
+            'dateFilter' => Query::csv($this->dateFilter),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
         ], static fn (mixed $value): bool => $value !== null);

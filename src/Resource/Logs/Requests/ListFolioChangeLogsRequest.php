@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Logs\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Logs\Enum\FolioLogEventType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListFolioChangeLogsRequest extends Request
 {
@@ -42,12 +43,12 @@ final readonly class ListFolioChangeLogsRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'folioIds' => implode(',', $this->folioIds) ?: null,
-            'eventTypes' => implode(',', array_map(static fn (FolioLogEventType $t): string => $t->value, $this->eventTypes)) ?: null,
-            'clientIds' => implode(',', $this->clientIds) ?: null,
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'subjectIds' => implode(',', $this->subjectIds) ?: null,
-            'dateFilter' => implode(',', $this->dateFilter) ?: null,
+            'folioIds' => Query::csv($this->folioIds),
+            'eventTypes' => Query::csv($this->eventTypes),
+            'clientIds' => Query::csv($this->clientIds),
+            'propertyIds' => Query::csv($this->propertyIds),
+            'subjectIds' => Query::csv($this->subjectIds),
+            'dateFilter' => Query::csv($this->dateFilter),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
         ], static fn (mixed $value): bool => $value !== null);

@@ -9,6 +9,7 @@ use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class GetOffersRequest extends Request
 {
@@ -52,13 +53,13 @@ final readonly class GetOffersRequest extends Request
             'departure' => $this->departure->format('Y-m-d'),
             'adults' => $this->adults,
             'timeSliceTemplate' => $this->timeSliceTemplate?->value,
-            'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,
-            'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
-            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
+            'timeSliceDefinitionIds' => Query::csv($this->timeSliceDefinitionIds),
+            'unitGroupIds' => Query::csv($this->unitGroupIds),
+            'unitGroupTypes' => Query::csv($this->unitGroupTypes),
             'channelCode' => $this->channelCode?->value,
             'promoCode' => $this->promoCode,
             'corporateCode' => $this->corporateCode,
-            'childrenAges' => implode(',', $this->childrenAges) ?: null,
+            'childrenAges' => Query::csv($this->childrenAges),
             'includeUnavailable' => $this->includeUnavailable,
         ], static fn (mixed $value): bool => $value !== null);
     }

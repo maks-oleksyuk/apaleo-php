@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Availability\Service\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListServiceAvailabilityRequest extends Request
 {
@@ -42,8 +43,8 @@ final readonly class ListServiceAvailabilityRequest extends Request
             'from' => $this->from->format('Y-m-d'),
             'to' => $this->to->format('Y-m-d'),
             'timeSliceTemplate' => $this->timeSliceTemplate?->value,
-            'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,
-            'channelCodes' => implode(',', $this->channelCodes) ?: null,
+            'timeSliceDefinitionIds' => Query::csv($this->timeSliceDefinitionIds),
+            'channelCodes' => Query::csv($this->channelCodes),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
         ], static fn (mixed $value): bool => $value !== null);

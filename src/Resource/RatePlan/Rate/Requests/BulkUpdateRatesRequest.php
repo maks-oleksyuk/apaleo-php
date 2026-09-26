@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\DayOfWeek;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class BulkUpdateRatesRequest extends Request
 {
@@ -39,7 +40,7 @@ final readonly class BulkUpdateRatesRequest extends Request
             'ratePlanIds' => implode(',', $this->ratePlanIds),
             'from' => $this->from->format('Y-m-d'),
             'to' => $this->to->format('Y-m-d'),
-            'weekDays' => implode(',', array_map(static fn (DayOfWeek $d): string => $d->value, $this->weekDays)) ?: null,
+            'weekDays' => Query::csv($this->weekDays),
         ], static fn (mixed $value): bool => $value !== null);
     }
 

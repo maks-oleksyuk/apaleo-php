@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Unit;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitArchiveFilter;
 use Oleksyuk\Apaleo\Resource\Inventory\Unit\Enum\UnitMaintenanceType;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class UnitFilter
 {
@@ -32,8 +33,8 @@ final readonly class UnitFilter
         return array_filter([
             'propertyId' => $this->propertyId,
             'unitGroupId' => $this->unitGroupId,
-            'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
-            'unitAttributeIds' => implode(',', $this->unitAttributeIds) ?: null,
+            'unitGroupIds' => Query::csv($this->unitGroupIds),
+            'unitAttributeIds' => Query::csv($this->unitAttributeIds),
             'isOccupied' => $this->isOccupied,
             'maintenanceType' => $this->maintenanceType?->value,
             'condition' => $this->condition?->value,

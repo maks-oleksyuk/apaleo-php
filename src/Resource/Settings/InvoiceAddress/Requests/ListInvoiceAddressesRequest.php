@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Settings\InvoiceAddress\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListInvoiceAddressesRequest extends Request
 {
@@ -27,7 +28,7 @@ final readonly class ListInvoiceAddressesRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
+            'propertyIds' => Query::csv($this->propertyIds),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

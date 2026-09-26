@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Authorization;
 
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationTargetType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class AuthorizationFilter
 {
@@ -31,11 +32,11 @@ final readonly class AuthorizationFilter
     public function toQuery(): array
     {
         return array_filter([
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'bookingIds' => implode(',', $this->bookingIds) ?: null,
-            'reservationIds' => implode(',', $this->reservationIds) ?: null,
-            'status' => implode(',', array_map(static fn (AuthorizationStatus $s): string => $s->value, $this->status)) ?: null,
-            'targetTypes' => implode(',', array_map(static fn (AuthorizationTargetType $t): string => $t->value, $this->targetTypes)) ?: null,
+            'propertyIds' => Query::csv($this->propertyIds),
+            'bookingIds' => Query::csv($this->bookingIds),
+            'reservationIds' => Query::csv($this->reservationIds),
+            'status' => Query::csv($this->status),
+            'targetTypes' => Query::csv($this->targetTypes),
             'dateField' => $this->dateField,
             'from' => $this->from?->format(\DateTimeInterface::ATOM),
             'to' => $this->to?->format(\DateTimeInterface::ATOM),

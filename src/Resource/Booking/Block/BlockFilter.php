@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Block;
 use Oleksyuk\Apaleo\Resource\Booking\Block\Enum\BlockStatus;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class BlockFilter
 {
@@ -36,12 +37,12 @@ final readonly class BlockFilter
     {
         return array_filter([
             'groupId' => $this->groupId,
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'status' => implode(',', array_map(static fn (BlockStatus $s): string => $s->value, $this->status)) ?: null,
-            'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
-            'ratePlanIds' => implode(',', $this->ratePlanIds) ?: null,
-            'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,
-            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
+            'propertyIds' => Query::csv($this->propertyIds),
+            'status' => Query::csv($this->status),
+            'unitGroupIds' => Query::csv($this->unitGroupIds),
+            'ratePlanIds' => Query::csv($this->ratePlanIds),
+            'timeSliceDefinitionIds' => Query::csv($this->timeSliceDefinitionIds),
+            'unitGroupTypes' => Query::csv($this->unitGroupTypes),
             'timeSliceTemplate' => $this->timeSliceTemplate?->value,
             'from' => $this->from?->format(\DateTimeInterface::ATOM),
             'to' => $this->to?->format(\DateTimeInterface::ATOM),

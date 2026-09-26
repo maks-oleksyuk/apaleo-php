@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
+use Oleksyuk\Apaleo\Support\Query;
 
 /** Auto-assigns a unit for the whole reservation stay; see {@see AssignSpecificUnitRequest} to pick the unit yourself. */
 final readonly class AssignUnitRequest extends Request
@@ -29,6 +30,6 @@ final readonly class AssignUnitRequest extends Request
 
     public function query(): array
     {
-        return array_filter(['unitConditions' => implode(',', array_map(static fn (UnitCondition $c): string => $c->value, $this->unitConditions)) ?: null], static fn (mixed $value): bool => $value !== null);
+        return array_filter(['unitConditions' => Query::csv($this->unitConditions)], static fn (mixed $value): bool => $value !== null);
     }
 }

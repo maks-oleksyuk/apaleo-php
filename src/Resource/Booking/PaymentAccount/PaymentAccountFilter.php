@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\PaymentAccount;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationTargetType;
 use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\Enum\PaymentAccountPayerInteraction;
 use Oleksyuk\Apaleo\Resource\Booking\PaymentAccount\Enum\PaymentAccountStatus;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class PaymentAccountFilter
 {
@@ -38,17 +39,17 @@ final readonly class PaymentAccountFilter
     public function toQuery(): array
     {
         return array_filter([
-            'paymentAccountIds' => implode(',', $this->paymentAccountIds) ?: null,
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'bookingIds' => implode(',', $this->bookingIds) ?: null,
-            'reservationIds' => implode(',', $this->reservationIds) ?: null,
-            'payerInteractions' => implode(',', array_map(static fn (PaymentAccountPayerInteraction $p): string => $p->value, $this->payerInteractions)) ?: null,
-            'status' => implode(',', array_map(static fn (PaymentAccountStatus $s): string => $s->value, $this->status)) ?: null,
-            'targetTypes' => implode(',', array_map(static fn (AuthorizationTargetType $t): string => $t->value, $this->targetTypes)) ?: null,
+            'paymentAccountIds' => Query::csv($this->paymentAccountIds),
+            'propertyIds' => Query::csv($this->propertyIds),
+            'bookingIds' => Query::csv($this->bookingIds),
+            'reservationIds' => Query::csv($this->reservationIds),
+            'payerInteractions' => Query::csv($this->payerInteractions),
+            'status' => Query::csv($this->status),
+            'targetTypes' => Query::csv($this->targetTypes),
             'dateField' => $this->dateField,
             'from' => $this->from?->format(\DateTimeInterface::ATOM),
             'to' => $this->to?->format(\DateTimeInterface::ATOM),
-            'paymentLinkUrls' => implode(',', $this->paymentLinkUrls) ?: null,
+            'paymentLinkUrls' => Query::csv($this->paymentLinkUrls),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

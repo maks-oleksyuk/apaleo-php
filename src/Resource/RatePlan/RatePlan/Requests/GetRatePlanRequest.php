@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class GetRatePlanRequest extends Request
 {
@@ -33,7 +34,7 @@ final readonly class GetRatePlanRequest extends Request
     {
         return array_filter([
             'languages' => $this->languages !== null ? implode(',', $this->languages) : null,
-            'expand' => implode(',', $this->expand) ?: null,
+            'expand' => Query::csv($this->expand),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

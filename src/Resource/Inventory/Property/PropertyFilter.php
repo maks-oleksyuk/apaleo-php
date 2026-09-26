@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Inventory\Property;
 
 use Oleksyuk\Apaleo\Resource\Inventory\Property\Enum\PropertyStatus;
+use Oleksyuk\Apaleo\Support\Query;
 
 /** list() only: Apaleo's properties/$count takes no filter. */
 final readonly class PropertyFilter
@@ -23,9 +24,9 @@ final readonly class PropertyFilter
     public function toQuery(): array
     {
         return array_filter([
-            'status' => implode(',', array_map(static fn (PropertyStatus $s): string => $s->value, $this->status)) ?: null,
+            'status' => Query::csv($this->status),
             'includeArchived' => $this->includeArchived,
-            'countryCode' => implode(',', $this->countryCode) ?: null,
+            'countryCode' => Query::csv($this->countryCode),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

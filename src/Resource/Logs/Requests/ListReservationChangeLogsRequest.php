@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Logs\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Logs\Enum\ReservationLogEventType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListReservationChangeLogsRequest extends Request
 {
@@ -43,12 +44,12 @@ final readonly class ListReservationChangeLogsRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'reservationIds' => implode(',', $this->reservationIds) ?: null,
-            'eventTypes' => implode(',', array_map(static fn (ReservationLogEventType $t): string => $t->value, $this->eventTypes)) ?: null,
-            'clientIds' => implode(',', $this->clientIds) ?: null,
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'subjectIds' => implode(',', $this->subjectIds) ?: null,
-            'dateFilter' => implode(',', $this->dateFilter) ?: null,
+            'reservationIds' => Query::csv($this->reservationIds),
+            'eventTypes' => Query::csv($this->eventTypes),
+            'clientIds' => Query::csv($this->clientIds),
+            'propertyIds' => Query::csv($this->propertyIds),
+            'subjectIds' => Query::csv($this->subjectIds),
+            'dateFilter' => Query::csv($this->dateFilter),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
             'expand' => $this->expandChanges ? 'changes' : null,

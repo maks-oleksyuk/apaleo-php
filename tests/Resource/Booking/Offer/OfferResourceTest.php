@@ -78,6 +78,15 @@ final class OfferResourceTest extends TestCase
         self::assertStringContainsString('adults=1', (string) $request->getUri());
     }
 
+    public function testAnInfantAloneIsStillSentAsAChild(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{"offers":[]}'));
+
+        $this->offers->forProperty('MUC', new \DateTimeImmutable('2026-09-20'), new \DateTimeImmutable('2026-09-22'), 2, childrenAges: [0]);
+
+        self::assertStringContainsString('childrenAges=0', (string) $this->lastRequest()->getUri());
+    }
+
     public function testForRatePlanReturnsStayOffers(): void
     {
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([

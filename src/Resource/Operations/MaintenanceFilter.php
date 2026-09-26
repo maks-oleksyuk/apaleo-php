@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Operations;
 
 use Oleksyuk\Apaleo\Resource\Shared\Enum\MaintenanceType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class MaintenanceFilter
 {
@@ -25,7 +26,7 @@ final readonly class MaintenanceFilter
             'unitId' => $this->unitId,
             'from' => $this->from?->format(\DateTimeInterface::ATOM),
             'to' => $this->to?->format(\DateTimeInterface::ATOM),
-            'types' => implode(',', array_map(static fn (MaintenanceType $t): string => $t->value, $this->types)) ?: null,
+            'types' => Query::csv($this->types),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

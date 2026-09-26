@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Resource\RatePlan\RatePlan\Enum\GuaranteeType;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class RatePlanFilter
 {
@@ -51,21 +52,21 @@ final readonly class RatePlanFilter
     {
         return array_filter([
             'propertyId' => $this->propertyId,
-            'ratePlanCodes' => implode(',', $this->ratePlanCodes) ?: null,
-            'includedServiceIds' => implode(',', $this->includedServiceIds) ?: null,
-            'channelCodes' => implode(',', array_map(static fn (ChannelCode $c): string => $c->value, $this->channelCodes)) ?: null,
-            'promoCodes' => implode(',', $this->promoCodes) ?: null,
-            'companyIds' => implode(',', $this->companyIds) ?: null,
-            'baseRatePlanIds' => implode(',', $this->baseRatePlanIds) ?: null,
-            'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
-            'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,
-            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
+            'ratePlanCodes' => Query::csv($this->ratePlanCodes),
+            'includedServiceIds' => Query::csv($this->includedServiceIds),
+            'channelCodes' => Query::csv($this->channelCodes),
+            'promoCodes' => Query::csv($this->promoCodes),
+            'companyIds' => Query::csv($this->companyIds),
+            'baseRatePlanIds' => Query::csv($this->baseRatePlanIds),
+            'unitGroupIds' => Query::csv($this->unitGroupIds),
+            'timeSliceDefinitionIds' => Query::csv($this->timeSliceDefinitionIds),
+            'unitGroupTypes' => Query::csv($this->unitGroupTypes),
             'timeSliceTemplate' => $this->timeSliceTemplate?->value,
-            'minGuaranteeTypes' => implode(',', array_map(static fn (GuaranteeType $t): string => $t->value, $this->minGuaranteeTypes)) ?: null,
-            'cancellationPolicyIds' => implode(',', $this->cancellationPolicyIds) ?: null,
-            'noShowPolicyIds' => implode(',', $this->noShowPolicyIds) ?: null,
+            'minGuaranteeTypes' => Query::csv($this->minGuaranteeTypes),
+            'cancellationPolicyIds' => Query::csv($this->cancellationPolicyIds),
+            'noShowPolicyIds' => Query::csv($this->noShowPolicyIds),
             'isDerived' => $this->isDerived,
-            'derivationLevelFilter' => implode(',', $this->derivationLevelFilter) ?: null,
+            'derivationLevelFilter' => Query::csv($this->derivationLevelFilter),
             'includeArchived' => $this->includeArchived,
         ], static fn (mixed $value): bool => $value !== null);
     }

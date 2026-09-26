@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Finance\Invoice\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class PreviewInvoiceRequest extends Request
 {
@@ -29,7 +30,7 @@ final readonly class PreviewInvoiceRequest extends Request
     {
         return array_filter([
             'folioId' => $this->folioId,
-            'expand' => implode(',', $this->expand) ?: null,
+            'expand' => Query::csv($this->expand),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

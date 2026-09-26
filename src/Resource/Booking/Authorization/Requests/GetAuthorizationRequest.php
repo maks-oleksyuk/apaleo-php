@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Authorization\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class GetAuthorizationRequest extends Request
 {
@@ -27,6 +28,6 @@ final readonly class GetAuthorizationRequest extends Request
 
     public function query(): array
     {
-        return array_filter(['expand' => implode(',', $this->expand) ?: null], static fn (mixed $value): bool => $value !== null);
+        return array_filter(['expand' => Query::csv($this->expand)], static fn (mixed $value): bool => $value !== null);
     }
 }

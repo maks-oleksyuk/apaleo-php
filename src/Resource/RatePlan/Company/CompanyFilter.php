@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Company;
 
+use Oleksyuk\Apaleo\Support\Query;
+
 final readonly class CompanyFilter
 {
     /**
@@ -22,8 +24,8 @@ final readonly class CompanyFilter
     {
         return array_filter([
             'propertyId' => $this->propertyId,
-            'ratePlanIds' => implode(',', $this->ratePlanIds) ?: null,
-            'corporateCodes' => implode(',', $this->corporateCodes) ?: null,
+            'ratePlanIds' => Query::csv($this->ratePlanIds),
+            'corporateCodes' => Query::csv($this->corporateCodes),
             'textSearch' => $this->textSearch,
         ], static fn (mixed $value): bool => $value !== null);
     }

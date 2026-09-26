@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Finance\Payment\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\PaymentStatus;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListPaymentsRequest extends Request
 {
@@ -35,10 +36,10 @@ final readonly class ListPaymentsRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'statusCodes' => implode(',', array_map(static fn (PaymentStatus $s): string => $s->value, $this->statuses)) ?: null,
+            'statusCodes' => Query::csv($this->statuses),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
-            'expand' => implode(',', $this->expand) ?: null,
+            'expand' => Query::csv($this->expand),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

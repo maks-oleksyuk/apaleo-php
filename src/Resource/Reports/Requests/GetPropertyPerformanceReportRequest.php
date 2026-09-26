@@ -9,6 +9,7 @@ use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class GetPropertyPerformanceReportRequest extends Request
 {
@@ -55,16 +56,16 @@ final readonly class GetPropertyPerformanceReportRequest extends Request
             'propertyId' => $this->propertyId,
             'from' => $this->from->format('Y-m-d'),
             'to' => $this->to->format('Y-m-d'),
-            'companyIds' => implode(',', $this->companyIds) ?: null,
-            'ratePlanIds' => implode(',', $this->ratePlanIds) ?: null,
-            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
-            'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
-            'timeSliceDefinitionIds' => implode(',', $this->timeSliceDefinitionIds) ?: null,
-            'channelCodes' => implode(',', array_map(static fn (ChannelCode $c): string => $c->value, $this->channelCodes)) ?: null,
-            'sources' => implode(',', $this->sources) ?: null,
-            'marketSegmentIds' => implode(',', $this->marketSegmentIds) ?: null,
+            'companyIds' => Query::csv($this->companyIds),
+            'ratePlanIds' => Query::csv($this->ratePlanIds),
+            'unitGroupTypes' => Query::csv($this->unitGroupTypes),
+            'unitGroupIds' => Query::csv($this->unitGroupIds),
+            'timeSliceDefinitionIds' => Query::csv($this->timeSliceDefinitionIds),
+            'channelCodes' => Query::csv($this->channelCodes),
+            'sources' => Query::csv($this->sources),
+            'marketSegmentIds' => Query::csv($this->marketSegmentIds),
             'travelPurpose' => $this->travelPurpose?->value,
-            'expand' => implode(',', $this->expand) ?: null,
+            'expand' => Query::csv($this->expand),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

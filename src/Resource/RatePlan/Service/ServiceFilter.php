@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\RatePlan\Service;
 
 use Oleksyuk\Apaleo\Resource\RatePlan\Shared\Enum\ServiceType;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ServiceFilter
 {
@@ -28,8 +29,8 @@ final readonly class ServiceFilter
             'propertyId' => $this->propertyId,
             'textSearch' => $this->textSearch,
             'onlySoldAsExtras' => $this->onlySoldAsExtras,
-            'channelCodes' => implode(',', array_map(static fn (ChannelCode $c): string => $c->value, $this->channelCodes)) ?: null,
-            'serviceTypes' => implode(',', array_map(static fn (ServiceType $t): string => $t->value, $this->serviceTypes)) ?: null,
+            'channelCodes' => Query::csv($this->channelCodes),
+            'serviceTypes' => Query::csv($this->serviceTypes),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Account\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListAccountsRequest extends Request
 {
@@ -27,7 +28,7 @@ final readonly class ListAccountsRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'accountCodes' => implode(',', $this->accountCodes) ?: null,
+            'accountCodes' => Query::csv($this->accountCodes),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

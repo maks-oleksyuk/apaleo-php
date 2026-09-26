@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Availability\Unit\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListAvailableUnitsRequest extends Request
 {
@@ -42,7 +43,7 @@ final readonly class ListAvailableUnitsRequest extends Request
             'to' => $this->to->format(\DateTimeInterface::ATOM),
             'includeOutOfService' => $this->includeOutOfService,
             'unitCondition' => $this->unitCondition?->value,
-            'unitAttributeIds' => implode(',', $this->unitAttributeIds) ?: null,
+            'unitAttributeIds' => Query::csv($this->unitAttributeIds),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
         ], static fn (mixed $value): bool => $value !== null);

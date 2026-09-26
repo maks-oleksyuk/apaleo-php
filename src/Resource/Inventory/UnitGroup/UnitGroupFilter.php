@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Resource\Inventory\UnitGroup;
 
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class UnitGroupFilter
 {
@@ -19,7 +20,7 @@ final readonly class UnitGroupFilter
     {
         return array_filter([
             'propertyId' => $this->propertyId,
-            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
+            'unitGroupTypes' => Query::csv($this->unitGroupTypes),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

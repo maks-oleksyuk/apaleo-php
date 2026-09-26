@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class GetReservationOffersRequest extends Request
 {
@@ -44,13 +45,13 @@ final readonly class GetReservationOffersRequest extends Request
             'arrival' => $this->arrival?->format('Y-m-d'),
             'departure' => $this->departure?->format('Y-m-d'),
             'adults' => $this->adults,
-            'childrenAges' => implode(',', $this->childrenAges) ?: null,
+            'childrenAges' => Query::csv($this->childrenAges),
             'channelCode' => $this->channelCode?->value,
             'promoCode' => $this->promoCode,
             'corporateCode' => $this->corporateCode,
             'requote' => $this->requote,
             'includeUnavailable' => $this->includeUnavailable,
-            'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
+            'unitGroupIds' => Query::csv($this->unitGroupIds),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

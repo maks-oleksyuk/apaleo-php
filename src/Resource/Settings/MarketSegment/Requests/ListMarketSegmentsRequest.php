@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Settings\MarketSegment\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListMarketSegmentsRequest extends Request
 {
@@ -29,7 +30,7 @@ final readonly class ListMarketSegmentsRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
+            'propertyIds' => Query::csv($this->propertyIds),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
         ], static fn (mixed $value): bool => $value !== null);

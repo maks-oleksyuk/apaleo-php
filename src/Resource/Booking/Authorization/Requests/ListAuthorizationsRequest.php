@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Authorization\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\AuthorizationFilter;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListAuthorizationsRequest extends Request
 {
@@ -38,8 +39,8 @@ final readonly class ListAuthorizationsRequest extends Request
             ...$this->filter->toQuery(),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
-            'sort' => implode(',', $this->sort) ?: null,
-            'expand' => implode(',', $this->expand) ?: null,
+            'sort' => Query::csv($this->sort),
+            'expand' => Query::csv($this->expand),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

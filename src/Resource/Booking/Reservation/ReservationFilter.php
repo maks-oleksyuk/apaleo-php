@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\DateFilter;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\ReservationStatus;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ReservationFilter
 {
@@ -58,28 +59,28 @@ final readonly class ReservationFilter
     {
         return array_filter([
             'bookingId' => $this->bookingId,
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'ratePlanIds' => implode(',', $this->ratePlanIds) ?: null,
-            'companyIds' => implode(',', $this->companyIds) ?: null,
-            'unitIds' => implode(',', $this->unitIds) ?: null,
-            'unitGroupIds' => implode(',', $this->unitGroupIds) ?: null,
-            'unitGroupTypes' => implode(',', array_map(static fn (UnitGroupType $t): string => $t->value, $this->unitGroupTypes)) ?: null,
-            'blockIds' => implode(',', $this->blockIds) ?: null,
-            'marketSegmentIds' => implode(',', $this->marketSegmentIds) ?: null,
-            'status' => implode(',', array_map(static fn (ReservationStatus $s): string => $s->value, $this->status)) ?: null,
+            'propertyIds' => Query::csv($this->propertyIds),
+            'ratePlanIds' => Query::csv($this->ratePlanIds),
+            'companyIds' => Query::csv($this->companyIds),
+            'unitIds' => Query::csv($this->unitIds),
+            'unitGroupIds' => Query::csv($this->unitGroupIds),
+            'unitGroupTypes' => Query::csv($this->unitGroupTypes),
+            'blockIds' => Query::csv($this->blockIds),
+            'marketSegmentIds' => Query::csv($this->marketSegmentIds),
+            'status' => Query::csv($this->status),
             'dateFilter' => $this->dateFilter?->value,
             'from' => $this->from?->format(\DateTimeInterface::ATOM),
             'to' => $this->to?->format(\DateTimeInterface::ATOM),
-            'channelCode' => implode(',', array_map(static fn (ChannelCode $c): string => $c->value, $this->channelCode)) ?: null,
-            'sources' => implode(',', $this->sources) ?: null,
-            'validationMessageCategory' => implode(',', $this->validationMessageCategory) ?: null,
+            'channelCode' => Query::csv($this->channelCode),
+            'sources' => Query::csv($this->sources),
+            'validationMessageCategory' => Query::csv($this->validationMessageCategory),
             'externalCode' => $this->externalCode,
             'textSearch' => $this->textSearch,
-            'balanceFilter' => implode(',', $this->balanceFilter) ?: null,
+            'balanceFilter' => Query::csv($this->balanceFilter),
             'allFoliosHaveInvoice' => $this->allFoliosHaveInvoice,
             'isPreCheckedIn' => $this->isPreCheckedIn,
             'hasActivePaymentAccount' => $this->hasActivePaymentAccount,
-            'externalReferences' => implode(',', $this->externalReferences) ?: null,
+            'externalReferences' => Query::csv($this->externalReferences),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

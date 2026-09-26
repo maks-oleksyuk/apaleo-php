@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Settings\TimeSliceDefinition\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListTimeSliceDefinitionsRequest extends Request
 {
@@ -28,7 +29,7 @@ final readonly class ListTimeSliceDefinitionsRequest extends Request
     public function query(): array
     {
         return array_filter([
-            'expand' => implode(',', $this->expand) ?: null,
+            'expand' => Query::csv($this->expand),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Finance\Folio;
 
 use Oleksyuk\Apaleo\Resource\Finance\Folio\Enum\FolioStatus;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FolioType;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class FolioFilter
 {
@@ -40,10 +41,10 @@ final readonly class FolioFilter
     public function toQuery(): array
     {
         return array_filter([
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'companyIds' => implode(',', $this->companyIds) ?: null,
-            'reservationIds' => implode(',', $this->reservationIds) ?: null,
-            'bookingIds' => implode(',', $this->bookingIds) ?: null,
+            'propertyIds' => Query::csv($this->propertyIds),
+            'companyIds' => Query::csv($this->companyIds),
+            'reservationIds' => Query::csv($this->reservationIds),
+            'bookingIds' => Query::csv($this->bookingIds),
             'type' => $this->type?->value,
             'status' => $this->status?->value,
             'isEmpty' => $this->isEmpty,
@@ -56,7 +57,7 @@ final readonly class FolioFilter
             'updatedTo' => $this->updatedTo?->format(\DateTimeInterface::ATOM),
             'externalFolioCode' => $this->externalFolioCode,
             'textSearch' => $this->textSearch,
-            'balanceFilter' => implode(',', $this->balanceFilter) ?: null,
+            'balanceFilter' => Query::csv($this->balanceFilter),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

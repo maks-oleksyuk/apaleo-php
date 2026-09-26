@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Reports\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListCompanyInvoicesVatRequest extends Request
 {
@@ -33,8 +34,8 @@ final readonly class ListCompanyInvoicesVatRequest extends Request
     {
         return array_filter([
             'propertyId' => $this->propertyId,
-            'companyIds' => implode(',', $this->companyIds) ?: null,
-            'dateFilter' => implode(',', $this->dateFilter) ?: null,
+            'companyIds' => Query::csv($this->companyIds),
+            'dateFilter' => Query::csv($this->dateFilter),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

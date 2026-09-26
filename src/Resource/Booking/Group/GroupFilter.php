@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Group;
 
+use Oleksyuk\Apaleo\Support\Query;
+
 final readonly class GroupFilter
 {
     /** @param list<string> $propertyIds */
@@ -20,7 +22,7 @@ final readonly class GroupFilter
     {
         return array_filter([
             'textSearch' => $this->textSearch,
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
+            'propertyIds' => Query::csv($this->propertyIds),
             'from' => $this->from?->format(\DateTimeInterface::ATOM),
             'to' => $this->to?->format(\DateTimeInterface::ATOM),
             'hasActivePaymentAccount' => $this->hasActivePaymentAccount,

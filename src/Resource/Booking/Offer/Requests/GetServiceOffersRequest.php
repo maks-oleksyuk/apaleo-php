@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Offer\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class GetServiceOffersRequest extends Request
 {
@@ -40,7 +41,7 @@ final readonly class GetServiceOffersRequest extends Request
             'departure' => $this->departure->format('Y-m-d'),
             'adults' => $this->adults,
             'channelCode' => $this->channelCode?->value,
-            'childrenAges' => implode(',', $this->childrenAges) ?: null,
+            'childrenAges' => Query::csv($this->childrenAges),
             'onlyDefaultDates' => $this->onlyDefaultDates,
             'includeUnavailable' => $this->includeUnavailable,
         ], static fn (mixed $value): bool => $value !== null);

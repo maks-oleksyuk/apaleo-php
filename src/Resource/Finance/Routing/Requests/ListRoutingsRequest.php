@@ -7,6 +7,7 @@ namespace Oleksyuk\Apaleo\Resource\Finance\Routing\Requests;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Resource\Finance\Routing\RoutingFilter;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class ListRoutingsRequest extends Request
 {
@@ -34,7 +35,7 @@ final readonly class ListRoutingsRequest extends Request
             ...$this->filter->toQuery(),
             'pageNumber' => $this->pageNumber,
             'pageSize' => $this->pageSize,
-            'expand' => implode(',', $this->expand) ?: null,
+            'expand' => Query::csv($this->expand),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }

@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Finance\Invoice;
 
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceRecipientType;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\Enum\InvoiceStatus;
+use Oleksyuk\Apaleo\Support\Query;
 
 final readonly class InvoiceFilter
 {
@@ -44,13 +45,13 @@ final readonly class InvoiceFilter
             'checkedOutOnAccountsReceivable' => $this->checkedOutOnAccountsReceivable,
             'recipientType' => $this->recipientType?->value,
             'nameSearch' => $this->nameSearch,
-            'propertyIds' => implode(',', $this->propertyIds) ?: null,
-            'reservationIds' => implode(',', $this->reservationIds) ?: null,
-            'bookingIds' => implode(',', $this->bookingIds) ?: null,
-            'folioIds' => implode(',', $this->folioIds) ?: null,
-            'companyIds' => implode(',', $this->companyIds) ?: null,
-            'dateFilter' => implode(',', $this->dateFilter) ?: null,
-            'outstandingPaymentFilter' => implode(',', $this->outstandingPaymentFilter) ?: null,
+            'propertyIds' => Query::csv($this->propertyIds),
+            'reservationIds' => Query::csv($this->reservationIds),
+            'bookingIds' => Query::csv($this->bookingIds),
+            'folioIds' => Query::csv($this->folioIds),
+            'companyIds' => Query::csv($this->companyIds),
+            'dateFilter' => Query::csv($this->dateFilter),
+            'outstandingPaymentFilter' => Query::csv($this->outstandingPaymentFilter),
         ], static fn (mixed $value): bool => $value !== null);
     }
 }
