@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Http;
 
+/**
+ * Values may be enums (sent by value) and dates (sent as ISO 8601 date-times).
+ * For a date-only field, pass the 'Y-m-d' string instead.
+ */
 final class JsonPatch
 {
     /** @var list<array<string, mixed>> */

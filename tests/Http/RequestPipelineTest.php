@@ -15,8 +15,11 @@ use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
 use Oleksyuk\Apaleo\Exception\ApaleoValidationException;
 use Oleksyuk\Apaleo\Http\Enum\Method;
+use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
+use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\ReservationStatus;
+use Oleksyuk\Apaleo\Resource\Booking\Reservation\Requests\UpdateReservationRequest;
 use Oleksyuk\Apaleo\Tests\Support\FakeTokenProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -276,6 +279,33 @@ final class RequestPipelineTest extends TestCase
         $this->pipeline->send($request);
 
         self::assertSame('{"amount":{"amount":0.3,"currency":"EUR"},"percent":12.345}', (string) $this->lastRequest()->getBody());
+    }
+
+    public function testEnumsAndDatesInTheBodyAreSentAsTheirApiValues(): void
+    {
+        $this->httpClient->addResponse(new Response(204));
+        $patch = new JsonPatch()
+            ->replace('/status', ReservationStatus::Confirmed)
+            ->replace('/arrival', new \DateTimeImmutable('2026-10-01T15:00:00+02:00'))
+        ;
+
+        $this->pipeline->send(new UpdateReservationRequest('R1', $patch));
+
+        self::assertSame(
+            '[{"op":"replace","path":"\/status","value":"Confirmed"},{"op":"replace","path":"\/arrival","value":"2026-10-01T15:00:00+02:00"}]',
+            (string) $this->lastRequest()->getBody(),
+        );
+    }
+
+    public function testUnknownEnumObjectInTheBodyIsRejected(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        try {
+            $this->pipeline->send(new UpdateReservationRequest('R1', new JsonPatch()->replace('/status', ReservationStatus::Unknown)));
+        } finally {
+            self::assertFalse($this->httpClient->getLastRequest());
+        }
     }
 
     public function testTransportFailureMapsToTransportException(): void
