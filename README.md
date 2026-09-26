@@ -56,7 +56,7 @@ $apaleo = new ApaleoClient($httpClient, $requestFactory, $streamFactory, $tokenP
 
 ### Timeouts and retries
 
-The SDK doesn't retry on its own: that's the HTTP client's job. With `symfony/http-client`, this matches what `apaleo-bundle` sets up: a 10 s timeout, `429` retried for every method (honoring `Retry-After`), and `5xx`/transport errors retried only for `GET`/`HEAD`, because a `502` after a `POST` may still have been applied.
+The SDK doesn't retry on its own: that's the HTTP client's job. With `symfony/http-client`, this matches what `apaleo-bundle` sets up: a 10 s timeout, and `5xx`/transport errors retried only for `GET`/`HEAD`, because a `502` after a `POST` may still have been applied. `429` is deliberately not retried there: the client would sleep for whatever `Retry-After` says, uncapped. Catch `ApaleoRateLimitException` and use its `retryAfterSeconds` to decide whether to wait.
 
 ```php
 use Oleksyuk\Apaleo\ApaleoClient;
@@ -69,7 +69,7 @@ use Symfony\Component\HttpClient\RetryableHttpClient;
 $safe = ['GET', 'HEAD'];
 $http = new RetryableHttpClient(
     HttpClient::create(['timeout' => 10]),
-    new GenericRetryStrategy([0 => $safe, 429, 500 => $safe, 502 => $safe, 503 => $safe, 504 => $safe]),
+    new GenericRetryStrategy([0 => $safe, 500 => $safe, 502 => $safe, 503 => $safe, 504 => $safe]),
     maxRetries: 2,
 );
 $psr18 = new Psr18Client($http); // also serves as the PSR-17 request/stream factory
