@@ -12,6 +12,7 @@ final class FakeTokenProvider implements TokenProvider
 {
     public function getToken(bool $forceRefresh = false): AccessToken
     {
-        return new AccessToken('fake-token', new \DateTimeImmutable('+1 hour'));
+        // A distinct value after a forced refresh, so tests can tell which token a request carried.
+        return new AccessToken($forceRefresh ? 'fresh-token' : 'fake-token', new \DateTimeImmutable('+1 hour'));
     }
 }

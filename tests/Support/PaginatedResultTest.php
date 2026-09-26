@@ -45,6 +45,7 @@ final class PaginatedResultTest extends TestCase
         $result = new PaginatedResult(items: ['a'], totalCount: 1);
 
         $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage(PaginatedResult::class.' is read-only.');
 
         $result[0] = 'b';
     }
@@ -54,6 +55,7 @@ final class PaginatedResultTest extends TestCase
         $result = new PaginatedResult(items: ['a'], totalCount: 1);
 
         $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage(PaginatedResult::class.' is read-only.');
 
         unset($result[0]);
     }

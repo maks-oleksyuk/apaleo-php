@@ -15,6 +15,7 @@ use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -143,7 +144,7 @@ final class ClientCredentialsTokenProviderTest extends TestCase
 
         $request = $this->lastRequest();
         self::assertSame('POST', $request->getMethod());
-        self::assertStringContainsString('/connect/token', (string) $request->getUri());
+        self::assertSame('https://identity.apaleo.com/connect/token', (string) $request->getUri());
         self::assertSame('Basic '.base64_encode('client-id:client-secret'), $request->getHeaderLine('Authorization'));
         self::assertSame('application/x-www-form-urlencoded', $request->getHeaderLine('Content-Type'));
         self::assertSame('grant_type=client_credentials', (string) $request->getBody());
@@ -182,6 +183,75 @@ final class ClientCredentialsTokenProviderTest extends TestCase
         $this->expectException(ApaleoServerException::class);
 
         $this->provider->getToken();
+    }
+
+    public function testUsesTheConfiguredIdentityServer(): void
+    {
+        $factory = new Psr17Factory();
+        $provider = new ClientCredentialsTokenProvider($this->httpClient, $factory, $factory, 'client-id', 'client-secret', identityBaseUri: 'https://identity.example.test');
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{"access_token":"x","expires_in":60}'));
+
+        $provider->getToken();
+
+        self::assertSame('https://identity.example.test/connect/token', (string) $this->lastRequest()->getUri());
+    }
+
+    /** @param class-string<\Throwable> $exception */
+    #[DataProvider('provideErrorStatusMapsToItsExceptionCases')]
+    public function testErrorStatusMapsToItsException(int $status, string $exception): void
+    {
+        $this->httpClient->addResponse(new Response($status, ['Content-Type' => 'application/json'], '{}'));
+
+        try {
+            $this->provider->getToken();
+            self::fail("Expected {$exception}");
+        } catch (\Throwable $throwable) {
+            self::assertSame($throwable::class, $exception);
+        }
+    }
+
+    /** @return iterable<string, array{int, class-string<\Throwable>}> */
+    public static function provideErrorStatusMapsToItsExceptionCases(): iterable
+    {
+        yield '499' => [499, ApaleoAuthException::class];
+
+        yield '500' => [500, ApaleoServerException::class];
+    }
+
+    /** @param array<string, string> $body */
+    #[DataProvider('provideErrorMessageFallsBackToTheErrorCodeCases')]
+    public function testErrorMessageFallsBackToTheErrorCode(array $body, string $message): void
+    {
+        $this->httpClient->addResponse(new Response(400, ['Content-Type' => 'application/json'], (string) json_encode($body)));
+
+        $this->expectExceptionMessageMatches('/^'.preg_quote($message, '/').'$/');
+
+        $this->provider->getToken();
+    }
+
+    /** @return iterable<string, array{array<string, string>, string}> */
+    public static function provideErrorMessageFallsBackToTheErrorCodeCases(): iterable
+    {
+        yield 'error code only' => [['error' => 'invalid_client'], 'Failed to obtain Apaleo access token: invalid_client'];
+
+        yield 'nothing' => [[], 'Failed to obtain Apaleo access token'];
+    }
+
+    public function testTransportFailureKeepsTheClientMessage(): void
+    {
+        $factory = new Psr17Factory();
+        $client = new class implements ClientInterface {
+            public function sendRequest(RequestInterface $request): ResponseInterface
+            {
+                throw new class('dns failure') extends \RuntimeException implements ClientExceptionInterface {};
+            }
+        };
+        $provider = new ClientCredentialsTokenProvider($client, $factory, $factory, 'client-id', 'client-secret');
+
+        $this->expectException(ApaleoTransportException::class);
+        $this->expectExceptionMessage('Failed to reach Apaleo identity server: dns failure');
+
+        $provider->getToken();
     }
 
     public function testTransportFailureMapsToTransportException(): void

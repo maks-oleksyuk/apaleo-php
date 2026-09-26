@@ -10,6 +10,7 @@ use Nyholm\Psr7\Response;
 use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
+use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
@@ -95,7 +96,7 @@ final class RequestPipelineSendManyTest extends TestCase
         $pipeline->sendMany([$this->requestTo('/x', ['a' => 'b'])]);
 
         self::assertSame('GET', $seenMethod);
-        self::assertStringContainsString('/x', (string) $seenUrl);
+        self::assertSame('https://api.apaleo.com/x?a=b', $seenUrl);
         self::assertIsArray($seenOptions);
         $headers = $seenOptions['headers'] ?? [];
         self::assertIsArray($headers);
@@ -295,7 +296,7 @@ final class RequestPipelineSendManyTest extends TestCase
         $pipeline = new RequestPipeline(new MockClient(), $factory, $factory, $this->fakeTokenProvider(), asyncHttpClient: $asyncClient);
 
         $this->expectException(ApaleoTransportException::class);
-        $this->expectExceptionMessage('connection reset');
+        $this->expectExceptionMessage('Failed to reach Apaleo API: connection reset');
 
         $pipeline->sendMany([$this->requestTo('/one')]);
     }
@@ -308,6 +309,59 @@ final class RequestPipelineSendManyTest extends TestCase
         yield 'reading the body' => ['content'];
 
         yield 'reading the headers' => ['headers'];
+    }
+
+    public function testAsyncRetriesAfter401CarryTheRefreshedToken(): void
+    {
+        $seenTokens = [];
+        $asyncClient = new MockHttpClient(static function (string $method, string $url, array $options) use (&$seenTokens): MockResponse {
+            $headers = $options['headers'] ?? [];
+            \assert(\is_array($headers));
+            $seenTokens[] = array_values(array_filter($headers, static fn (mixed $header): bool => \is_string($header) && str_starts_with($header, 'Authorization:')));
+
+            return new MockResponse('{}', ['http_code' => \count($seenTokens) === 1 ? 401 : 200]);
+        });
+
+        $factory = new Psr17Factory();
+        $pipeline = new RequestPipeline(new MockClient(), $factory, $factory, $this->fakeTokenProvider(), asyncHttpClient: $asyncClient);
+
+        $pipeline->sendMany([$this->requestTo('/one')]);
+
+        self::assertSame([['Authorization: Bearer fake-token'], ['Authorization: Bearer fresh-token']], $seenTokens);
+    }
+
+    public function testAsync429CarriesRetryAfter(): void
+    {
+        $asyncClient = new MockHttpClient(new MockResponse('{}', ['http_code' => 429, 'response_headers' => ['Retry-After: 30']]));
+
+        $factory = new Psr17Factory();
+        $pipeline = new RequestPipeline(new MockClient(), $factory, $factory, $this->fakeTokenProvider(), asyncHttpClient: $asyncClient);
+
+        try {
+            $pipeline->sendMany([$this->requestTo('/one')]);
+            self::fail('Expected ApaleoRateLimitException');
+        } catch (ApaleoRateLimitException $apaleoRateLimitException) {
+            self::assertSame(30, $apaleoRateLimitException->retryAfterSeconds);
+        }
+    }
+
+    public function testEmptyRequestListWithAsyncClientFetchesNoToken(): void
+    {
+        $tokenProvider = new class implements TokenProvider {
+            public int $calls = 0;
+
+            public function getToken(bool $forceRefresh = false): AccessToken
+            {
+                ++$this->calls;
+
+                return new AccessToken('t', new \DateTimeImmutable('+1 hour'));
+            }
+        };
+        $factory = new Psr17Factory();
+        $pipeline = new RequestPipeline(new MockClient(), $factory, $factory, $tokenProvider, asyncHttpClient: new MockHttpClient());
+
+        self::assertSame([], $pipeline->sendMany([]));
+        self::assertSame(0, $tokenProvider->calls);
     }
 
     private function fakeTokenProvider(): TokenProvider

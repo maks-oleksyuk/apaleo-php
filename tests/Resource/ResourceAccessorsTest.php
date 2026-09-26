@@ -30,13 +30,15 @@ final class ResourceAccessorsTest extends TestCase
     {
         $resource = new $aggregate($this->createPipeline());
 
+        // Every method, not just public ones: an accessor that lost its public keyword must fail here.
         $accessors = array_filter(
-            new \ReflectionClass($resource)->getMethods(\ReflectionMethod::IS_PUBLIC),
+            new \ReflectionClass($resource)->getMethods(),
             static fn (\ReflectionMethod $method): bool => !$method->isConstructor(),
         );
         self::assertNotEmpty($accessors);
 
         foreach ($accessors as $accessor) {
+            self::assertTrue($accessor->isPublic(), $accessor->getName());
             $returnType = $accessor->getReturnType();
             self::assertInstanceOf(\ReflectionNamedType::class, $returnType);
             $subResource = $returnType->getName();

@@ -29,16 +29,23 @@ final class ApaleoClientTest extends TestCase
     {
         $client = $this->client();
 
-        foreach (new \ReflectionClass($client)->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+        // Every method, not just public ones: an accessor that lost its public keyword must fail here.
+        $accessors = 0;
+        foreach (new \ReflectionClass($client)->getMethods() as $method) {
             $returnType = $method->getReturnType();
-            if ($method->isStatic() || $method->getNumberOfParameters() > 0 || !$returnType instanceof \ReflectionNamedType || $returnType->isBuiltin()) {
+            if ($method->isStatic() || $method->isConstructor() || $method->getNumberOfParameters() > 0 || !$returnType instanceof \ReflectionNamedType || $returnType->isBuiltin()) {
                 continue;
             }
+
+            ++$accessors;
+            self::assertTrue($method->isPublic(), $method->getName());
 
             $resource = $returnType->getName();
             \assert(class_exists($resource));
             self::assertInstanceOf($resource, $method->invoke($client), $method->getName());
         }
+
+        self::assertSame(10, $accessors, 'one accessor per Apaleo API');
     }
 
     public function testSendReturnsTheDecodedBody(): void

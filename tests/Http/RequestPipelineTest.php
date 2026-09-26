@@ -8,6 +8,7 @@ use Http\Mock\Client as MockClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
+use Oleksyuk\Apaleo\Exception\ApaleoClientException;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
@@ -252,6 +253,7 @@ final class RequestPipelineTest extends TestCase
         };
 
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/^Failed to encode request body as JSON: \S/');
 
         $this->pipeline->send($request);
     }
@@ -386,6 +388,175 @@ final class RequestPipelineTest extends TestCase
         yield 'absent' => [[]];
 
         yield 'garbage' => [['Retry-After' => 'soon']];
+    }
+
+    public function testRequestGoesToTheBaseUriPlusEndpointWithItsQuery(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{"a":1,"b":2}'));
+
+        $data = $this->pipeline->send($this->requestWithQuery(['propertyId' => 'MUC']));
+
+        self::assertSame(['a' => 1, 'b' => 2], $data);
+        self::assertSame('GET', $this->lastRequest()->getMethod());
+        self::assertSame('https://api.apaleo.com/x?propertyId=MUC', (string) $this->lastRequest()->getUri());
+    }
+
+    public function testRequestWithoutQueryHasNoQuestionMark(): void
+    {
+        $this->httpClient->addResponse(new Response(204));
+
+        $this->pipeline->send($this->requestWithQuery([]));
+
+        self::assertSame('https://api.apaleo.com/x', (string) $this->lastRequest()->getUri());
+    }
+
+    public function testRetryAfter401CarriesTheRefreshedToken(): void
+    {
+        $this->httpClient->addResponse(new Response(401, ['Content-Type' => 'application/json'], '{}'));
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '{}'));
+
+        $this->pipeline->send($this->requestWithQuery([]));
+
+        $requests = $this->httpClient->getRequests();
+        self::assertCount(2, $requests);
+        self::assertSame('Bearer fake-token', $requests[0]->getHeaderLine('Authorization'));
+        self::assertSame('Bearer fresh-token', $requests[1]->getHeaderLine('Authorization'));
+    }
+
+    /** @param class-string<\Throwable> $exception */
+    #[DataProvider('provideStatusMapsToItsExceptionCases')]
+    public function testStatusMapsToItsException(int $status, string $exception): void
+    {
+        // 401 is retried once, so it needs a second response.
+        $this->httpClient->addResponse(new Response($status, ['Content-Type' => 'application/json'], '{"detail":"d"}'));
+        $this->httpClient->addResponse(new Response($status, ['Content-Type' => 'application/json'], '{"detail":"d"}'));
+
+        try {
+            $this->pipeline->send($this->requestWithQuery([]));
+            self::fail("Expected {$exception}");
+        } catch (\Throwable $throwable) {
+            self::assertSame($throwable::class, $exception);
+            self::assertSame($status, $throwable->getCode());
+        }
+    }
+
+    /** @return iterable<string, array{int, class-string<\Throwable>}> */
+    public static function provideStatusMapsToItsExceptionCases(): iterable
+    {
+        yield '400' => [400, ApaleoValidationException::class];
+
+        yield '401' => [401, ApaleoAuthException::class];
+
+        yield '402' => [402, ApaleoClientException::class];
+
+        yield '403' => [403, ApaleoAuthException::class];
+
+        yield '404' => [404, ApaleoNotFoundException::class];
+
+        yield '409' => [409, ApaleoClientException::class];
+
+        yield '421' => [421, ApaleoClientException::class];
+
+        yield '422' => [422, ApaleoValidationException::class];
+
+        yield '423' => [423, ApaleoClientException::class];
+
+        yield '429' => [429, ApaleoRateLimitException::class];
+
+        yield '499' => [499, ApaleoClientException::class];
+
+        yield '500' => [500, ApaleoServerException::class];
+    }
+
+    public function test422WithMessagesUsesTheFirstOneAsTheMessage(): void
+    {
+        $this->httpClient->addResponse(new Response(422, ['Content-Type' => 'application/json'], '{"title":"t","messages":[1,"A: first.","B: second."]}'));
+
+        try {
+            $this->pipeline->send($this->requestWithQuery([]));
+            self::fail('Expected ApaleoValidationException');
+        } catch (ApaleoValidationException $apaleoValidationException) {
+            self::assertSame(['A: first.', 'B: second.'], $apaleoValidationException->messages);
+            self::assertSame('A: first.', $apaleoValidationException->getMessage());
+        }
+    }
+
+    public function testMessagesAreIgnoredOutsideValidationStatuses(): void
+    {
+        $this->httpClient->addResponse(new Response(409, ['Content-Type' => 'application/json'], '{"detail":"conflict","messages":["m"]}'));
+
+        $this->expectExceptionMessage('conflict');
+
+        $this->pipeline->send($this->requestWithQuery([]));
+    }
+
+    public function testDetailWinsOverTitle(): void
+    {
+        $this->httpClient->addResponse(new Response(409, ['Content-Type' => 'application/json'], '{"title":"Conflict","detail":"Unit is occupied"}'));
+
+        $this->expectExceptionMessage('Unit is occupied');
+
+        $this->pipeline->send($this->requestWithQuery([]));
+    }
+
+    public function testJsonErrorWithoutDetailGetsAGenericMessage(): void
+    {
+        $this->httpClient->addResponse(new Response(500, ['Content-Type' => 'application/json'], '{"foo":1}'));
+
+        try {
+            $this->pipeline->send($this->requestWithQuery([]));
+            self::fail('Expected ApaleoServerException');
+        } catch (ApaleoServerException $apaleoServerException) {
+            self::assertSame('Apaleo API error (HTTP 500)', $apaleoServerException->getMessage());
+        }
+    }
+
+    public function testHtmlErrorBodyIsFlattenedIntoTheMessage(): void
+    {
+        $this->httpClient->addResponse(new Response(502, ['Content-Type' => 'text/html'], "<html>\n  <h1>Bad   Gateway</h1>\n</html>\n"));
+
+        try {
+            $this->pipeline->send($this->requestWithQuery([]));
+            self::fail('Expected ApaleoServerException');
+        } catch (ApaleoServerException $apaleoServerException) {
+            self::assertSame('Apaleo API error (HTTP 502): Bad Gateway', $apaleoServerException->getMessage());
+        }
+    }
+
+    public function testSendRawMapsA400ToAnException(): void
+    {
+        $this->httpClient->addResponse(new Response(400, ['Content-Type' => 'application/json'], '{"detail":"bad"}'));
+
+        $this->expectException(ApaleoValidationException::class);
+
+        $this->pipeline->sendRaw($this->requestWithQuery([]));
+    }
+
+    public function testMalformedSuccessBodyIsExcerptedIntoTheMessage(): void
+    {
+        $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '<html>oops</html>'));
+
+        $this->expectException(ApaleoUnexpectedResponseException::class);
+        $this->expectExceptionMessage('Apaleo API returned a non-JSON or malformed body (HTTP 200): oops');
+
+        $this->pipeline->send($this->requestWithQuery([]));
+    }
+
+    public function testTransportFailureKeepsTheClientMessage(): void
+    {
+        $client = new class implements ClientInterface {
+            public function sendRequest(RequestInterface $request): ResponseInterface
+            {
+                throw new class('connection refused') extends \RuntimeException implements ClientExceptionInterface {};
+            }
+        };
+        $factory = new Psr17Factory();
+        $pipeline = new RequestPipeline($client, $factory, $factory, new FakeTokenProvider());
+
+        $this->expectException(ApaleoTransportException::class);
+        $this->expectExceptionMessage('Failed to reach Apaleo API: connection refused');
+
+        $pipeline->send($this->requestWithQuery([]));
     }
 
     /** @param array<string, mixed> $query */

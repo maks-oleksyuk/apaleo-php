@@ -7,9 +7,11 @@ namespace Oleksyuk\Apaleo\Tests\Auth;
 use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\Psr16TokenCache;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesNamespace;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\Clock\MockClock;
 
 /**
  * @internal
@@ -53,6 +55,34 @@ final class Psr16TokenCacheTest extends TestCase
         $cache->set('key', ['value' => 'abc', 'expiresAt' => 'not a date at all']);
 
         self::assertNull(new Psr16TokenCache($cache)->get('key'));
+    }
+
+    /** @param array<string, string> $stored */
+    #[DataProvider('provideGetReturnsNullWhenAFieldIsMissingCases')]
+    public function testGetReturnsNullWhenAFieldIsMissing(array $stored): void
+    {
+        $cache = $this->inMemoryPsr16Cache();
+        $cache->set('key', $stored);
+
+        self::assertNull(new Psr16TokenCache($cache)->get('key'));
+    }
+
+    /** @return iterable<string, array{array<string, string>}> */
+    public static function provideGetReturnsNullWhenAFieldIsMissingCases(): iterable
+    {
+        yield 'no expiresAt' => [['value' => 'abc']];
+
+        yield 'no value' => [['expiresAt' => '2026-10-01T12:00:00+00:00']];
+    }
+
+    public function testAnAlreadyExpiredTokenIsStoredForOneSecond(): void
+    {
+        $cache = new InMemoryPsr16Cache();
+        $clock = new MockClock('2026-10-01 12:00:00');
+
+        new Psr16TokenCache($cache, $clock)->set('key', new AccessToken('abc', new \DateTimeImmutable('2026-10-01 11:59:00')));
+
+        self::assertSame(1, $cache->lastTtl);
     }
 
     public function testSetPassesTtlMatchingTokenExpiry(): void

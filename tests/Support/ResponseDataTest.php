@@ -48,6 +48,7 @@ final class ResponseDataTest extends TestCase
     #[TestWith(['   '])]
     #[TestWith(['tomorrow'])]
     #[TestWith(['2026-09-22'])]
+    #[TestWith(['next monday 2026-09-22T10:00'])]
     public function testDateTimeRejectsNonIsoValues(string $value): void
     {
         $this->expectException(ApaleoUnexpectedResponseException::class);
@@ -116,6 +117,48 @@ final class ResponseDataTest extends TestCase
 
         $this->expectException(ApaleoUnexpectedResponseException::class);
         ResponseData::float(['n' => '2.5'], 'n');
+    }
+
+    #[TestWith([1.0])]
+    #[TestWith([true])]
+    #[TestWith([[1]])]
+    public function testIntRejectsNonIntTypesEvenWhenIntLike(mixed $value): void
+    {
+        $this->expectException(ApaleoUnexpectedResponseException::class);
+
+        ResponseData::int(['n' => $value], 'n');
+    }
+
+    #[TestWith([1.0])]
+    #[TestWith([true])]
+    public function testNullableIntRejectsNonIntTypesEvenWhenIntLike(mixed $value): void
+    {
+        $this->expectException(ApaleoUnexpectedResponseException::class);
+
+        ResponseData::nullableInt(['n' => $value], 'n');
+    }
+
+    public function testNullableFloatTurnsIntsIntoFloats(): void
+    {
+        self::assertSame(5.0, ResponseData::nullableFloat(['n' => 5], 'n'));
+    }
+
+    public function testStringListsDropNonStringsAndTrim(): void
+    {
+        self::assertSame(['a', 'b'], ResponseData::stringList(['l' => [5, ' a ', null, 'b']], 'l'));
+        self::assertSame(['a', 'b'], ResponseData::stringListOrEmpty(['l' => [5, ' a ', null, 'b']], 'l'));
+    }
+
+    public function testNestedReturnsTheObjectOrEmpty(): void
+    {
+        self::assertSame(['a' => 1, 'b' => 2], ResponseData::nested(['o' => ['a' => 1, 'b' => 2, 0 => 'dropped']], 'o'));
+        self::assertSame([], ResponseData::nested(['o' => 'x'], 'o'));
+    }
+
+    public function testNestedListAndLocalizedTextKeepEveryItem(): void
+    {
+        self::assertSame([['a' => 1], ['a' => 2]], ResponseData::nestedList(['l' => [['a' => 1], ['a' => 2]]], 'l'));
+        self::assertSame(['en' => 'Hi', 'de' => 'Hallo'], ResponseData::localizedText(['t' => ['en' => 'Hi', 'de' => 'Hallo']], 't'));
     }
 
     public function testNullableFloatIsNullWhenAbsentOrNotANumber(): void
