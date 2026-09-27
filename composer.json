@@ -27,13 +27,10 @@
     "require": {
         "php": "^8.4",
         "ext-mbstring": "*",
-        "php-http/discovery": "^1.20",
         "psr/clock": "^1.0",
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.1",
-        "psr/http-message": "^2.0",
-        "psr/simple-cache": "^3.0",
-        "symfony/http-client-contracts": "^3.0"
+        "psr/http-message": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95.27",
@@ -41,11 +38,13 @@
         "php-http/mock-client": "^1.6.1",
         "phpstan/phpstan": "^2.2.14",
         "phpunit/phpunit": "^13.3.4",
+        "psr/simple-cache": "^3.0",
         "rector/rector": "^2.6.7",
         "symfony/clock": "^8.0",
         "symfony/http-client": "^8.0"
     },
     "suggest": {
+        "psr/simple-cache": "Required by Psr16TokenCache to share the access token through a PSR-16 cache.",
         "symfony/http-client": "Lets RequestPipeline::sendMany() dispatch requests concurrently instead of one by one."
     },
     "minimum-stability": "stable",
@@ -62,7 +61,7 @@
     },
     "config": {
         "allow-plugins": {
-            "php-http/discovery": true
+            "php-http/discovery": false
         },
         "sort-packages": true
     }

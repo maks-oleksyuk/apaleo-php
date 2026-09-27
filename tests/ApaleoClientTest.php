@@ -74,11 +74,6 @@ final class ApaleoClientTest extends TestCase
         self::assertSame([['n' => 1], ['n' => 2]], $client->sendMany([$this->request(), $this->request()]));
     }
 
-    public function testCreateDiscoversAnHttpClientAndFactories(): void
-    {
-        self::assertInstanceOf(ApaleoClient::class, ApaleoClient::create('client-id', 'client-secret'));
-    }
-
     private function client(): ApaleoClient
     {
         $this->httpClient = new MockClient();

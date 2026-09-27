@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo;
 
-use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
-use Oleksyuk\Apaleo\Auth\ClientCredentialsTokenProvider;
-use Oleksyuk\Apaleo\Auth\InMemoryTokenCache;
-use Oleksyuk\Apaleo\Auth\TokenCache;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -126,36 +121,5 @@ final readonly class ApaleoClient
     public function sendMany(array $requests): array
     {
         return $this->pipeline->sendMany($requests);
-    }
-
-    /**
-     * Convenience constructor for the common case: auto-discovers a PSR-18 client and PSR-17
-     * factories (via php-http/discovery) instead of requiring the caller to wire them up.
-     * Requires an actual PSR-18 client implementation (e.g. symfony/http-client,
-     * guzzlehttp/guzzle) to be installed — discovery can't invent one.
-     */
-    public static function create(
-        string $clientId,
-        #[\SensitiveParameter]
-        string $clientSecret,
-        TokenCache $tokenCache = new InMemoryTokenCache(),
-        string $baseUri = RequestPipeline::DEFAULT_BASE_URI,
-    ): self {
-        $httpClient = Psr18ClientDiscovery::find();
-        $requestFactory = Psr17FactoryDiscovery::findRequestFactory();
-        $streamFactory = Psr17FactoryDiscovery::findStreamFactory();
-
-        $tokenProvider = new ClientCredentialsTokenProvider(
-            $httpClient,
-            $requestFactory,
-            $streamFactory,
-            $clientId,
-            $clientSecret,
-            $tokenCache,
-        );
-
-        // $asyncHttpClient isn't auto-discovered: it would silently run through a second,
-        // differently-configured client. Pass it to the main constructor explicitly if you want it.
-        return new self($httpClient, $requestFactory, $streamFactory, $tokenProvider, $baseUri);
     }
 }

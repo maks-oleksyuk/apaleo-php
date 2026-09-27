@@ -18,17 +18,19 @@ Framework-agnostic PHP SDK for the [Apaleo](//apaleo.com) hotel PMS API.
 composer require oleksyuk/apaleo-php
 ```
 
-Requires an actual [PSR-18](https://www.php-fig.org/psr/psr-18/) HTTP client (e.g. `symfony/http-client`, `guzzlehttp/guzzle`) to be installed — [`php-http/discovery`](https://github.com/php-http/discovery) picks it up automatically, it doesn't invent one.
+Bring any [PSR-18](https://www.php-fig.org/psr/psr-18/) HTTP client and [PSR-17](https://www.php-fig.org/psr/psr-17/) factories, e.g. `symfony/http-client` + `nyholm/psr7`, or `guzzlehttp/guzzle`.
 
 ## Usage
 
 ```php
 use Oleksyuk\Apaleo\ApaleoClient;
+use Oleksyuk\Apaleo\Auth\ClientCredentialsTokenProvider;
+use Symfony\Component\HttpClient\Psr18Client;
 
-$apaleo = ApaleoClient::create(
-    clientId: 'your-client-id',
-    clientSecret: 'your-client-secret',
-);
+$http = new Psr18Client(); // also serves as the PSR-17 request/stream factory
+
+$tokenProvider = new ClientCredentialsTokenProvider($http, $http, $http, 'your-client-id', 'your-client-secret');
+$apaleo = new ApaleoClient($http, $http, $http, $tokenProvider);
 
 $properties = $apaleo->inventory()->properties()->list();
 
@@ -37,22 +39,7 @@ foreach ($properties as $property) {
 }
 ```
 
-`ApaleoClient::create()` auto-discovers a PSR-18 client and PSR-17 factories for you. To wire your own instead (e.g., inside a DI container), use the constructor directly:
-
-```php
-use Oleksyuk\Apaleo\ApaleoClient;
-use Oleksyuk\Apaleo\Auth\ClientCredentialsTokenProvider;
-
-$tokenProvider = new ClientCredentialsTokenProvider(
-    $httpClient,
-    $requestFactory,
-    $streamFactory,
-    clientId: 'your-client-id',
-    clientSecret: 'your-client-secret',
-);
-
-$apaleo = new ApaleoClient($httpClient, $requestFactory, $streamFactory, $tokenProvider);
-```
+With Guzzle, pass `new GuzzleHttp\Client()` as the client and `new GuzzleHttp\Psr7\HttpFactory()` as both factories. Inside a DI container, wire the same services the container already has.
 
 ### Timeouts and retries
 
@@ -84,13 +71,15 @@ See [`apaleo-bundle`](//github.com/maks-oleksyuk/apaleo-bundle) for a ready-made
 
 ### Token cache
 
-`ApaleoClient::create()` keeps the access token in memory, which under PHP-FPM means a new token request on every HTTP request. Share it through any PSR-16 cache:
+By default the access token is kept in memory, which under PHP-FPM means a new token request on every HTTP request. Share it through any PSR-16 cache (needs `psr/simple-cache`, which PSR-16 implementations such as `symfony/cache` don't always pull in):
 
 ```php
 use Oleksyuk\Apaleo\Auth\Psr16TokenCache;
 
-$apaleo = ApaleoClient::create('your-client-id', 'your-client-secret', new Psr16TokenCache($psr16Cache));
+$tokenProvider = new ClientCredentialsTokenProvider($http, $http, $http, 'your-client-id', 'your-client-secret', new Psr16TokenCache($psr16Cache));
 ```
+
+Or implement `TokenCache` on top of your framework's own storage.
 
 On a `401` the SDK drops the cached token, fetches a new one and retries the request at once.
 
