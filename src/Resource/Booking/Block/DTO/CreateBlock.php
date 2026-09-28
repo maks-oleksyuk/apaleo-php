@@ -12,8 +12,8 @@ final readonly class CreateBlock
     public function __construct(
         public string $groupId,
         public string $ratePlanId,
-        public string $from,
-        public string $to,
+        public \DateTimeImmutable $from,
+        public \DateTimeImmutable $to,
         public MonetaryValue $grossDailyRate,
         public array $timeSlices = [],
         public ?int $blockedUnits = null,
@@ -28,8 +28,8 @@ final readonly class CreateBlock
         return array_filter([
             'groupId' => $this->groupId,
             'ratePlanId' => $this->ratePlanId,
-            'from' => $this->from,
-            'to' => $this->to,
+            'from' => $this->from->format('Y-m-d'),
+            'to' => $this->to->format('Y-m-d'),
             'grossDailyRate' => $this->grossDailyRate->toArray(),
             'timeSlices' => $this->timeSlices !== [] ? array_map(static fn (CreateBlockTimeSlice $s): array => $s->toArray(), $this->timeSlices) : null,
             'blockedUnits' => $this->blockedUnits,

@@ -12,8 +12,8 @@ final readonly class ReplaceBlock
 {
     /** @param list<CreateBlockTimeSlice> $timeSlices */
     public function __construct(
-        public string $from,
-        public string $to,
+        public \DateTimeImmutable $from,
+        public \DateTimeImmutable $to,
         public MonetaryValue $grossDailyRate,
         public array $timeSlices,
         public ?string $marketSegmentId = null,
@@ -27,8 +27,8 @@ final readonly class ReplaceBlock
     public function toArray(): array
     {
         return array_filter([
-            'from' => $this->from,
-            'to' => $this->to,
+            'from' => $this->from->format('Y-m-d'),
+            'to' => $this->to->format('Y-m-d'),
             'grossDailyRate' => $this->grossDailyRate->toArray(),
             'timeSlices' => array_map(static fn (CreateBlockTimeSlice $s): array => $s->toArray(), $this->timeSlices),
             'marketSegmentId' => $this->marketSegmentId,

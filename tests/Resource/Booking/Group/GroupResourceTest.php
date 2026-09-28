@@ -185,8 +185,8 @@ final class GroupResourceTest extends TestCase
 
         $created = $this->groups->pickUpReservations('XPGMSXGF', [new PickUpReservation(
             blockId: 'MUC-HSGTDG',
-            arrival: '2026-09-20',
-            departure: '2026-09-22',
+            arrival: new \DateTimeImmutable('2026-09-20'),
+            departure: new \DateTimeImmutable('2026-09-22'),
             adults: 1,
         )]);
 

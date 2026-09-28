@@ -124,8 +124,8 @@ final class BookingDomainResourceTest extends TestCase
         $created = $this->bookings->create(new CreateBooking(
             booker: new Booker('Doe', firstName: 'John'),
             reservations: [new CreateReservation(
-                arrival: '2026-09-20',
-                departure: '2026-09-22',
+                arrival: new \DateTimeImmutable('2026-09-20'),
+                departure: new \DateTimeImmutable('2026-09-22'),
                 adults: 1,
                 channelCode: ChannelCode::Direct,
                 timeSlices: [new CreateReservationTimeSlice('MUC-NONREF_SGL')],
@@ -154,8 +154,8 @@ final class BookingDomainResourceTest extends TestCase
         $this->bookings->create(new CreateBooking(
             booker: new Booker('Doe'),
             reservations: [new CreateReservation(
-                arrival: '2026-09-20',
-                departure: '2026-09-22',
+                arrival: new \DateTimeImmutable('2026-09-20'),
+                departure: new \DateTimeImmutable('2026-09-22'),
                 adults: 1,
                 channelCode: ChannelCode::Direct,
                 timeSlices: [new CreateReservationTimeSlice('MUC-NONREF_SGL')],
@@ -186,8 +186,8 @@ final class BookingDomainResourceTest extends TestCase
         ])));
 
         $created = $this->bookings->addReservations('XPGMSXGF', [new CreateReservation(
-            arrival: '2026-09-24',
-            departure: '2026-09-25',
+            arrival: new \DateTimeImmutable('2026-09-24'),
+            departure: new \DateTimeImmutable('2026-09-25'),
             adults: 1,
             channelCode: ChannelCode::Direct,
             timeSlices: [new CreateReservationTimeSlice('MUC-NONREF_SGL')],
@@ -206,8 +206,8 @@ final class BookingDomainResourceTest extends TestCase
         $this->httpClient->addResponse(new Response(201, ['Content-Type' => 'application/json'], (string) json_encode(['reservationIds' => []])));
 
         $this->bookings->addReservations('XPGMSXGF', [new CreateReservation(
-            arrival: '2026-09-24',
-            departure: '2026-09-25',
+            arrival: new \DateTimeImmutable('2026-09-24'),
+            departure: new \DateTimeImmutable('2026-09-25'),
             adults: 1,
             channelCode: ChannelCode::Direct,
             timeSlices: [new CreateReservationTimeSlice('MUC-NONREF_SGL')],

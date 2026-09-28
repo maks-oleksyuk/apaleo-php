@@ -11,8 +11,8 @@ final readonly class DesiredStayDetails
      * @param list<DesiredTimeSlice> $timeSlices
      */
     public function __construct(
-        public string $arrival,
-        public string $departure,
+        public \DateTimeImmutable $arrival,
+        public \DateTimeImmutable $departure,
         public int $adults,
         public array $timeSlices,
         public array $childrenAges = [],
@@ -23,8 +23,8 @@ final readonly class DesiredStayDetails
     public function toArray(): array
     {
         return array_filter([
-            'arrival' => $this->arrival,
-            'departure' => $this->departure,
+            'arrival' => $this->arrival->format(\DateTimeInterface::ATOM),
+            'departure' => $this->departure->format(\DateTimeInterface::ATOM),
             'adults' => $this->adults,
             'childrenAges' => $this->childrenAges !== [] ? $this->childrenAges : null,
             'requote' => $this->requote,

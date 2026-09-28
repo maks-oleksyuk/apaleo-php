@@ -138,8 +138,8 @@ final class BlockResourceTest extends TestCase
         $id = $this->blocks->create(new CreateBlock(
             groupId: 'XPGMSXGF',
             ratePlanId: 'MUC-NONREF_SGL',
-            from: '2026-09-23',
-            to: '2026-09-26',
+            from: new \DateTimeImmutable('2026-09-23'),
+            to: new \DateTimeImmutable('2026-09-26'),
             grossDailyRate: new MonetaryValue(160.0, 'EUR'),
             timeSlices: [new CreateBlockTimeSlice(3)],
         ));
@@ -179,8 +179,8 @@ final class BlockResourceTest extends TestCase
         $this->httpClient->addResponse(new Response(204));
 
         $this->blocks->amend('MUC-HSGTDG', new ReplaceBlock(
-            from: '2026-09-23',
-            to: '2026-09-27',
+            from: new \DateTimeImmutable('2026-09-23'),
+            to: new \DateTimeImmutable('2026-09-27'),
             grossDailyRate: new MonetaryValue(170.0, 'EUR'),
             timeSlices: [new CreateBlockTimeSlice(4)],
         ));

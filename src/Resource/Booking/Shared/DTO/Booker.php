@@ -19,12 +19,12 @@ final readonly class Booker
         public ?PersonAddress $address = null,
         public ?string $nationalityCountryCode = null,
         public ?string $identificationNumber = null,
-        public ?string $identificationIssueDate = null,
-        public ?string $identificationExpiryDate = null,
+        public ?\DateTimeImmutable $identificationIssueDate = null,
+        public ?\DateTimeImmutable $identificationExpiryDate = null,
         public ?string $identificationType = null,
         public ?PersonCompany $company = null,
         public ?string $preferredLanguage = null,
-        public ?string $birthDate = null,
+        public ?\DateTimeImmutable $birthDate = null,
         public ?string $birthPlace = null,
     ) {}
 
@@ -42,12 +42,12 @@ final readonly class Booker
             address: ResponseData::nullableNested($data, 'address', PersonAddress::fromArray(...)),
             nationalityCountryCode: ResponseData::nullableString($data, 'nationalityCountryCode'),
             identificationNumber: ResponseData::nullableString($data, 'identificationNumber'),
-            identificationIssueDate: ResponseData::nullableString($data, 'identificationIssueDate'),
-            identificationExpiryDate: ResponseData::nullableString($data, 'identificationExpiryDate'),
+            identificationIssueDate: ResponseData::nullableDate($data, 'identificationIssueDate'),
+            identificationExpiryDate: ResponseData::nullableDate($data, 'identificationExpiryDate'),
             identificationType: ResponseData::nullableString($data, 'identificationType'),
             company: ResponseData::nullableNested($data, 'company', PersonCompany::fromArray(...)),
             preferredLanguage: ResponseData::nullableString($data, 'preferredLanguage'),
-            birthDate: ResponseData::nullableString($data, 'birthDate'),
+            birthDate: ResponseData::nullableDate($data, 'birthDate'),
             birthPlace: ResponseData::nullableString($data, 'birthPlace'),
         );
     }
@@ -66,12 +66,12 @@ final readonly class Booker
             'address' => $this->address?->toArray(),
             'nationalityCountryCode' => $this->nationalityCountryCode,
             'identificationNumber' => $this->identificationNumber,
-            'identificationIssueDate' => $this->identificationIssueDate,
-            'identificationExpiryDate' => $this->identificationExpiryDate,
+            'identificationIssueDate' => $this->identificationIssueDate?->format('Y-m-d'),
+            'identificationExpiryDate' => $this->identificationExpiryDate?->format('Y-m-d'),
             'identificationType' => $this->identificationType,
             'company' => $this->company?->toArray(),
             'preferredLanguage' => $this->preferredLanguage,
-            'birthDate' => $this->birthDate,
+            'birthDate' => $this->birthDate?->format('Y-m-d'),
             'birthPlace' => $this->birthPlace,
         ], static fn (mixed $value): bool => $value !== null);
     }

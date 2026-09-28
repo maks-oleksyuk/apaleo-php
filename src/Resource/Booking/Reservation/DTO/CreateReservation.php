@@ -23,8 +23,8 @@ final readonly class CreateReservation
      * @param list<BookReservationService>     $services
      */
     public function __construct(
-        public string $arrival,
-        public string $departure,
+        public \DateTimeImmutable $arrival,
+        public \DateTimeImmutable $departure,
         public int $adults,
         public ChannelCode $channelCode,
         public array $timeSlices,
@@ -51,8 +51,8 @@ final readonly class CreateReservation
     public function toArray(): array
     {
         return array_filter([
-            'arrival' => $this->arrival,
-            'departure' => $this->departure,
+            'arrival' => $this->arrival->format('Y-m-d'),
+            'departure' => $this->departure->format('Y-m-d'),
             'adults' => $this->adults,
             'channelCode' => $this->channelCode->value,
             'childrenAges' => $this->childrenAges !== [] ? $this->childrenAges : null,

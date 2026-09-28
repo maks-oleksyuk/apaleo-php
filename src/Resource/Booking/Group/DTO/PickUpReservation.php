@@ -17,8 +17,8 @@ final readonly class PickUpReservation
      */
     public function __construct(
         public string $blockId,
-        public string $arrival,
-        public string $departure,
+        public \DateTimeImmutable $arrival,
+        public \DateTimeImmutable $departure,
         public int $adults,
         public array $childrenAges = [],
         public array $services = [],
@@ -34,8 +34,8 @@ final readonly class PickUpReservation
     {
         return array_filter([
             'blockId' => $this->blockId,
-            'arrival' => $this->arrival,
-            'departure' => $this->departure,
+            'arrival' => $this->arrival->format('Y-m-d'),
+            'departure' => $this->departure->format('Y-m-d'),
             'adults' => $this->adults,
             'childrenAges' => $this->childrenAges !== [] ? $this->childrenAges : null,
             'services' => $this->services !== [] ? array_map(static fn (BookReservationService $s): array => $s->toArray(), $this->services) : null,
