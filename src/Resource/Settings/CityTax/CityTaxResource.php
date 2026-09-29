@@ -36,10 +36,7 @@ final readonly class CityTaxResource
     {
         $data = $this->pipeline->send(new ListCityTaxesRequest($propertyId));
 
-        return new PaginatedResult(
-            items: array_map(CityTaxListItem::fromArray(...), ResponseData::nestedList($data, 'cityTaxes')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'cityTaxes', CityTaxListItem::fromArray(...));
     }
 
     public function create(CreateCityTax $data, ?string $idempotencyKey = null): string

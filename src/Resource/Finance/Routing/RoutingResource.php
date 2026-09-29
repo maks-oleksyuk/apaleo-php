@@ -43,10 +43,7 @@ final readonly class RoutingResource
 
         $data = $this->pipeline->send(new ListRoutingsRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(Routing::fromArray(...), ResponseData::nestedList($data, 'routings')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'routings', Routing::fromArray(...));
     }
 
     public function create(CreateRouting $data, ?string $idempotencyKey = null): string

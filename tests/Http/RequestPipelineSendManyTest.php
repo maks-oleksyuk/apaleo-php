@@ -296,7 +296,7 @@ final class RequestPipelineSendManyTest extends TestCase
         $pipeline = new RequestPipeline(new MockClient(), $factory, $factory, $this->fakeTokenProvider(), asyncHttpClient: $asyncClient);
 
         $this->expectException(ApaleoTransportException::class);
-        $this->expectExceptionMessage('Failed to reach Apaleo API: connection reset');
+        $this->expectExceptionMessageIsOrContains('Failed to reach Apaleo API: connection reset');
 
         $pipeline->sendMany([$this->requestTo('/one')]);
     }

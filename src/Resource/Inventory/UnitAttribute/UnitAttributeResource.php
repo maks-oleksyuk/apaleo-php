@@ -52,10 +52,7 @@ final readonly class UnitAttributeResource
 
         $data = $this->pipeline->send(new ListUnitAttributesRequest($pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(UnitAttributeDefinition::fromArray(...), ResponseData::nestedList($data, 'unitAttributes')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'unitAttributes', UnitAttributeDefinition::fromArray(...));
     }
 
     public function create(CreateUnitAttributeDefinition $data, ?string $idempotencyKey = null): string

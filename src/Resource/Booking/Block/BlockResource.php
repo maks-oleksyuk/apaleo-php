@@ -67,10 +67,7 @@ final readonly class BlockResource
 
         $data = $this->pipeline->send(new ListBlocksRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(Block::fromArray(...), ResponseData::nestedList($data, 'blocks')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'blocks', Block::fromArray(...));
     }
 
     public function count(BlockFilter $filter = new BlockFilter()): int

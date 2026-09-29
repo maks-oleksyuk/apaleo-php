@@ -36,10 +36,7 @@ final readonly class AgeCategoryResource
     {
         $data = $this->pipeline->send(new ListAgeCategoriesRequest($propertyId));
 
-        return new PaginatedResult(
-            items: array_map(AgeCategoryListItem::fromArray(...), ResponseData::nestedList($data, 'ageCategories')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'ageCategories', AgeCategoryListItem::fromArray(...));
     }
 
     public function create(CreateAgeCategory $data, ?string $idempotencyKey = null): string

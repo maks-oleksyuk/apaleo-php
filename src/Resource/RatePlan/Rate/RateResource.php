@@ -42,10 +42,7 @@ final readonly class RateResource
 
         $data = $this->pipeline->send(new ListRatesRequest($ratePlanId, $from, $to, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(Rate::fromArray(...), ResponseData::nestedList($data, 'rates')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'rates', Rate::fromArray(...));
     }
 
     public function count(string $ratePlanId, \DateTimeImmutable $from, \DateTimeImmutable $to): int

@@ -9,7 +9,6 @@ use Oleksyuk\Apaleo\Resource\RatePlan\PromoCode\DTO\PromoCode;
 use Oleksyuk\Apaleo\Resource\RatePlan\PromoCode\Requests\ListPromoCodesRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class PromoCodeResource
 {
@@ -24,9 +23,6 @@ final readonly class PromoCodeResource
 
         $data = $this->pipeline->send(new ListPromoCodesRequest($propertyId, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(PromoCode::fromArray(...), ResponseData::nestedList($data, 'promoCodes')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'promoCodes', PromoCode::fromArray(...));
     }
 }

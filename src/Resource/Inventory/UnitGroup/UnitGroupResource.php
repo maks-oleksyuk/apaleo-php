@@ -61,10 +61,7 @@ final readonly class UnitGroupResource
 
         $data = $this->pipeline->send(new ListUnitGroupsRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(UnitGroupListItem::fromArray(...), ResponseData::nestedList($data, 'unitGroups')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'unitGroups', UnitGroupListItem::fromArray(...));
     }
 
     public function count(UnitGroupFilter $filter = new UnitGroupFilter()): int

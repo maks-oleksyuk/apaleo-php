@@ -158,7 +158,7 @@ final class ClientCredentialsTokenProviderTest extends TestCase
         ])));
 
         $this->expectException(ApaleoAuthException::class);
-        $this->expectExceptionMessage('Invalid client credentials');
+        $this->expectExceptionMessageIsOrContains('Invalid client credentials');
 
         $this->provider->getToken();
     }
@@ -249,7 +249,7 @@ final class ClientCredentialsTokenProviderTest extends TestCase
         $provider = new ClientCredentialsTokenProvider($client, $factory, $factory, 'client-id', 'client-secret');
 
         $this->expectException(ApaleoTransportException::class);
-        $this->expectExceptionMessage('Failed to reach Apaleo identity server: dns failure');
+        $this->expectExceptionMessageIsOrContains('Failed to reach Apaleo identity server: dns failure');
 
         $provider->getToken();
     }

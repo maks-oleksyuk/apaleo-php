@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Inventory\Types\Country;
 
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\Types\Country\Requests\ListCountriesRequest;
+use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class CountryResource
 {
@@ -19,18 +20,7 @@ final readonly class CountryResource
     public function list(): array
     {
         $data = $this->pipeline->send(new ListCountriesRequest());
-        $codes = $data['countryCodes'] ?? null;
-        if (!\is_array($codes)) {
-            return [];
-        }
 
-        $result = [];
-        foreach ($codes as $code) {
-            if (\is_string($code)) {
-                $result[] = $code;
-            }
-        }
-
-        return $result;
+        return ResponseData::stringListOrEmpty($data, 'countryCodes');
     }
 }

@@ -41,10 +41,7 @@ final readonly class RefundResource
 
         $data = $this->pipeline->send(new ListRefundsRequest($folioId, $statuses, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(Refund::fromArray(...), ResponseData::nestedList($data, 'refunds')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'refunds', Refund::fromArray(...));
     }
 
     public function create(string $folioId, CreateFolioRefund $refund, ?string $idempotencyKey = null): string

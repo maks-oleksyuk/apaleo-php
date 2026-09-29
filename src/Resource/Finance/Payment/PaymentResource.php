@@ -50,10 +50,7 @@ final readonly class PaymentResource
 
         $data = $this->pipeline->send(new ListPaymentsRequest($folioId, $statuses, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(Payment::fromArray(...), ResponseData::nestedList($data, 'payments')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'payments', Payment::fromArray(...));
     }
 
     public function create(

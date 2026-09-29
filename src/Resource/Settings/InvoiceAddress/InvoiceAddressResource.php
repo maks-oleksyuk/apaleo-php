@@ -12,7 +12,6 @@ use Oleksyuk\Apaleo\Resource\Settings\InvoiceAddress\Requests\ListInvoiceAddress
 use Oleksyuk\Apaleo\Resource\Settings\InvoiceAddress\Requests\ReplaceInvoiceAddressRequest;
 use Oleksyuk\Apaleo\Resource\Settings\InvoiceAddress\Requests\UpdateInvoiceAddressRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** The address printed on invoices, when it differs from the property's own. One address per property. */
 final readonly class InvoiceAddressResource
@@ -30,10 +29,7 @@ final readonly class InvoiceAddressResource
     {
         $data = $this->pipeline->send(new ListInvoiceAddressesRequest($propertyIds));
 
-        return new PaginatedResult(
-            items: array_map(InvoiceAddress::fromArray(...), ResponseData::nestedList($data, 'addresses')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'addresses', InvoiceAddress::fromArray(...));
     }
 
     /**

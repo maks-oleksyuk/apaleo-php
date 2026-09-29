@@ -25,7 +25,7 @@ final class Paginator
 
         do {
             $page = $fetchPage($pageNumber);
-            foreach ($page as $item) {
+            foreach ($page->items as $item) {
                 yield $item;
             }
 

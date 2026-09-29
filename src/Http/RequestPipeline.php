@@ -130,26 +130,30 @@ final readonly class RequestPipeline
 
     private function statusCode(SymfonyResponseInterface $response): int
     {
-        try {
-            return $response->getStatusCode();
-        } catch (\Throwable $throwable) {
-            throw new ApaleoTransportException('Failed to reach Apaleo API: '.$throwable->getMessage(), $throwable->getCode(), previous: $throwable);
-        }
+        return $this->transport(static fn (): int => $response->getStatusCode());
     }
 
     private function content(SymfonyResponseInterface $response): string
     {
-        try {
-            return $response->getContent(false);
-        } catch (\Throwable $throwable) {
-            throw new ApaleoTransportException('Failed to reach Apaleo API: '.$throwable->getMessage(), $throwable->getCode(), previous: $throwable);
-        }
+        return $this->transport(static fn (): string => $response->getContent(false));
     }
 
     private function headerLine(SymfonyResponseInterface $response, string $name): string
     {
+        return $this->transport(static fn (): string => $response->getHeaders(false)[$name][0] ?? '');
+    }
+
+    /**
+     * @template T
+     *
+     * @param callable(): T $read
+     *
+     * @return T
+     */
+    private function transport(callable $read): mixed
+    {
         try {
-            return $response->getHeaders(false)[$name][0] ?? '';
+            return $read();
         } catch (\Throwable $throwable) {
             throw new ApaleoTransportException('Failed to reach Apaleo API: '.$throwable->getMessage(), $throwable->getCode(), previous: $throwable);
         }

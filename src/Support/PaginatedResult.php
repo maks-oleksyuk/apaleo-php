@@ -24,6 +24,22 @@ final readonly class PaginatedResult implements \Countable, \IteratorAggregate, 
         public int $totalCount,
     ) {}
 
+    /**
+     * @template U
+     *
+     * @param array<string, mixed>           $data
+     * @param callable(array<string, mixed>): U $map
+     *
+     * @return self<U>
+     */
+    public static function fromResponse(array $data, string $itemsKey, callable $map): self
+    {
+        return new self(
+            items: array_map($map, ResponseData::nestedList($data, $itemsKey)),
+            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
+        );
+    }
+
     /** Count of items on this page (not $totalCount — use that for the overall total). */
     public function count(): int
     {

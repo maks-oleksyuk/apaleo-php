@@ -65,10 +65,7 @@ final readonly class PropertyResource
 
         $data = $this->pipeline->send(new ListPropertiesRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(PropertyListItem::fromArray(...), ResponseData::nestedList($data, 'properties')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'properties', PropertyListItem::fromArray(...));
     }
 
     public function count(): int

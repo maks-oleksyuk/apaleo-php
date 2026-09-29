@@ -90,7 +90,7 @@ final class InvoiceResourceTest extends FinanceTestCase
         $this->respond(['detail' => 'Invoice not found'], 404);
 
         $this->expectException(ApaleoNotFoundException::class);
-        $this->expectExceptionMessage('Invoice not found');
+        $this->expectExceptionMessageIsOrContains('Invoice not found');
 
         $this->api->invoices()->previewPdf('F404', 'en');
     }

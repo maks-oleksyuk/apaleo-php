@@ -53,10 +53,7 @@ final readonly class InvoiceResource
 
         $data = $this->pipeline->send(new ListInvoicesRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(InvoiceListItem::fromArray(...), ResponseData::nestedList($data, 'invoices')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'invoices', InvoiceListItem::fromArray(...));
     }
 
     /** @param list<'company'> $expand */

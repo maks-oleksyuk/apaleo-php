@@ -11,7 +11,6 @@ use Oleksyuk\Apaleo\Resource\Availability\Unit\Requests\ListReservationAvailable
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitCondition;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class UnitResource
 {
@@ -49,10 +48,7 @@ final readonly class UnitResource
             $pageSize,
         ));
 
-        return new PaginatedResult(
-            items: array_map(AvailableUnitItem::fromArray(...), ResponseData::nestedList($data, 'units')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'units', AvailableUnitItem::fromArray(...));
     }
 
     /**
@@ -85,9 +81,6 @@ final readonly class UnitResource
             $pageSize,
         ));
 
-        return new PaginatedResult(
-            items: array_map(AvailableUnitItem::fromArray(...), ResponseData::nestedList($data, 'units')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'units', AvailableUnitItem::fromArray(...));
     }
 }

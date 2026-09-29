@@ -39,10 +39,7 @@ final readonly class CancellationPolicyResource
 
         $data = $this->pipeline->send(new ListCancellationPoliciesRequest($propertyId, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(CancellationPolicyListItem::fromArray(...), ResponseData::nestedList($data, 'cancellationPolicies')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'cancellationPolicies', CancellationPolicyListItem::fromArray(...));
     }
 
     public function create(CreateCancellationPolicy $data, ?string $idempotencyKey = null): string

@@ -19,7 +19,6 @@ use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TravelPurpose;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class ReportsResource
 {
@@ -36,10 +35,7 @@ final readonly class ReportsResource
     {
         $data = $this->pipeline->send(new ListOrderedServicesRequest($propertyId, $serviceIds, $from, $to));
 
-        return new PaginatedResult(
-            items: array_map(OrderedService::fromArray(...), ResponseData::nestedList($data, 'orderedServices')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'orderedServices', OrderedService::fromArray(...));
     }
 
     public function arrivals(string $propertyId, int $month, int $year): ArrivalsReport
@@ -104,10 +100,7 @@ final readonly class ReportsResource
     {
         $data = $this->pipeline->send(new ListCompanyInvoicesVatRequest($propertyId, $companyIds, $dateFilter));
 
-        return new PaginatedResult(
-            items: array_map(CompanyInvoice::fromArray(...), ResponseData::nestedList($data, 'companyInvoices')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'companyInvoices', CompanyInvoice::fromArray(...));
     }
 
     public function revenues(string $propertyId, \DateTimeImmutable $from, \DateTimeImmutable $to, ?string $languageCode = null): RevenuesReportItem

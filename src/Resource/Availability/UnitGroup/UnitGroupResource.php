@@ -13,7 +13,6 @@ use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class UnitGroupResource
 {
@@ -60,10 +59,7 @@ final readonly class UnitGroupResource
             $pageSize,
         ));
 
-        return new PaginatedResult(
-            items: array_map(UnitGroupAvailabilityTimeSlice::fromArray(...), ResponseData::nestedList($data, 'timeSlices')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'timeSlices', UnitGroupAvailabilityTimeSlice::fromArray(...));
     }
 
     /** Replaces the allowed overbooking count for a unit group in [$from, $to) — e.g. `(new JsonPatch())->replace('/allowedOverbookingCount', 2)`. */

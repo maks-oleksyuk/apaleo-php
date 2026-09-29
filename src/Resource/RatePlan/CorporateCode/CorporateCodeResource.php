@@ -9,7 +9,6 @@ use Oleksyuk\Apaleo\Resource\RatePlan\CorporateCode\DTO\CorporateCode;
 use Oleksyuk\Apaleo\Resource\RatePlan\CorporateCode\Requests\ListCorporateCodesRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class CorporateCodeResource
 {
@@ -24,9 +23,6 @@ final readonly class CorporateCodeResource
 
         $data = $this->pipeline->send(new ListCorporateCodesRequest($propertyId, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(CorporateCode::fromArray(...), ResponseData::nestedList($data, 'corporateCodes')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'corporateCodes', CorporateCode::fromArray(...));
     }
 }

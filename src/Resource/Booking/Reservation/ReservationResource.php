@@ -66,10 +66,7 @@ final readonly class ReservationResource
 
         $data = $this->pipeline->send(new ListReservationsRequest($filter, $pageNumber, $pageSize, $sort, $expand));
 
-        return new PaginatedResult(
-            items: array_map(ReservationListItem::fromArray(...), ResponseData::nestedList($data, 'reservations')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'reservations', ReservationListItem::fromArray(...));
     }
 
     public function count(ReservationFilter $filter = new ReservationFilter()): int

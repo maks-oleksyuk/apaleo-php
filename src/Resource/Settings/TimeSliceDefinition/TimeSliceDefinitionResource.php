@@ -39,10 +39,7 @@ final readonly class TimeSliceDefinitionResource
     {
         $data = $this->pipeline->send(new ListTimeSliceDefinitionsRequest($propertyId, $expand));
 
-        return new PaginatedResult(
-            items: array_map(TimeSliceDefinition::fromArray(...), ResponseData::nestedList($data, 'timeSliceDefinitions')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'timeSliceDefinitions', TimeSliceDefinition::fromArray(...));
     }
 
     public function create(string $propertyId, CreateTimeSliceDefinition $data, ?string $idempotencyKey = null): string

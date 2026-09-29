@@ -51,10 +51,7 @@ final readonly class AuthorizationResource
 
         $data = $this->pipeline->send(new ListAuthorizationsRequest($filter, $pageNumber, $pageSize, $sort, $expand));
 
-        return new PaginatedResult(
-            items: array_map(Authorization::fromArray(...), ResponseData::nestedList($data, 'authorizations')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'authorizations', Authorization::fromArray(...));
     }
 
     public function createByAuthorization(AuthorizationTarget $target, MonetaryValue $amount, string $transactionReference, ?string $idempotencyKey = null): string

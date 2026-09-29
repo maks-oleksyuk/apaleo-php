@@ -45,10 +45,7 @@ final readonly class OperationsResource
 
         $data = $this->pipeline->send(new ListMaintenancesRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(Maintenance::fromArray(...), ResponseData::nestedList($data, 'maintenances')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'maintenances', Maintenance::fromArray(...));
     }
 
     public function countMaintenances(MaintenanceFilter $filter = new MaintenanceFilter()): int

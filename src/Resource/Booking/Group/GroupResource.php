@@ -63,10 +63,7 @@ final readonly class GroupResource
 
         $data = $this->pipeline->send(new ListGroupsRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(Group::fromArray(...), ResponseData::nestedList($data, 'groups')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'groups', Group::fromArray(...));
     }
 
     public function count(GroupFilter $filter = new GroupFilter()): int

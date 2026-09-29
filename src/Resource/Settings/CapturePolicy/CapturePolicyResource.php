@@ -13,7 +13,6 @@ use Oleksyuk\Apaleo\Resource\Settings\CapturePolicy\Requests\ListCapturePolicies
 use Oleksyuk\Apaleo\Resource\Settings\CapturePolicy\Requests\UpdateCapturePolicyRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class CapturePolicyResource
 {
@@ -35,10 +34,7 @@ final readonly class CapturePolicyResource
 
         $data = $this->pipeline->send(new ListCapturePoliciesRequest($propertyId, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(CapturePolicyListItem::fromArray(...), ResponseData::nestedList($data, 'capturePolicies')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'capturePolicies', CapturePolicyListItem::fromArray(...));
     }
 
     public function update(string $capturePolicyId, JsonPatch $patch): void

@@ -39,10 +39,7 @@ final readonly class NoShowPolicyResource
 
         $data = $this->pipeline->send(new ListNoShowPoliciesRequest($propertyId, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(NoShowPolicyListItem::fromArray(...), ResponseData::nestedList($data, 'noShowPolicies')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'noShowPolicies', NoShowPolicyListItem::fromArray(...));
     }
 
     public function create(CreateNoShowPolicy $data, ?string $idempotencyKey = null): string

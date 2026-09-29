@@ -45,10 +45,7 @@ final readonly class AccountResource
     {
         $data = $this->pipeline->send(new ListAccountsRequest($accountCodes));
 
-        return new PaginatedResult(
-            items: array_map(AccountListItem::fromArray(...), ResponseData::nestedList($data, 'accounts')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'accounts', AccountListItem::fromArray(...));
     }
 
     /** @return string the code of the created account */

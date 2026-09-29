@@ -16,6 +16,26 @@ use PHPUnit\Framework\TestCase;
 #[UsesNamespace('Oleksyuk\Apaleo')]
 final class PaginatedResultTest extends TestCase
 {
+    public function testFromResponseMapsItemsAndReadsCount(): void
+    {
+        $result = PaginatedResult::fromResponse(
+            ['things' => [['n' => 1], ['n' => 2]], 'count' => 7],
+            'things',
+            static fn (array $row): array => $row,
+        );
+
+        self::assertSame([['n' => 1], ['n' => 2]], $result->items);
+        self::assertSame(7, $result->totalCount);
+    }
+
+    public function testFromResponseDefaultsTotalCountToZeroWhenMissing(): void
+    {
+        $result = PaginatedResult::fromResponse(['things' => []], 'things', static fn (array $row): array => $row);
+
+        self::assertSame([], $result->items);
+        self::assertSame(0, $result->totalCount);
+    }
+
     public function testCountReflectsThisPageNotTotalCount(): void
     {
         $result = new PaginatedResult(items: ['a', 'b'], totalCount: 42);
@@ -45,7 +65,7 @@ final class PaginatedResultTest extends TestCase
         $result = new PaginatedResult(items: ['a'], totalCount: 1);
 
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage(PaginatedResult::class.' is read-only.');
+        $this->expectExceptionMessageIs(PaginatedResult::class.' is read-only.');
 
         $result[0] = 'b';
     }
@@ -55,7 +75,7 @@ final class PaginatedResultTest extends TestCase
         $result = new PaginatedResult(items: ['a'], totalCount: 1);
 
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage(PaginatedResult::class.' is read-only.');
+        $this->expectExceptionMessageIs(PaginatedResult::class.' is read-only.');
 
         unset($result[0]);
     }

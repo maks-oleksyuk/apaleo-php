@@ -10,7 +10,6 @@ use Oleksyuk\Apaleo\Resource\Availability\Service\Requests\ListServiceAvailabili
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class ServiceResource
 {
@@ -47,9 +46,6 @@ final readonly class ServiceResource
             $pageSize,
         ));
 
-        return new PaginatedResult(
-            items: array_map(ServiceAvailabilityTimeSlice::fromArray(...), ResponseData::nestedList($data, 'timeSlices')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'timeSlices', ServiceAvailabilityTimeSlice::fromArray(...));
     }
 }

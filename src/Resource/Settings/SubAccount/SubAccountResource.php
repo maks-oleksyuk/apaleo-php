@@ -52,10 +52,7 @@ final readonly class SubAccountResource
 
         $data = $this->pipeline->send(new ListSubAccountsRequest($propertyId, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(SubAccount::fromArray(...), ResponseData::nestedList($data, 'subAccounts')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'subAccounts', SubAccount::fromArray(...));
     }
 
     public function count(string $propertyId): int

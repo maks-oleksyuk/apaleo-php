@@ -90,10 +90,7 @@ final readonly class FolioResource
 
         $data = $this->pipeline->send(new ListFoliosRequest($filter, $pageNumber, $pageSize, $sort, $expand));
 
-        return new PaginatedResult(
-            items: array_map(FolioListItem::fromArray(...), ResponseData::nestedList($data, 'folios')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'folios', FolioListItem::fromArray(...));
     }
 
     public function count(FolioFilter $filter = new FolioFilter()): int

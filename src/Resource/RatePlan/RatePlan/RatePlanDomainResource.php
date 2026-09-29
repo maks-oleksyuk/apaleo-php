@@ -68,10 +68,7 @@ final readonly class RatePlanDomainResource
 
         $data = $this->pipeline->send(new ListRatePlansRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(RatePlanListItem::fromArray(...), ResponseData::nestedList($data, 'ratePlans')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'ratePlans', RatePlanListItem::fromArray(...));
     }
 
     public function count(RatePlanFilter $filter = new RatePlanFilter()): int

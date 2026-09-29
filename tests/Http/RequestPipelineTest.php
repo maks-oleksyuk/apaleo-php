@@ -340,7 +340,7 @@ final class RequestPipelineTest extends TestCase
         $this->httpClient->addResponse(new Response(404, ['Content-Type' => 'application/json'], '{"detail":"no invoice"}'));
 
         $this->expectException(ApaleoNotFoundException::class);
-        $this->expectExceptionMessage('no invoice');
+        $this->expectExceptionMessageIsOrContains('no invoice');
 
         $this->pipeline->sendRaw($this->requestWithQuery([]));
     }
@@ -350,7 +350,7 @@ final class RequestPipelineTest extends TestCase
         $this->httpClient->addResponse(new Response(500, ['Content-Type' => 'text/plain'], 'upstream exploded'));
 
         $this->expectException(ApaleoServerException::class);
-        $this->expectExceptionMessage('Apaleo API error (HTTP 500): upstream exploded');
+        $this->expectExceptionMessageIsOrContains('Apaleo API error (HTTP 500): upstream exploded');
 
         $this->pipeline->send($this->requestWithQuery([]));
     }
@@ -485,7 +485,7 @@ final class RequestPipelineTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(409, ['Content-Type' => 'application/json'], '{"detail":"conflict","messages":["m"]}'));
 
-        $this->expectExceptionMessage('conflict');
+        $this->expectExceptionMessageIsOrContains('conflict');
 
         $this->pipeline->send($this->requestWithQuery([]));
     }
@@ -494,7 +494,7 @@ final class RequestPipelineTest extends TestCase
     {
         $this->httpClient->addResponse(new Response(409, ['Content-Type' => 'application/json'], '{"title":"Conflict","detail":"Unit is occupied"}'));
 
-        $this->expectExceptionMessage('Unit is occupied');
+        $this->expectExceptionMessageIsOrContains('Unit is occupied');
 
         $this->pipeline->send($this->requestWithQuery([]));
     }
@@ -537,7 +537,7 @@ final class RequestPipelineTest extends TestCase
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], '<html>oops</html>'));
 
         $this->expectException(ApaleoUnexpectedResponseException::class);
-        $this->expectExceptionMessage('Apaleo API returned a non-JSON or malformed body (HTTP 200): oops');
+        $this->expectExceptionMessageIsOrContains('Apaleo API returned a non-JSON or malformed body (HTTP 200): oops');
 
         $this->pipeline->send($this->requestWithQuery([]));
     }
@@ -554,7 +554,7 @@ final class RequestPipelineTest extends TestCase
         $pipeline = new RequestPipeline($client, $factory, $factory, new FakeTokenProvider());
 
         $this->expectException(ApaleoTransportException::class);
-        $this->expectExceptionMessage('Failed to reach Apaleo API: connection refused');
+        $this->expectExceptionMessageIsOrContains('Failed to reach Apaleo API: connection refused');
 
         $pipeline->send($this->requestWithQuery([]));
     }

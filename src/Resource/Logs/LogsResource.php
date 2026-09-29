@@ -19,7 +19,6 @@ use Oleksyuk\Apaleo\Resource\Logs\Requests\ListReservationChangeLogsRequest;
 use Oleksyuk\Apaleo\Resource\Logs\Requests\ListTransactionsExportLogsRequest;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class LogsResource
 {
@@ -62,10 +61,7 @@ final readonly class LogsResource
             $expandChanges,
         ));
 
-        return new PaginatedResult(
-            items: array_map(ReservationChangeLogItem::fromArray(...), ResponseData::nestedList($data, 'logEntries')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'logEntries', ReservationChangeLogItem::fromArray(...));
     }
 
     /**
@@ -92,10 +88,7 @@ final readonly class LogsResource
 
         $data = $this->pipeline->send(new ListFolioChangeLogsRequest($folioIds, $eventTypes, $clientIds, $propertyIds, $subjectIds, $dateFilter, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(FolioChangeLogItem::fromArray(...), ResponseData::nestedList($data, 'logEntries')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'logEntries', FolioChangeLogItem::fromArray(...));
     }
 
     /**
@@ -118,10 +111,7 @@ final readonly class LogsResource
 
         $data = $this->pipeline->send(new ListNightAuditLogsRequest($statuses, $propertyIds, $subjectIds, $dateFilter, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(NightAuditLogItem::fromArray(...), ResponseData::nestedList($data, 'logEntries')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'logEntries', NightAuditLogItem::fromArray(...));
     }
 
     /**
@@ -144,9 +134,6 @@ final readonly class LogsResource
 
         $data = $this->pipeline->send(new ListTransactionsExportLogsRequest($types, $propertyIds, $subjectIds, $dateFilter, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(TransactionsExportLogItem::fromArray(...), ResponseData::nestedList($data, 'logEntries')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'logEntries', TransactionsExportLogItem::fromArray(...));
     }
 }

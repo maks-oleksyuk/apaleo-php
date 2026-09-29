@@ -40,10 +40,7 @@ final readonly class CompanyResource
 
         $data = $this->pipeline->send(new ListCompaniesRequest($filter, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(Company::fromArray(...), ResponseData::nestedList($data, 'companies')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'companies', Company::fromArray(...));
     }
 
     public function create(CreateCompany $data, ?string $idempotencyKey = null): string

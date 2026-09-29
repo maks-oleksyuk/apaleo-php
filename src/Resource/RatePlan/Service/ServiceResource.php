@@ -64,10 +64,7 @@ final readonly class ServiceResource
 
         $data = $this->pipeline->send(new ListServicesRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(ServiceListItem::fromArray(...), ResponseData::nestedList($data, 'services')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'services', ServiceListItem::fromArray(...));
     }
 
     public function count(ServiceFilter $filter = new ServiceFilter()): int

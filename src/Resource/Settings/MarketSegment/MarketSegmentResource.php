@@ -55,10 +55,7 @@ final readonly class MarketSegmentResource
 
         $data = $this->pipeline->send(new ListMarketSegmentsRequest($propertyIds, $pageNumber, $pageSize));
 
-        return new PaginatedResult(
-            items: array_map(MarketSegment::fromArray(...), ResponseData::nestedList($data, 'marketSegments')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'marketSegments', MarketSegment::fromArray(...));
     }
 
     /** @param list<string> $propertyIds */

@@ -20,7 +20,6 @@ use Oleksyuk\Apaleo\Resource\Booking\BookingResource;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\DTO\CreateReservation;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
-use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** Named BookingDomainResource (not BookingResource) to avoid a clash with the top-level {@see BookingResource} API aggregator. */
 final readonly class BookingDomainResource
@@ -52,10 +51,7 @@ final readonly class BookingDomainResource
 
         $data = $this->pipeline->send(new ListBookingsRequest($filter, $pageNumber, $pageSize, $expand));
 
-        return new PaginatedResult(
-            items: array_map(BookingListItem::fromArray(...), ResponseData::nestedList($data, 'bookings')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'bookings', BookingListItem::fromArray(...));
     }
 
     public function create(CreateBooking $booking, bool $force = false, ?string $idempotencyKey = null): BookingCreated

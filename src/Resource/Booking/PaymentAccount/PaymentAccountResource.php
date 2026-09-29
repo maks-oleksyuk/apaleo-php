@@ -50,10 +50,7 @@ final readonly class PaymentAccountResource
 
         $data = $this->pipeline->send(new ListPaymentAccountsRequest($filter, $pageNumber, $pageSize, $sort, $expand));
 
-        return new PaginatedResult(
-            items: array_map(PaymentAccount::fromArray(...), ResponseData::nestedList($data, 'paymentAccounts')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'paymentAccounts', PaymentAccount::fromArray(...));
     }
 
     public function createByAuthorization(PaymentAccountTarget $target, string $transactionReference, ?string $idempotencyKey = null): string

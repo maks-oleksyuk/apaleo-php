@@ -177,9 +177,6 @@ final readonly class FinanceAccountResource
      */
     private function accounts(array $data): PaginatedResult
     {
-        return new PaginatedResult(
-            items: array_map(FinanceAccountListItem::fromArray(...), ResponseData::nestedList($data, 'accounts')),
-            totalCount: ResponseData::nullableInt($data, 'count') ?? 0,
-        );
+        return PaginatedResult::fromResponse($data, 'accounts', FinanceAccountListItem::fromArray(...));
     }
 }
