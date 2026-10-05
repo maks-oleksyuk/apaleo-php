@@ -79,7 +79,7 @@ use Oleksyuk\Apaleo\Auth\Psr16TokenCache;
 $tokenProvider = new ClientCredentialsTokenProvider($http, $http, $http, 'your-client-id', 'your-client-secret', new Psr16TokenCache($psr16Cache));
 ```
 
-Or implement `TokenCache` on top of your framework's own storage.
+Or implement `TokenCacheInterface` on top of your framework's own storage.
 
 On a `401` the SDK drops the cached token, fetches a new one and retries the request at once.
 

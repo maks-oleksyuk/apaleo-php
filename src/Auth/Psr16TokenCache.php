@@ -12,7 +12,7 @@ use Psr\SimpleCache\CacheInterface;
  * Without this, InMemoryTokenCache starts empty on every PHP-FPM request, so every page load
  * fetches a fresh token from identity.apaleo.com instead of reusing one for its ~1h lifetime.
  */
-final readonly class Psr16TokenCache implements TokenCache
+final readonly class Psr16TokenCache implements TokenCacheInterface
 {
     public function __construct(
         private CacheInterface $cache,

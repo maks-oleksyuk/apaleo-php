@@ -15,7 +15,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-final readonly class ClientCredentialsTokenProvider implements TokenProvider
+final readonly class ClientCredentialsTokenProvider implements TokenProviderInterface
 {
     private const string CACHE_KEY_PREFIX = 'apaleo_token_';
 
@@ -26,7 +26,7 @@ final readonly class ClientCredentialsTokenProvider implements TokenProvider
         private string $clientId,
         #[\SensitiveParameter]
         private string $clientSecret,
-        private TokenCache $cache = new InMemoryTokenCache(),
+        private TokenCacheInterface $cache = new InMemoryTokenCache(),
         private string $identityBaseUri = 'https://identity.apaleo.com',
         private ClockInterface $clock = new SystemClock(),
     ) {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Auth;
 
-final class InMemoryTokenCache implements TokenCache
+final class InMemoryTokenCache implements TokenCacheInterface
 {
     /** @var array<string, AccessToken> */
     private array $tokens = [];

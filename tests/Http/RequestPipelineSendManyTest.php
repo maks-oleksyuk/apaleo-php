@@ -8,7 +8,7 @@ use Http\Mock\Client as MockClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
+use Oleksyuk\Apaleo\Auth\TokenProviderInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
 use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoTransportException;
@@ -155,7 +155,7 @@ final class RequestPipelineSendManyTest extends TestCase
 
         $syncClient = new MockClient();
         $factory = new Psr17Factory();
-        $tokenProvider = new class implements TokenProvider {
+        $tokenProvider = new class implements TokenProviderInterface {
             public int $refreshCount = 0;
 
             public function getToken(bool $forceRefresh = false): AccessToken
@@ -347,7 +347,7 @@ final class RequestPipelineSendManyTest extends TestCase
 
     public function testEmptyRequestListWithAsyncClientFetchesNoToken(): void
     {
-        $tokenProvider = new class implements TokenProvider {
+        $tokenProvider = new class implements TokenProviderInterface {
             public int $calls = 0;
 
             public function getToken(bool $forceRefresh = false): AccessToken
@@ -364,7 +364,7 @@ final class RequestPipelineSendManyTest extends TestCase
         self::assertSame(0, $tokenProvider->calls);
     }
 
-    private function fakeTokenProvider(): TokenProvider
+    private function fakeTokenProvider(): TokenProviderInterface
     {
         return new FakeTokenProvider();
     }

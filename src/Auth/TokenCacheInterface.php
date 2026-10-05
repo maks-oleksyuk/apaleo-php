@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Auth;
 
-interface TokenCache
+interface TokenCacheInterface
 {
     public function get(string $key): ?AccessToken;
 

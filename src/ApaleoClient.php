@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo;
 
-use Oleksyuk\Apaleo\Auth\TokenProvider;
+use Oleksyuk\Apaleo\Auth\TokenProviderInterface;
 use Oleksyuk\Apaleo\Http\Request;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Account\AccountResource;
@@ -31,7 +31,7 @@ final readonly class ApaleoClient
         ClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        TokenProvider $tokenProvider,
+        TokenProviderInterface $tokenProvider,
         string $baseUri = RequestPipeline::DEFAULT_BASE_URI,
         ?SymfonyHttpClientInterface $asyncHttpClient = null,
     ) {

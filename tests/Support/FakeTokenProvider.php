@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Tests\Support;
 
 use Oleksyuk\Apaleo\Auth\AccessToken;
-use Oleksyuk\Apaleo\Auth\TokenProvider;
+use Oleksyuk\Apaleo\Auth\TokenProviderInterface;
 
 /** Hands out the same valid token every time, so tests never hit the OAuth endpoint. */
-final class FakeTokenProvider implements TokenProvider
+final class FakeTokenProvider implements TokenProviderInterface
 {
     public function getToken(bool $forceRefresh = false): AccessToken
     {
