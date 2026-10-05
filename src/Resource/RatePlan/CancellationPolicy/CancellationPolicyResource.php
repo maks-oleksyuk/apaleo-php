@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy\DTO\CancellationPolicy;
@@ -24,7 +25,11 @@ final readonly class CancellationPolicyResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param ?list<string> $languages */
+    /**
+     * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $cancellationPolicyId, ?array $languages = null): CancellationPolicy
     {
         $data = $this->pipeline->send(new GetCancellationPolicyRequest($cancellationPolicyId, $languages));
@@ -32,7 +37,11 @@ final readonly class CancellationPolicyResource
         return CancellationPolicy::fromArray($data);
     }
 
-    /** @return PaginatedResult<CancellationPolicyListItem> */
+    /**
+     * @return PaginatedResult<CancellationPolicyListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(?string $propertyId = null, ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
         Pagination::assertValidPageSize($pageSize);
@@ -42,6 +51,9 @@ final readonly class CancellationPolicyResource
         return PaginatedResult::fromResponse($data, 'cancellationPolicies', CancellationPolicyListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateCancellationPolicy $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateCancellationPolicyRequest($data, $idempotencyKey));
@@ -49,11 +61,17 @@ final readonly class CancellationPolicyResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $cancellationPolicyId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateCancellationPolicyRequest($cancellationPolicyId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $cancellationPolicyId): void
     {
         $this->pipeline->send(new DeleteCancellationPolicyRequest($cancellationPolicyId));

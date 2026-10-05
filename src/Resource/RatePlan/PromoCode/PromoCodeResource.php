@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\PromoCode;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\PromoCode\DTO\PromoCode;
 use Oleksyuk\Apaleo\Resource\RatePlan\PromoCode\Requests\ListPromoCodesRequest;
@@ -16,7 +17,11 @@ final readonly class PromoCodeResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @return PaginatedResult<PromoCode> */
+    /**
+     * @return PaginatedResult<PromoCode>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(?string $propertyId = null, ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
         Pagination::assertValidPageSize($pageSize);

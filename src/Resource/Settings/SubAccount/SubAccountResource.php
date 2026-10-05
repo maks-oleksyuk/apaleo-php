@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\SubAccount;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -27,6 +28,9 @@ final readonly class SubAccountResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $subAccountId): SubAccount
     {
         $data = $this->pipeline->send(new GetSubAccountRequest($subAccountId));
@@ -34,6 +38,9 @@ final readonly class SubAccountResource
         return SubAccount::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $subAccountId): bool
     {
         try {
@@ -45,7 +52,11 @@ final readonly class SubAccountResource
         }
     }
 
-    /** @return PaginatedResult<SubAccount> */
+    /**
+     * @return PaginatedResult<SubAccount>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(string $propertyId, ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
         Pagination::assertValidPageSize($pageSize);
@@ -55,6 +66,9 @@ final readonly class SubAccountResource
         return PaginatedResult::fromResponse($data, 'subAccounts', SubAccount::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(string $propertyId): int
     {
         $data = $this->pipeline->send(new CountSubAccountsRequest($propertyId));
@@ -62,6 +76,9 @@ final readonly class SubAccountResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateSubAccount $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateSubAccountRequest($data, $idempotencyKey));
@@ -69,12 +86,19 @@ final readonly class SubAccountResource
         return ResponseData::string($response, 'id');
     }
 
-    /** Only the name can be changed. */
+    /**
+     * Only the name can be changed.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $subAccountId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateSubAccountRequest($subAccountId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $subAccountId): void
     {
         $this->pipeline->send(new DeleteSubAccountRequest($subAccountId));

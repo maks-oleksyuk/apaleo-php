@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\UnitAttribute;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -25,6 +26,9 @@ final readonly class UnitAttributeResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $unitAttributeId): UnitAttributeDefinition
     {
         $data = $this->pipeline->send(new GetUnitAttributeRequest($unitAttributeId));
@@ -32,6 +36,9 @@ final readonly class UnitAttributeResource
         return UnitAttributeDefinition::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $unitAttributeId): bool
     {
         try {
@@ -45,6 +52,8 @@ final readonly class UnitAttributeResource
 
     /**
      * @return PaginatedResult<UnitAttributeDefinition>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
@@ -55,6 +64,9 @@ final readonly class UnitAttributeResource
         return PaginatedResult::fromResponse($data, 'unitAttributes', UnitAttributeDefinition::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateUnitAttributeDefinition $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateUnitAttributeRequest($data, $idempotencyKey));
@@ -62,11 +74,17 @@ final readonly class UnitAttributeResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $unitAttributeId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateUnitAttributeRequest($unitAttributeId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $unitAttributeId): void
     {
         $this->pipeline->send(new DeleteUnitAttributeRequest($unitAttributeId));

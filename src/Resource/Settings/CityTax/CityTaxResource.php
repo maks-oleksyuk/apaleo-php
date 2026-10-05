@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\CityTax;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Settings\CityTax\DTO\CityTax;
@@ -23,7 +24,11 @@ final readonly class CityTaxResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param ?list<string> $languages */
+    /**
+     * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $cityTaxId, ?array $languages = null): CityTax
     {
         $data = $this->pipeline->send(new GetCityTaxRequest($cityTaxId, $languages));
@@ -31,7 +36,11 @@ final readonly class CityTaxResource
         return CityTax::fromArray($data);
     }
 
-    /** @return PaginatedResult<CityTaxListItem> */
+    /**
+     * @return PaginatedResult<CityTaxListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(?string $propertyId = null): PaginatedResult
     {
         $data = $this->pipeline->send(new ListCityTaxesRequest($propertyId));
@@ -39,6 +48,9 @@ final readonly class CityTaxResource
         return PaginatedResult::fromResponse($data, 'cityTaxes', CityTaxListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateCityTax $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateCityTaxRequest($data, $idempotencyKey));
@@ -46,11 +58,17 @@ final readonly class CityTaxResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $cityTaxId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateCityTaxRequest($cityTaxId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $cityTaxId): void
     {
         $this->pipeline->send(new DeleteCityTaxRequest($cityTaxId));

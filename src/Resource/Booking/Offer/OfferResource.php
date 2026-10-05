@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Offer;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\DTO\ServiceOffers;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\DTO\StayOffers;
@@ -23,7 +24,11 @@ final readonly class OfferResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** A rate plan's offers across every time slice in [$from, $to) — no property/adults/etc needed, just the rate plan. */
+    /**
+     * A rate plan's offers across every time slice in [$from, $to) — no property/adults/etc needed, just the rate plan.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function index(string $ratePlanId, \DateTimeImmutable $from, \DateTimeImmutable $to, ChannelCode $channelCode, ?int $pageNumber = null, ?int $pageSize = null): TimeSlices
     {
         Pagination::assertValidPageSize($pageSize);
@@ -38,6 +43,8 @@ final readonly class OfferResource
      * @param list<string> $unitGroupIds
      * @param list<UnitGroupType> $unitGroupTypes
      * @param list<int>    $childrenAges
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function forProperty(
         string $propertyId,
@@ -76,6 +83,8 @@ final readonly class OfferResource
     /**
      * @param list<int>   $childrenAges
      * @param list<float> $overridePrices desired price per time slice, to quote a custom rate
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function forRatePlan(
         string $ratePlanId,
@@ -92,7 +101,11 @@ final readonly class OfferResource
         return StayOffers::fromArray($data);
     }
 
-    /** @param list<int> $childrenAges */
+    /**
+     * @param list<int> $childrenAges
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function services(
         string $ratePlanId,
         \DateTimeImmutable $arrival,

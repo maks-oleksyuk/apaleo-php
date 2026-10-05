@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\UnitGroup;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Inventory\UnitGroup\DTO\CreateUnitGroup;
@@ -27,7 +28,11 @@ final readonly class UnitGroupResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param ?list<string> $languages */
+    /**
+     * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $unitGroupId, ?array $languages = null): UnitGroup
     {
         $data = $this->pipeline->send(new GetUnitGroupRequest($unitGroupId, $languages));
@@ -35,6 +40,9 @@ final readonly class UnitGroupResource
         return UnitGroup::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $unitGroupId): bool
     {
         try {
@@ -50,6 +58,8 @@ final readonly class UnitGroupResource
      * @param list<'connectedUnitGroups'|'property'> $expand
      *
      * @return PaginatedResult<UnitGroupListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         UnitGroupFilter $filter = new UnitGroupFilter(),
@@ -64,6 +74,9 @@ final readonly class UnitGroupResource
         return PaginatedResult::fromResponse($data, 'unitGroups', UnitGroupListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(UnitGroupFilter $filter = new UnitGroupFilter()): int
     {
         $data = $this->pipeline->send(new CountUnitGroupsRequest($filter));
@@ -71,6 +84,9 @@ final readonly class UnitGroupResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateUnitGroup $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateUnitGroupRequest($data, $idempotencyKey));
@@ -78,11 +94,17 @@ final readonly class UnitGroupResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function replace(string $unitGroupId, ReplaceUnitGroup $data): void
     {
         $this->pipeline->send(new ReplaceUnitGroupRequest($unitGroupId, $data));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $unitGroupId): void
     {
         $this->pipeline->send(new DeleteUnitGroupRequest($unitGroupId));

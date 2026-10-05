@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\TimeSliceDefinition;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Settings\TimeSliceDefinition\DTO\CreateTimeSliceDefinition;
@@ -22,7 +23,11 @@ final readonly class TimeSliceDefinitionResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'actions'> $expand */
+    /**
+     * @param list<'actions'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $propertyId, string $timeSliceDefinitionId, array $expand = []): TimeSliceDefinition
     {
         $data = $this->pipeline->send(new GetTimeSliceDefinitionRequest($propertyId, $timeSliceDefinitionId, $expand));
@@ -34,6 +39,8 @@ final readonly class TimeSliceDefinitionResource
      * @param list<'actions'> $expand
      *
      * @return PaginatedResult<TimeSliceDefinition>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(string $propertyId, array $expand = []): PaginatedResult
     {
@@ -42,6 +49,9 @@ final readonly class TimeSliceDefinitionResource
         return PaginatedResult::fromResponse($data, 'timeSliceDefinitions', TimeSliceDefinition::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(string $propertyId, CreateTimeSliceDefinition $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateTimeSliceDefinitionRequest($propertyId, $data, $idempotencyKey));
@@ -49,11 +59,17 @@ final readonly class TimeSliceDefinitionResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $propertyId, string $timeSliceDefinitionId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateTimeSliceDefinitionRequest($propertyId, $timeSliceDefinitionId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $propertyId, string $timeSliceDefinitionId): void
     {
         $this->pipeline->send(new DeleteTimeSliceDefinitionRequest($propertyId, $timeSliceDefinitionId));

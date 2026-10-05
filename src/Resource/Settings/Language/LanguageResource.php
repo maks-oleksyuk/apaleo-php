@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\Language;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Settings\Language\DTO\Language;
 use Oleksyuk\Apaleo\Resource\Settings\Language\DTO\ReplaceLanguage;
@@ -18,7 +19,11 @@ final readonly class LanguageResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @return list<Language> */
+    /**
+     * @return list<Language>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(): array
     {
         $data = $this->pipeline->send(new GetLanguagesRequest());
@@ -26,7 +31,11 @@ final readonly class LanguageResource
         return array_map(Language::fromArray(...), ResponseData::nestedList($data, 'languages'));
     }
 
-    /** @param list<ReplaceLanguage> $languages the full new set; languages left out are removed */
+    /**
+     * @param list<ReplaceLanguage> $languages the full new set; languages left out are removed
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function replace(array $languages): void
     {
         $this->pipeline->send(new ReplaceLanguagesRequest($languages));

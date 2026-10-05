@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\AgeCategoryResource;
 use Oleksyuk\Apaleo\Resource\RatePlan\CancellationPolicy\CancellationPolicyResource;
@@ -22,46 +23,73 @@ final readonly class RatePlanResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function ratePlans(): RatePlanDomainResource
     {
         return new RatePlanDomainResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function rates(): RateResource
     {
         return new RateResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function services(): ServiceResource
     {
         return new ServiceResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function companies(): CompanyResource
     {
         return new CompanyResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function cancellationPolicies(): CancellationPolicyResource
     {
         return new CancellationPolicyResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function noShowPolicies(): NoShowPolicyResource
     {
         return new NoShowPolicyResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function corporateCodes(): CorporateCodeResource
     {
         return new CorporateCodeResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function promoCodes(): PromoCodeResource
     {
         return new PromoCodeResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function ageCategories(): AgeCategoryResource
     {
         return new AgeCategoryResource($this->pipeline);

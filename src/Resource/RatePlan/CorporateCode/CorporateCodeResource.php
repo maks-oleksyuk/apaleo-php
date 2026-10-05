@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\CorporateCode;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\CorporateCode\DTO\CorporateCode;
 use Oleksyuk\Apaleo\Resource\RatePlan\CorporateCode\Requests\ListCorporateCodesRequest;
@@ -16,7 +17,11 @@ final readonly class CorporateCodeResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @return PaginatedResult<CorporateCode> */
+    /**
+     * @return PaginatedResult<CorporateCode>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(?string $propertyId = null, ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
         Pagination::assertValidPageSize($pageSize);

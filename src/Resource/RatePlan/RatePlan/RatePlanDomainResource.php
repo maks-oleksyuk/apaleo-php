@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\RatePlan;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -34,6 +35,8 @@ final readonly class RatePlanDomainResource
     /**
      * @param list<'cancellationPolicy'|'property'> $expand
      * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function get(string $ratePlanId, array $expand = [], ?array $languages = null): RatePlan
     {
@@ -42,6 +45,9 @@ final readonly class RatePlanDomainResource
         return RatePlan::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $ratePlanId): bool
     {
         try {
@@ -57,6 +63,8 @@ final readonly class RatePlanDomainResource
      * @param list<'ageCategories'|'bookingPeriods'|'cancellationPolicy'|'property'|'services'|'surcharges'|'unitGroup'> $expand
      *
      * @return PaginatedResult<RatePlanListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         RatePlanFilter $filter = new RatePlanFilter(),
@@ -71,6 +79,9 @@ final readonly class RatePlanDomainResource
         return PaginatedResult::fromResponse($data, 'ratePlans', RatePlanListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(RatePlanFilter $filter = new RatePlanFilter()): int
     {
         $data = $this->pipeline->send(new CountRatePlansRequest($filter));
@@ -78,6 +89,9 @@ final readonly class RatePlanDomainResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateRatePlan $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateRatePlanRequest($data, $idempotencyKey));
@@ -85,6 +99,9 @@ final readonly class RatePlanDomainResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function replace(string $ratePlanId, ReplaceRatePlan $data): void
     {
         $this->pipeline->send(new ReplaceRatePlanRequest($ratePlanId, $data));
@@ -94,24 +111,37 @@ final readonly class RatePlanDomainResource
      * Apaleo has no single-rate-plan PATCH: pass one id to update just that one.
      *
      * @param list<string> $ratePlanIds
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function bulkUpdate(array $ratePlanIds, JsonPatch $patch): void
     {
         $this->pipeline->send(new BulkUpdateRatePlansRequest($ratePlanIds, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $ratePlanId): void
     {
         $this->pipeline->send(new DeleteRatePlanRequest($ratePlanId));
     }
 
-    /** @param list<string> $ratePlanIds */
+    /**
+     * @param list<string> $ratePlanIds
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function bulkDelete(array $ratePlanIds): void
     {
         $this->pipeline->send(new BulkDeleteRatePlansRequest($ratePlanIds));
     }
 
-    /** Makes the rate plan unavailable for all operations; cannot be undone. */
+    /**
+     * Makes the rate plan unavailable for all operations; cannot be undone.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function archive(string $ratePlanId): void
     {
         $this->pipeline->send(new ArchiveRatePlanRequest($ratePlanId));

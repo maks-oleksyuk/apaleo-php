@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\MarketSegment;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -26,6 +27,9 @@ final readonly class MarketSegmentResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $marketSegmentId): MarketSegment
     {
         $data = $this->pipeline->send(new GetMarketSegmentRequest($marketSegmentId));
@@ -33,6 +37,9 @@ final readonly class MarketSegmentResource
         return MarketSegment::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $marketSegmentId): bool
     {
         try {
@@ -48,6 +55,8 @@ final readonly class MarketSegmentResource
      * @param list<string> $propertyIds
      *
      * @return PaginatedResult<MarketSegment>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(array $propertyIds = [], ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
@@ -58,7 +67,11 @@ final readonly class MarketSegmentResource
         return PaginatedResult::fromResponse($data, 'marketSegments', MarketSegment::fromArray(...));
     }
 
-    /** @param list<string> $propertyIds */
+    /**
+     * @param list<string> $propertyIds
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function count(array $propertyIds = []): int
     {
         $data = $this->pipeline->send(new CountMarketSegmentsRequest($propertyIds));
@@ -66,6 +79,9 @@ final readonly class MarketSegmentResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateMarketSegment $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateMarketSegmentRequest($data, $idempotencyKey));
@@ -73,11 +89,17 @@ final readonly class MarketSegmentResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $marketSegmentId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateMarketSegmentRequest($marketSegmentId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $marketSegmentId): void
     {
         $this->pipeline->send(new DeleteMarketSegmentRequest($marketSegmentId));

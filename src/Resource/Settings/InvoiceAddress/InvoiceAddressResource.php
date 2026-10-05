@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\InvoiceAddress;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Settings\InvoiceAddress\DTO\InvoiceAddress;
@@ -24,6 +25,8 @@ final readonly class InvoiceAddressResource
      * @param list<string> $propertyIds empty for all properties
      *
      * @return PaginatedResult<InvoiceAddress>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(array $propertyIds = []): PaginatedResult
     {
@@ -36,13 +39,19 @@ final readonly class InvoiceAddressResource
      * Creates or replaces the invoice address of every given property.
      *
      * @param non-empty-list<string> $propertyIds
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function replace(array $propertyIds, ReplaceInvoiceAddress $data): void
     {
         $this->pipeline->send(new ReplaceInvoiceAddressRequest($propertyIds, $data));
     }
 
-    /** @param non-empty-list<string> $propertyIds */
+    /**
+     * @param non-empty-list<string> $propertyIds
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function update(array $propertyIds, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateInvoiceAddressRequest($propertyIds, $patch));

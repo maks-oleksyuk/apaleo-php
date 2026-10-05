@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\Unit;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -30,7 +31,11 @@ final readonly class UnitResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param ?list<string> $languages */
+    /**
+     * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $unitId, ?array $languages = null): Unit
     {
         $data = $this->pipeline->send(new GetUnitRequest($unitId, $languages));
@@ -38,6 +43,9 @@ final readonly class UnitResource
         return Unit::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $unitId): bool
     {
         try {
@@ -53,6 +61,8 @@ final readonly class UnitResource
      * @param list<'actions'|'connectedUnits'|'property'|'unitGroup'> $expand
      *
      * @return PaginatedResult<UnitListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         UnitFilter $filter = new UnitFilter(),
@@ -67,6 +77,9 @@ final readonly class UnitResource
         return PaginatedResult::fromResponse($data, 'units', UnitListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(UnitFilter $filter = new UnitFilter()): int
     {
         $data = $this->pipeline->send(new CountUnitsRequest($filter));
@@ -74,6 +87,9 @@ final readonly class UnitResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateUnit $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateUnitRequest($data, $idempotencyKey));
@@ -85,6 +101,8 @@ final readonly class UnitResource
      * @param list<CreateUnit> $units
      *
      * @return list<string>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function bulkCreate(array $units, ?string $idempotencyKey = null): array
     {
@@ -93,6 +111,9 @@ final readonly class UnitResource
         return ResponseData::stringList($response, 'ids');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $unitId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateUnitRequest($unitId, $patch));
@@ -100,17 +121,25 @@ final readonly class UnitResource
 
     /**
      * @param list<string> $unitIds
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function bulkUpdate(array $unitIds, JsonPatch $patch): void
     {
         $this->pipeline->send(new BulkUpdateUnitsRequest($unitIds, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $unitId): void
     {
         $this->pipeline->send(new DeleteUnitRequest($unitId));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function archive(string $unitId): void
     {
         $this->pipeline->send(new ArchiveUnitRequest($unitId));

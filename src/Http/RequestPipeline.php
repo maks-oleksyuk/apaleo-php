@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Auth\AccessToken;
 use Oleksyuk\Apaleo\Auth\TokenProvider;
 use Oleksyuk\Apaleo\Exception\ApaleoAuthException;
 use Oleksyuk\Apaleo\Exception\ApaleoClientException;
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Exception\ApaleoRateLimitException;
 use Oleksyuk\Apaleo\Exception\ApaleoServerException;
@@ -41,6 +42,8 @@ final readonly class RequestPipeline
 
     /**
      * @return array<string, mixed>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function send(Request $apaleoRequest): array
     {
@@ -52,6 +55,8 @@ final readonly class RequestPipeline
     /**
      * Same as send(), but returns the body as-is instead of decoding it: for binary endpoints like
      * invoice PDFs. Errors still come back as JSON and are mapped to the usual exceptions.
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function sendRaw(Request $apaleoRequest): string
     {
@@ -68,13 +73,15 @@ final readonly class RequestPipeline
     /**
      * All-or-nothing: the first failed response throws, and the other results are lost.
      *
-     * Sends several requests concurrently via $asyncHttpClient, if one was given; otherwise falls
+     * Sends several requests concurrently via $asyncHttpClient if one was given; otherwise falls
      * back to send()-ing them one by one. $httpClient is never used here: a PSR-18-wrapped
      * Symfony client can't be unwrapped back into its concurrency-capable form.
      *
      * @param list<Request> $requests
      *
      * @return list<array<string, mixed>> decoded response bodies, in the same order as $requests
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function sendMany(array $requests): array
     {
@@ -250,8 +257,8 @@ final readonly class RequestPipeline
     }
 
     /**
-     * Bools as "true"/"false" (ASP.NET's binder rejects PHP's 1/0), and no enum placeholder
-     * for an unrecognized API value may leak into a request.
+     * PHP booleans become "true"/"false" strings: Apaleo (ASP.NET) rejects the 1/0 PHP would send.
+     * Unknown enum placeholders are refused, not sent.
      *
      * @return array<string, mixed>
      */
@@ -282,10 +289,10 @@ final readonly class RequestPipeline
     {
         $body = $request->body();
         if ($body !== null) {
-            // Raw values (e.g. a JsonPatch value) as Apaleo expects them: json_encode() would turn a
+            // Raw values (e.g., a JsonPatch value) as Apaleo expects them: json_encode() would turn a
             // date into a PHP object dump, and an enum object would dodge the Unknown check below.
             // Float arithmetic noise (0.1 + 0.2 → 0.30000000000000004) would reach Apaleo verbatim;
-            // 10 decimals drops it without touching any precision a price or percentage really has.
+            // 10 decimals drop it without touching any precision a price or percentage really has.
             array_walk_recursive($body, static function (mixed &$value): void {
                 $value = match (true) {
                     $value instanceof \BackedEnum => $value->value,

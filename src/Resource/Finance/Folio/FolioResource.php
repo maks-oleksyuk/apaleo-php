@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Folio;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -54,7 +55,11 @@ final readonly class FolioResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'folios'> $expand */
+    /**
+     * @param list<'folios'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $folioId, array $expand = []): Folio
     {
         $data = $this->pipeline->send(new GetFolioRequest($folioId, $expand));
@@ -62,6 +67,9 @@ final readonly class FolioResource
         return Folio::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $folioId): bool
     {
         try {
@@ -78,6 +86,8 @@ final readonly class FolioResource
      * @param list<'allowances'|'allowedActions'|'charges'|'company'|'payments'|'transitoryCharges'|'warnings'> $expand
      *
      * @return PaginatedResult<FolioListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         FolioFilter $filter = new FolioFilter(),
@@ -93,6 +103,9 @@ final readonly class FolioResource
         return PaginatedResult::fromResponse($data, 'folios', FolioListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(FolioFilter $filter = new FolioFilter()): int
     {
         $data = $this->pipeline->send(new CountFoliosRequest($filter));
@@ -100,6 +113,9 @@ final readonly class FolioResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateFolio $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateFolioRequest($data, $idempotencyKey));
@@ -107,32 +123,51 @@ final readonly class FolioResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $folioId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateFolioRequest($folioId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $folioId): void
     {
         $this->pipeline->send(new DeleteFolioRequest($folioId));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function close(string $folioId): void
     {
         $this->pipeline->send(new FolioSimpleActionRequest($folioId, 'close'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function reopen(string $folioId): void
     {
         $this->pipeline->send(new FolioSimpleActionRequest($folioId, 'reopen'));
     }
 
-    /** Posts every not-yet-posted charge for the whole stay, instead of night by night. */
+    /**
+     * Posts every not-yet-posted charge for the whole stay, instead of night by night.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function postCharges(string $folioId): void
     {
         $this->pipeline->send(new FolioSimpleActionRequest($folioId, 'post-charges'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function addCharge(string $folioId, CreateCharge $charge, ?string $idempotencyKey = null): AddedCharge
     {
         $data = $this->pipeline->send(new AddChargeRequest($folioId, $charge, $idempotencyKey));
@@ -140,6 +175,9 @@ final readonly class FolioResource
         return AddedCharge::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function addTransitoryCharge(string $folioId, CreateTransitoryCharge $charge, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new AddTransitoryChargeRequest($folioId, $charge, $idempotencyKey));
@@ -147,7 +185,11 @@ final readonly class FolioResource
         return ResponseData::string($data, 'id');
     }
 
-    /** Routed to the routing's destination folio if a routing covers cancellation fees. */
+    /**
+     * Routed to the routing's destination folio if a routing covers cancellation fees.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function addCancellationFee(string $folioId, MonetaryValue $amount, ?string $idempotencyKey = null): AddedCharge
     {
         $data = $this->pipeline->send(new AddFeeRequest($folioId, 'cancellation-fee', $amount, $idempotencyKey));
@@ -155,7 +197,11 @@ final readonly class FolioResource
         return AddedCharge::fromArray($data);
     }
 
-    /** Routed to the routing's destination folio if a routing covers no-show fees. */
+    /**
+     * Routed to the routing's destination folio if a routing covers no-show fees.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function addNoShowFee(string $folioId, MonetaryValue $amount, ?string $idempotencyKey = null): AddedCharge
     {
         $data = $this->pipeline->send(new AddFeeRequest($folioId, 'no-show-fee', $amount, $idempotencyKey));
@@ -163,6 +209,9 @@ final readonly class FolioResource
         return AddedCharge::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function addChargeAllowance(
         string $folioId,
         string $chargeId,
@@ -176,6 +225,9 @@ final readonly class FolioResource
         return ResponseData::string($data, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function addFolioAllowance(string $folioId, CreateFolioAllowance $allowance, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new AddFolioAllowanceRequest($folioId, $allowance, $idempotencyKey));
@@ -187,6 +239,8 @@ final readonly class FolioResource
      * @param list<BulkAllowanceItem> $items
      *
      * @return array<string, string> the created allowance ids, keyed by the charge id each was granted on
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function addBulkAllowances(
         string $folioId,
@@ -205,18 +259,29 @@ final readonly class FolioResource
         return $allowanceIds;
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function moveCharges(string $folioId, string $targetFolioId, string $reason, FolioItemSelection $items): void
     {
         $this->pipeline->send(new MoveChargesRequest($folioId, $targetFolioId, $reason, $items));
     }
 
-    /** Moves all charges and transitory charges (not allowances or payments). */
+    /**
+     * Moves all charges and transitory charges (not allowances or payments).
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function moveAllCharges(string $folioId, string $targetFolioId, string $reason): void
     {
         $this->pipeline->send(new MoveAllChargesRequest($folioId, $targetFolioId, $reason));
     }
 
-    /** @param list<BulkMoveItem> $items */
+    /**
+     * @param list<BulkMoveItem> $items
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function bulkMoveCharges(array $items, string $reason): void
     {
         $this->pipeline->send(new BulkMoveChargesRequest($items, $reason));
@@ -226,6 +291,8 @@ final readonly class FolioResource
      * Only between guest and booking folios.
      *
      * @param list<string> $paymentIds
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function movePayments(string $folioId, string $targetFolioId, string $reason, array $paymentIds): void
     {
@@ -236,6 +303,8 @@ final readonly class FolioResource
      * Moves the given items to a new folio, together with a matching share of the payments, so both folios end at a zero balance.
      *
      * @return string the id of the new folio
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function correct(string $folioId, string $reason, FolioItemSelection $items, ?string $idempotencyKey = null): string
     {
@@ -244,6 +313,9 @@ final readonly class FolioResource
         return ResponseData::string($data, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function splitCharge(string $folioId, string $chargeId, Split $split, ?string $idempotencyKey = null): SplitChargeResult
     {
         $data = $this->pipeline->send(new SplitChargeRequest($folioId, $chargeId, $split, $idempotencyKey));

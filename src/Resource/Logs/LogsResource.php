@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Logs;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Logs\DTO\FolioChangeLogItem;
 use Oleksyuk\Apaleo\Resource\Logs\DTO\NightAuditLogItem;
@@ -35,6 +36,8 @@ final readonly class LogsResource
      * @param list<string>                  $dateFilter expressions like "gte_2024-01-01T00:00:00Z"
      *
      * @return PaginatedResult<ReservationChangeLogItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function reservationChanges(
         array $reservationIds = [],
@@ -73,6 +76,8 @@ final readonly class LogsResource
      * @param list<string>            $dateFilter expressions like "gte_2024-01-01T00:00:00Z"
      *
      * @return PaginatedResult<FolioChangeLogItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function folioChanges(
         array $folioIds = [],
@@ -98,6 +103,8 @@ final readonly class LogsResource
      * @param list<string>           $dateFilter expressions like "gte_2024-01-01T00:00:00Z"
      *
      * @return PaginatedResult<NightAuditLogItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function nightAudit(
         array $statuses = [],
@@ -121,6 +128,8 @@ final readonly class LogsResource
      * @param list<string>                 $dateFilter expressions like "gte_2024-01-01T00:00:00Z"
      *
      * @return PaginatedResult<TransactionsExportLogItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function transactionsExport(
         array $types = [],

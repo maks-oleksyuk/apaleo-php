@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Availability\Service;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\Service\DTO\ServiceAvailabilityTimeSlice;
 use Oleksyuk\Apaleo\Resource\Availability\Service\Requests\ListServiceAvailabilityRequest;
@@ -22,6 +23,8 @@ final readonly class ServiceResource
      * @param list<string> $channelCodes
      *
      * @return PaginatedResult<ServiceAvailabilityTimeSlice>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         string $propertyId,

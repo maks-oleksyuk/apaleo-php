@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Company;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\Company\DTO\Company;
@@ -23,6 +24,9 @@ final readonly class CompanyResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $companyId): Company
     {
         $data = $this->pipeline->send(new GetCompanyRequest($companyId));
@@ -30,7 +34,11 @@ final readonly class CompanyResource
         return Company::fromArray($data);
     }
 
-    /** @return PaginatedResult<Company> */
+    /**
+     * @return PaginatedResult<Company>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(
         CompanyFilter $filter = new CompanyFilter(),
         ?int $pageNumber = null,
@@ -43,6 +51,9 @@ final readonly class CompanyResource
         return PaginatedResult::fromResponse($data, 'companies', Company::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateCompany $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateCompanyRequest($data, $idempotencyKey));
@@ -50,11 +61,17 @@ final readonly class CompanyResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $companyId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateCompanyRequest($companyId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $companyId): void
     {
         $this->pipeline->send(new DeleteCompanyRequest($companyId));

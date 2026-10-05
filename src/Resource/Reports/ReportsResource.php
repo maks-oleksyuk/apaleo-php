@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Reports;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Reports\DTO\ArrivalsReport;
 use Oleksyuk\Apaleo\Resource\Reports\DTO\CompanyInvoice;
@@ -30,6 +31,8 @@ final readonly class ReportsResource
      * @param list<string> $serviceIds
      *
      * @return PaginatedResult<OrderedService>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function orderedServices(string $propertyId, array $serviceIds, \DateTimeImmutable $from, \DateTimeImmutable $to): PaginatedResult
     {
@@ -38,6 +41,9 @@ final readonly class ReportsResource
         return PaginatedResult::fromResponse($data, 'orderedServices', OrderedService::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function arrivals(string $propertyId, int $month, int $year): ArrivalsReport
     {
         $data = $this->pipeline->send(new GetArrivalsReportRequest($propertyId, $month, $year));
@@ -55,6 +61,8 @@ final readonly class ReportsResource
      * @param list<string>        $sources
      * @param list<string>        $marketSegmentIds
      * @param list<'businessDays'>        $expand
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function propertyPerformance(
         string $propertyId,
@@ -95,6 +103,8 @@ final readonly class ReportsResource
      * @param list<string> $dateFilter expressions like "gte_2024-01-01", "lt_2024-02-01" (interval capped at 1 month by the API)
      *
      * @return PaginatedResult<CompanyInvoice>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function companyInvoicesVat(string $propertyId, array $companyIds = [], array $dateFilter = []): PaginatedResult
     {
@@ -103,6 +113,9 @@ final readonly class ReportsResource
         return PaginatedResult::fromResponse($data, 'companyInvoices', CompanyInvoice::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function revenues(string $propertyId, \DateTimeImmutable $from, \DateTimeImmutable $to, ?string $languageCode = null): RevenuesReportItem
     {
         $data = $this->pipeline->send(new GetRevenuesReportRequest($propertyId, $from, $to, $languageCode));

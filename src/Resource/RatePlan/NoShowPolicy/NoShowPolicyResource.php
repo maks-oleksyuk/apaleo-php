@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\NoShowPolicy\DTO\CreateNoShowPolicy;
@@ -24,7 +25,11 @@ final readonly class NoShowPolicyResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param ?list<string> $languages */
+    /**
+     * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $noShowPolicyId, ?array $languages = null): NoShowPolicy
     {
         $data = $this->pipeline->send(new GetNoShowPolicyRequest($noShowPolicyId, $languages));
@@ -32,7 +37,11 @@ final readonly class NoShowPolicyResource
         return NoShowPolicy::fromArray($data);
     }
 
-    /** @return PaginatedResult<NoShowPolicyListItem> */
+    /**
+     * @return PaginatedResult<NoShowPolicyListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(?string $propertyId = null, ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
         Pagination::assertValidPageSize($pageSize);
@@ -42,6 +51,9 @@ final readonly class NoShowPolicyResource
         return PaginatedResult::fromResponse($data, 'noShowPolicies', NoShowPolicyListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateNoShowPolicy $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateNoShowPolicyRequest($data, $idempotencyKey));
@@ -49,11 +61,17 @@ final readonly class NoShowPolicyResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $noShowPolicyId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateNoShowPolicyRequest($noShowPolicyId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $noShowPolicyId): void
     {
         $this->pipeline->send(new DeleteNoShowPolicyRequest($noShowPolicyId));

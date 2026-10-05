@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Operations;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -34,6 +35,8 @@ final readonly class OperationsResource
      * @param list<'unit'> $expand
      *
      * @return PaginatedResult<Maintenance>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function listMaintenances(
         MaintenanceFilter $filter = new MaintenanceFilter(),
@@ -48,6 +51,9 @@ final readonly class OperationsResource
         return PaginatedResult::fromResponse($data, 'maintenances', Maintenance::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function countMaintenances(MaintenanceFilter $filter = new MaintenanceFilter()): int
     {
         $data = $this->pipeline->send(new CountMaintenancesRequest($filter));
@@ -55,7 +61,11 @@ final readonly class OperationsResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @param list<'unit'> $expand */
+    /**
+     * @param list<'unit'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function getMaintenance(string $maintenanceId, array $expand = []): Maintenance
     {
         $data = $this->pipeline->send(new GetMaintenanceRequest($maintenanceId, $expand));
@@ -63,6 +73,9 @@ final readonly class OperationsResource
         return Maintenance::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function maintenanceExists(string $maintenanceId): bool
     {
         try {
@@ -74,6 +87,9 @@ final readonly class OperationsResource
         }
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function createMaintenance(CreateMaintenance $maintenance, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateMaintenanceRequest($maintenance, $idempotencyKey));
@@ -85,6 +101,8 @@ final readonly class OperationsResource
      * @param list<CreateMaintenance> $maintenances
      *
      * @return list<string>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function bulkCreateMaintenances(array $maintenances, ?string $idempotencyKey = null): array
     {
@@ -93,23 +111,37 @@ final readonly class OperationsResource
         return ResponseData::stringList($data, 'ids');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function updateMaintenance(string $maintenanceId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateMaintenanceRequest($maintenanceId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function deleteMaintenance(string $maintenanceId): void
     {
         $this->pipeline->send(new DeleteMaintenanceRequest($maintenanceId));
     }
 
-    /** Posts revenues for the past business day and sets all occupied units to 'Dirty'. */
+    /**
+     * Posts revenues for the past business day and sets all occupied units to 'Dirty'.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function performNightAudit(string $propertyId, ?bool $setReservationsToNoShow = null): void
     {
         $this->pipeline->send(new PerformNightAuditRequest($propertyId, $setReservationsToNoShow));
     }
 
-    /** @param list<UnitConditionUpdate> $conditions */
+    /**
+     * @param list<UnitConditionUpdate> $conditions
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function setUnitsCondition(array $conditions): void
     {
         $this->pipeline->send(new ReplaceUnitsConditionRequest($conditions));

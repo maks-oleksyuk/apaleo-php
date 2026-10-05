@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Availability\Property;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\Property\DTO\HouseOverbookingTimeSlice;
@@ -19,7 +20,11 @@ final readonly class PropertyResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @return list<HouseOverbookingTimeSlice> the time slices in [$from, $to) where house-level overbooking is applied */
+    /**
+     * @return list<HouseOverbookingTimeSlice> the time slices in [$from, $to) where house-level overbooking is applied
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function houseOverbooking(
         string $propertyId,
         \DateTimeImmutable $from,
@@ -32,7 +37,11 @@ final readonly class PropertyResource
         return array_map(HouseOverbookingTimeSlice::fromArray(...), ResponseData::nestedList($data, 'timeSlices'));
     }
 
-    /** Replaces the house-level overbooking limit for [$from, $to) — e.g. `(new JsonPatch())->replace('/houseOverbookingLimit', 5)`. */
+    /**
+     * Replaces the house-level overbooking limit for [$from, $to) — e.g. `(new JsonPatch())->replace('/houseOverbookingLimit', 5)`.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function updateHouseOverbooking(
         string $propertyId,
         \DateTimeImmutable $from,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Reservation;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Offer\DTO\ServiceOffers;
@@ -41,7 +42,11 @@ final readonly class ReservationResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'actions'|'assignedUnits'|'booker'|'company'|'services'|'timeSlices'> $expand */
+    /**
+     * @param list<'actions'|'assignedUnits'|'booker'|'company'|'services'|'timeSlices'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $reservationId, array $expand = []): Reservation
     {
         $data = $this->pipeline->send(new GetReservationRequest($reservationId, $expand));
@@ -54,6 +59,8 @@ final readonly class ReservationResource
      * @param list<'actions'|'assignedUnits'|'booker'|'company'|'services'|'timeSlices'> $expand
      *
      * @return PaginatedResult<ReservationListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         ReservationFilter $filter = new ReservationFilter(),
@@ -69,6 +76,9 @@ final readonly class ReservationResource
         return PaginatedResult::fromResponse($data, 'reservations', ReservationListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(ReservationFilter $filter = new ReservationFilter()): int
     {
         $data = $this->pipeline->send(new CountReservationsRequest($filter));
@@ -76,12 +86,19 @@ final readonly class ReservationResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $reservationId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateReservationRequest($reservationId, $patch));
     }
 
-    /** @return list<ReservationServiceItem> */
+    /**
+     * @return list<ReservationServiceItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function services(string $reservationId): array
     {
         $data = $this->pipeline->send(new GetReservationServicesRequest($reservationId));
@@ -89,61 +106,97 @@ final readonly class ReservationResource
         return array_map(ReservationServiceItem::fromArray(...), ResponseData::nestedList($data, 'services'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function removeService(string $reservationId, string $serviceId): void
     {
         $this->pipeline->send(new DeleteReservationServiceRequest($reservationId, $serviceId));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function bookService(string $reservationId, BookReservationService $service, bool $force = false): void
     {
         $this->pipeline->send(new BookReservationServiceRequest($reservationId, $service, $force));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function checkIn(string $reservationId, ?bool $withCityTax = null): void
     {
         $this->pipeline->send(new CheckInRequest($reservationId, $withCityTax));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function checkOut(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'checkout'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function cancel(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'cancel'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function noShow(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'noshow'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function revertCheckIn(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'revert-checkin'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function addCityTax(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'add-city-tax'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function removeCityTax(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'remove-city-tax'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function lockUnit(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'lock-unit'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function unlockUnit(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'unlock-unit'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function unassignUnits(string $reservationId): void
     {
         $this->pipeline->send(new ReservationSimpleActionRequest($reservationId, 'unassign-units'));
@@ -155,6 +208,8 @@ final readonly class ReservationResource
      * @param list<UnitCondition> $unitConditions
      *
      * @return list<AutoAssignedUnitItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function assignUnit(string $reservationId, array $unitConditions = []): array
     {
@@ -163,7 +218,11 @@ final readonly class ReservationResource
         return array_map(AutoAssignedUnitItem::fromArray(...), ResponseData::nestedList($data, 'timeSlices'));
     }
 
-    /** Assigns a specific unit, optionally only for part of the stay. */
+    /**
+     * Assigns a specific unit, optionally only for part of the stay.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function assignSpecificUnit(
         string $reservationId,
         string $unitId,
@@ -176,6 +235,9 @@ final readonly class ReservationResource
         return EmbeddedUnit::fromArray(ResponseData::nested($data, 'unit'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function amend(string $reservationId, DesiredStayDetails $details, bool $force = false): void
     {
         $this->pipeline->send(new AmendReservationRequest($reservationId, $details, $force));
@@ -186,6 +248,8 @@ final readonly class ReservationResource
      *
      * @param list<int>    $childrenAges
      * @param list<string> $unitGroupIds
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function offers(
         string $reservationId,
@@ -217,6 +281,9 @@ final readonly class ReservationResource
         return ReservationStayOffers::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function serviceOffers(
         string $reservationId,
         ?ChannelCode $channelCode = null,

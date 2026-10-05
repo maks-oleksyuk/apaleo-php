@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Service;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -30,6 +31,8 @@ final readonly class ServiceResource
     /**
      * @param list<'property'> $expand
      * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function get(string $serviceId, array $expand = [], ?array $languages = null): Service
     {
@@ -38,6 +41,9 @@ final readonly class ServiceResource
         return Service::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $serviceId): bool
     {
         try {
@@ -53,6 +59,8 @@ final readonly class ServiceResource
      * @param list<'property'> $expand
      *
      * @return PaginatedResult<ServiceListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         ServiceFilter $filter = new ServiceFilter(),
@@ -67,6 +75,9 @@ final readonly class ServiceResource
         return PaginatedResult::fromResponse($data, 'services', ServiceListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(ServiceFilter $filter = new ServiceFilter()): int
     {
         $data = $this->pipeline->send(new CountServicesRequest($filter));
@@ -74,6 +85,9 @@ final readonly class ServiceResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateService $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateServiceRequest($data, $idempotencyKey));
@@ -81,11 +95,17 @@ final readonly class ServiceResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $serviceId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateServiceRequest($serviceId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $serviceId): void
     {
         $this->pipeline->send(new DeleteServiceRequest($serviceId));

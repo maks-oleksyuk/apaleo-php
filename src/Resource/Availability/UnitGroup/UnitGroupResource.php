@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Availability\UnitGroup;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\UnitGroup\DTO\UnitGroupAvailabilityTimeSlice;
@@ -27,6 +28,8 @@ final readonly class UnitGroupResource
      * @param list<int>           $childrenAges
      *
      * @return PaginatedResult<UnitGroupAvailabilityTimeSlice>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         string $propertyId,
@@ -62,7 +65,11 @@ final readonly class UnitGroupResource
         return PaginatedResult::fromResponse($data, 'timeSlices', UnitGroupAvailabilityTimeSlice::fromArray(...));
     }
 
-    /** Replaces the allowed overbooking count for a unit group in [$from, $to) — e.g. `(new JsonPatch())->replace('/allowedOverbookingCount', 2)`. */
+    /**
+     * Replaces the allowed overbooking count for a unit group in [$from, $to) — e.g. `(new JsonPatch())->replace('/allowedOverbookingCount', 2)`.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function update(
         string $unitGroupId,
         \DateTimeImmutable $from,

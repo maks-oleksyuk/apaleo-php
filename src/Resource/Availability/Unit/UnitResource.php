@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Availability\Unit;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\Unit\DTO\AvailableUnitItem;
 use Oleksyuk\Apaleo\Resource\Availability\Unit\Requests\ListAvailableUnitsRequest;
@@ -22,6 +23,8 @@ final readonly class UnitResource
      * @param list<string> $unitAttributeIds
      *
      * @return PaginatedResult<AvailableUnitItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         string $propertyId,
@@ -55,6 +58,8 @@ final readonly class UnitResource
      * @param list<string> $unitAttributeIds
      *
      * @return PaginatedResult<AvailableUnitItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function forReservation(
         string $reservationId,

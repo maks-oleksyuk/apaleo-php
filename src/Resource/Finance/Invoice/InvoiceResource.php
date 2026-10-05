@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Invoice;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\DTO\Invoice;
 use Oleksyuk\Apaleo\Resource\Finance\Invoice\DTO\InvoiceListItem;
@@ -28,7 +29,11 @@ final readonly class InvoiceResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'company'> $expand */
+    /**
+     * @param list<'company'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $invoiceId, array $expand = []): Invoice
     {
         $data = $this->pipeline->send(new GetInvoiceRequest($invoiceId, $expand));
@@ -36,7 +41,11 @@ final readonly class InvoiceResource
         return Invoice::fromArray($data);
     }
 
-    /** @return string the raw PDF bytes */
+    /**
+     * @return string the raw PDF bytes
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function pdf(string $invoiceId): string
     {
         return $this->pipeline->sendRaw(new GetInvoicePdfRequest($invoiceId));
@@ -46,6 +55,8 @@ final readonly class InvoiceResource
      * @param list<'allowedActions'|'company'> $expand
      *
      * @return PaginatedResult<InvoiceListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(InvoiceFilter $filter = new InvoiceFilter(), ?int $pageNumber = null, ?int $pageSize = null, array $expand = []): PaginatedResult
     {
@@ -56,7 +67,11 @@ final readonly class InvoiceResource
         return PaginatedResult::fromResponse($data, 'invoices', InvoiceListItem::fromArray(...));
     }
 
-    /** @param list<'company'> $expand */
+    /**
+     * @param list<'company'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function preview(string $folioId, array $expand = []): InvoicePreview
     {
         $data = $this->pipeline->send(new PreviewInvoiceRequest($folioId, $expand));
@@ -64,7 +79,11 @@ final readonly class InvoiceResource
         return InvoicePreview::fromArray($data);
     }
 
-    /** @return string the raw PDF bytes */
+    /**
+     * @return string the raw PDF bytes
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function previewPdf(string $folioId, string $languageCode): string
     {
         return $this->pipeline->sendRaw(new PreviewInvoicePdfRequest($folioId, $languageCode));
@@ -72,6 +91,8 @@ final readonly class InvoiceResource
 
     /**
      * Check preview() first: it tells whether this would fail or also close the folio.
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function create(string $folioId, string $languageCode, ?string $idempotencyKey = null): string
     {
@@ -80,13 +101,21 @@ final readonly class InvoiceResource
         return ResponseData::string($data, 'id');
     }
 
-    /** Marks an invoice checked out on accounts receivable as paid. */
+    /**
+     * Marks an invoice checked out on accounts receivable as paid.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function markAsPaid(string $invoiceId, PaymentMethod $paymentMethod, string $receipt): void
     {
         $this->pipeline->send(new PayInvoiceRequest($invoiceId, $paymentMethod, $receipt));
     }
 
-    /** Issues a cancellation invoice for it. */
+    /**
+     * Issues a cancellation invoice for it.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function cancel(string $invoiceId, InvoiceCancellationReason $reason): void
     {
         $this->pipeline->send(new CancelInvoiceRequest($invoiceId, $reason));

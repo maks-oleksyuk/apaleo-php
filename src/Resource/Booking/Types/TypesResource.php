@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Types;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Enum\AllowedValueType;
 use Oleksyuk\Apaleo\Resource\Booking\Types\Requests\ListAllowedValuesRequest;
@@ -17,7 +18,11 @@ final readonly class TypesResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @return list<string> channels usable as a booking source */
+    /**
+     * @return list<string> channels usable as a booking source
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function sources(): array
     {
         $data = $this->pipeline->send(new ListSourcesRequest());
@@ -28,6 +33,8 @@ final readonly class TypesResource
     /**
      * @return list<string> values a field of $type can take in $countryCode; empty when the API
      *                       returns 204 No Content (no matching values on that page)
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function allowedValues(
         AllowedValueType $type,

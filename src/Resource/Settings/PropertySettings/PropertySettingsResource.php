@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\PropertySettings;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Settings\PropertySettings\DTO\PropertySettings;
 use Oleksyuk\Apaleo\Resource\Settings\PropertySettings\Requests\GetPropertySettingsRequest;
@@ -14,6 +15,9 @@ final readonly class PropertySettingsResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $propertyId): PropertySettings
     {
         $data = $this->pipeline->send(new GetPropertySettingsRequest($propertyId));

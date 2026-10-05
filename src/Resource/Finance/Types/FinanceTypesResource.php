@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Types;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\DTO\VatRate;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\FinanceServiceType;
@@ -18,13 +19,21 @@ final readonly class FinanceTypesResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @return list<string> ISO 4217 codes */
+    /**
+     * @return list<string> ISO 4217 codes
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function currencies(): array
     {
         return ResponseData::stringListOrEmpty($this->pipeline->send(new ListFinanceTypesRequest('currencies')), 'isoCurrencies');
     }
 
-    /** @return list<PaymentMethod> */
+    /**
+     * @return list<PaymentMethod>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function paymentMethods(): array
     {
         $data = $this->pipeline->send(new ListFinanceTypesRequest('payment-methods'));
@@ -32,7 +41,11 @@ final readonly class FinanceTypesResource
         return array_map(PaymentMethod::fromApi(...), ResponseData::stringListOrEmpty($data, 'paymentMethods'));
     }
 
-    /** @return list<FinanceServiceType> */
+    /**
+     * @return list<FinanceServiceType>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function serviceTypes(): array
     {
         $data = $this->pipeline->send(new ListFinanceTypesRequest('service-types'));
@@ -44,6 +57,8 @@ final readonly class FinanceTypesResource
      * @param ?\DateTimeImmutable $atDate the rates valid on that day; today when omitted
      *
      * @return list<VatRate>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function vatTypes(string $isoCountryCode, ?\DateTimeImmutable $atDate = null): array
     {

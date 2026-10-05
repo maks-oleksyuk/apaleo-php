@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\FeatureSettings;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Settings\FeatureSettings\DTO\FeatureSettings;
@@ -16,6 +17,9 @@ final readonly class FeatureSettingsResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $propertyId): FeatureSettings
     {
         $data = $this->pipeline->send(new GetFeatureSettingsRequest($propertyId));
@@ -23,6 +27,9 @@ final readonly class FeatureSettingsResource
         return FeatureSettings::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $propertyId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateFeatureSettingsRequest($propertyId, $patch));

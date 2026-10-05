@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Refund;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Finance\Refund\DTO\CreateFolioRefund;
 use Oleksyuk\Apaleo\Resource\Finance\Refund\DTO\CreatePaymentRefund;
@@ -23,6 +24,9 @@ final readonly class RefundResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $folioId, string $refundId): Refund
     {
         $data = $this->pipeline->send(new GetRefundRequest($folioId, $refundId));
@@ -34,6 +38,8 @@ final readonly class RefundResource
      * @param list<PaymentStatus> $statuses
      *
      * @return PaginatedResult<Refund>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(string $folioId, array $statuses = [], ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
@@ -44,6 +50,9 @@ final readonly class RefundResource
         return PaginatedResult::fromResponse($data, 'refunds', Refund::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(string $folioId, CreateFolioRefund $refund, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new CreateFolioRefundRequest($folioId, $refund, $idempotencyKey));
@@ -51,6 +60,9 @@ final readonly class RefundResource
         return ResponseData::string($data, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function refundPayment(string $folioId, string $paymentId, CreatePaymentRefund $refund, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new RefundPaymentRequest($folioId, $paymentId, $refund, $idempotencyKey));

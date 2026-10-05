@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\Rate;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\Rate\DTO\Rate;
@@ -30,7 +31,11 @@ final readonly class RateResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @return PaginatedResult<Rate> */
+    /**
+     * @return PaginatedResult<Rate>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(
         string $ratePlanId,
         \DateTimeImmutable $from,
@@ -45,6 +50,9 @@ final readonly class RateResource
         return PaginatedResult::fromResponse($data, 'rates', Rate::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(string $ratePlanId, \DateTimeImmutable $from, \DateTimeImmutable $to): int
     {
         $data = $this->pipeline->send(new CountRatesRequest($ratePlanId, $from, $to));
@@ -52,13 +60,21 @@ final readonly class RateResource
         return ResponseData::int($data, 'count');
     }
 
-    /** @param list<ReplaceRate> $rates */
+    /**
+     * @param list<ReplaceRate> $rates
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function replace(string $ratePlanId, array $rates): void
     {
         $this->pipeline->send(new ReplaceRatesRequest($ratePlanId, $rates));
     }
 
-    /** @param list<RatePatch> $patches */
+    /**
+     * @param list<RatePatch> $patches
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $ratePlanId, array $patches): void
     {
         $this->pipeline->send(new UpdateRatesRequest($ratePlanId, $patches));
@@ -67,6 +83,8 @@ final readonly class RateResource
     /**
      * @param list<string> $ratePlanIds
      * @param list<DayOfWeek> $weekDays empty = every day
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function bulkUpdate(
         array $ratePlanIds,
@@ -78,6 +96,9 @@ final readonly class RateResource
         $this->pipeline->send(new BulkUpdateRatesRequest($ratePlanIds, $from, $to, $patch, $weekDays));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $ratePlanId, \DateTimeImmutable $from, \DateTimeImmutable $to): void
     {
         $this->pipeline->send(new DeleteRatesRequest($ratePlanId, $from, $to));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Account;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Finance\Account\DTO\AccountingTransaction;
 use Oleksyuk\Apaleo\Resource\Finance\Account\DTO\ChartOfAccounts;
@@ -31,7 +32,11 @@ final readonly class FinanceAccountResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param ?int $transactionLimit how many of the latest transactions to include */
+    /**
+     * @param ?int $transactionLimit how many of the latest transactions to include
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(
         string $propertyId,
         string $accountNumber,
@@ -45,7 +50,11 @@ final readonly class FinanceAccountResource
         return FinanceAccount::fromArray($data);
     }
 
-    /** @param ?int $depth how many levels of sub-accounts to include */
+    /**
+     * @param ?int $depth how many levels of sub-accounts to include
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function chartOfAccounts(
         string $propertyId,
         ?int $depth = null,
@@ -58,7 +67,11 @@ final readonly class FinanceAccountResource
         return ChartOfAccounts::fromArray($data);
     }
 
-    /** @return PaginatedResult<FinanceAccountListItem> */
+    /**
+     * @return PaginatedResult<FinanceAccountListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function globalAccounts(
         string $propertyId,
         string $parent,
@@ -73,7 +86,11 @@ final readonly class FinanceAccountResource
         return $this->accounts($this->pipeline->send(new ListGlobalAccountsRequest($propertyId, $parent, $includeArchived, $accountingSchema, $languageCode, $pageNumber, $pageSize)));
     }
 
-    /** @return PaginatedResult<FinanceAccountListItem> */
+    /**
+     * @return PaginatedResult<FinanceAccountListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function childAccounts(
         string $propertyId,
         string $parent,
@@ -88,7 +105,11 @@ final readonly class FinanceAccountResource
         return $this->accounts($this->pipeline->send(new ListChildAccountsRequest($propertyId, $parent, $includeArchived, $accountingSchema, $languageCode, $pageNumber, $pageSize)));
     }
 
-    /** @return PaginatedResult<FinanceAccountListItem> */
+    /**
+     * @return PaginatedResult<FinanceAccountListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function guestAccounts(
         string $propertyId,
         string $reservationId,
@@ -102,7 +123,11 @@ final readonly class FinanceAccountResource
         return $this->accounts($this->pipeline->send(new ListGuestAccountsRequest($propertyId, $reservationId, $parent, $languageCode, $pageNumber, $pageSize)));
     }
 
-    /** @return PaginatedResult<FinanceAccountListItem> */
+    /**
+     * @return PaginatedResult<FinanceAccountListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function externalAccounts(
         string $propertyId,
         string $folioId,
@@ -116,13 +141,21 @@ final readonly class FinanceAccountResource
         return $this->accounts($this->pipeline->send(new ListExternalAccountsRequest($propertyId, $folioId, $parent, $languageCode, $pageNumber, $pageSize)));
     }
 
-    /** @return list<AccountingTransaction> */
+    /**
+     * @return list<AccountingTransaction>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function export(TransactionFilter $filter): array
     {
         return $this->transactions('export', $filter);
     }
 
-    /** @return list<AccountingTransaction> */
+    /**
+     * @return list<AccountingTransaction>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function exportDaily(TransactionFilter $filter): array
     {
         return $this->transactions('export-daily', $filter);
@@ -132,6 +165,8 @@ final readonly class FinanceAccountResource
      * Only $propertyId, $from, $to, $reference and $accountingSchema of the filter apply.
      *
      * @return list<GrossTransaction>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function exportGrossDaily(TransactionFilter $filter): array
     {
@@ -140,17 +175,27 @@ final readonly class FinanceAccountResource
         return array_map(GrossTransaction::fromArray(...), ResponseData::nestedList($data, 'transactions'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function aggregate(TransactionFilter $filter): TransactionAggregates
     {
         return TransactionAggregates::fromArray($this->pipeline->send(new TransactionsRequest('aggregate', $filter)));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function aggregateDaily(TransactionFilter $filter): TransactionAggregates
     {
         return TransactionAggregates::fromArray($this->pipeline->send(new TransactionsRequest('aggregate-daily', $filter)));
     }
 
-    /** @return list<TransactionPair> */
+    /**
+     * @return list<TransactionPair>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function aggregatePairsDaily(TransactionFilter $filter): array
     {
         $data = $this->pipeline->send(new TransactionsRequest('aggregate-pairs-daily', $filter));

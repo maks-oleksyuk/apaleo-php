@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Booking;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Booking\DTO\Booking;
@@ -28,7 +29,11 @@ final readonly class BookingDomainResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'property'|'propertyValues'|'ratePlan'|'reservations'|'services'|'unitGroup'> $expand */
+    /**
+     * @param list<'property'|'propertyValues'|'ratePlan'|'reservations'|'services'|'unitGroup'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $bookingId, array $expand = []): Booking
     {
         $data = $this->pipeline->send(new GetBookingRequest($bookingId, $expand));
@@ -40,6 +45,8 @@ final readonly class BookingDomainResource
      * @param list<'property'|'ratePlan'|'reservations'|'services'|'unitGroup'> $expand
      *
      * @return PaginatedResult<BookingListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         BookingFilter $filter = new BookingFilter(),
@@ -54,6 +61,9 @@ final readonly class BookingDomainResource
         return PaginatedResult::fromResponse($data, 'bookings', BookingListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateBooking $booking, bool $force = false, ?string $idempotencyKey = null): BookingCreated
     {
         $data = $this->pipeline->send(new CreateBookingRequest($booking, $force, $idempotencyKey));
@@ -61,12 +71,19 @@ final readonly class BookingDomainResource
         return BookingCreated::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $bookingId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateBookingRequest($bookingId, $patch));
     }
 
-    /** @param list<CreateReservation> $reservations */
+    /**
+     * @param list<CreateReservation> $reservations
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function addReservations(
         string $bookingId,
         array $reservations,

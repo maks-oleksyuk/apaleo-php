@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Inventory\Property;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -31,7 +32,11 @@ final readonly class PropertyResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param ?list<string> $languages */
+    /**
+     * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $propertyId, ?array $languages = null): Property
     {
         $data = $this->pipeline->send(new GetPropertyRequest($propertyId, $languages));
@@ -39,6 +44,9 @@ final readonly class PropertyResource
         return Property::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $propertyId): bool
     {
         try {
@@ -54,6 +62,8 @@ final readonly class PropertyResource
      * @param list<'actions'> $expand
      *
      * @return PaginatedResult<PropertyListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         PropertyFilter $filter = new PropertyFilter(),
@@ -68,6 +78,9 @@ final readonly class PropertyResource
         return PaginatedResult::fromResponse($data, 'properties', PropertyListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(): int
     {
         $data = $this->pipeline->send(new CountPropertiesRequest());
@@ -75,6 +88,9 @@ final readonly class PropertyResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateProperty $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreatePropertyRequest($data, $idempotencyKey));
@@ -82,16 +98,25 @@ final readonly class PropertyResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $propertyId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdatePropertyRequest($propertyId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $propertyId): void
     {
         $this->pipeline->send(new DeletePropertyRequest($propertyId));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function clone(string $propertyId, CreateProperty $overrides, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new ClonePropertyRequest($propertyId, $overrides, $idempotencyKey));
@@ -99,16 +124,25 @@ final readonly class PropertyResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function archive(string $propertyId): void
     {
         $this->pipeline->send(new ArchivePropertyRequest($propertyId));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function setLive(string $propertyId): void
     {
         $this->pipeline->send(new SetPropertyLiveRequest($propertyId));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function reset(string $propertyId): void
     {
         $this->pipeline->send(new ResetPropertyRequest($propertyId));

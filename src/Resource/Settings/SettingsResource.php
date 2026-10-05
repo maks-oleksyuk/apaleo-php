@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\RatePlanResource;
 use Oleksyuk\Apaleo\Resource\Settings\CapturePolicy\CapturePolicyResource;
@@ -23,46 +24,73 @@ final readonly class SettingsResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function capturePolicies(): CapturePolicyResource
     {
         return new CapturePolicyResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function cityTaxes(): CityTaxResource
     {
         return new CityTaxResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function subAccounts(): SubAccountResource
     {
         return new SubAccountResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function features(): FeatureSettingsResource
     {
         return new FeatureSettingsResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function invoiceAddresses(): InvoiceAddressResource
     {
         return new InvoiceAddressResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function languages(): LanguageResource
     {
         return new LanguageResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function marketSegments(): MarketSegmentResource
     {
         return new MarketSegmentResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function properties(): PropertySettingsResource
     {
         return new PropertySettingsResource($this->pipeline);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function timeSliceDefinitions(): TimeSliceDefinitionResource
     {
         return new TimeSliceDefinitionResource($this->pipeline);

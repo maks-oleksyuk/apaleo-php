@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Block;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -33,7 +34,11 @@ final readonly class BlockResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'actions'|'timeSlices'> $expand */
+    /**
+     * @param list<'actions'|'timeSlices'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $blockId, array $expand = []): Block
     {
         $data = $this->pipeline->send(new GetBlockRequest($blockId, $expand));
@@ -41,6 +46,9 @@ final readonly class BlockResource
         return Block::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $blockId): bool
     {
         try {
@@ -56,6 +64,8 @@ final readonly class BlockResource
      * @param list<'actions'|'timeSlices'> $expand
      *
      * @return PaginatedResult<Block>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         BlockFilter $filter = new BlockFilter(),
@@ -70,6 +80,9 @@ final readonly class BlockResource
         return PaginatedResult::fromResponse($data, 'blocks', Block::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(BlockFilter $filter = new BlockFilter()): int
     {
         $data = $this->pipeline->send(new CountBlocksRequest($filter));
@@ -77,6 +90,9 @@ final readonly class BlockResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateBlock $block, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new CreateBlockRequest($block, $idempotencyKey));
@@ -84,42 +100,67 @@ final readonly class BlockResource
         return ResponseData::string($data, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $blockId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateBlockRequest($blockId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $blockId): void
     {
         $this->pipeline->send(new DeleteBlockRequest($blockId));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function amend(string $blockId, ReplaceBlock $replacement): void
     {
         $this->pipeline->send(new AmendBlockRequest($blockId, $replacement));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function cancel(string $blockId): void
     {
         $this->pipeline->send(new BlockSimpleActionRequest($blockId, 'cancel'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function confirm(string $blockId): void
     {
         $this->pipeline->send(new BlockSimpleActionRequest($blockId, 'confirm'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function release(string $blockId): void
     {
         $this->pipeline->send(new BlockSimpleActionRequest($blockId, 'release'));
     }
 
-    /** Picks up (deletes) any of the block's unpicked units that are no longer needed. */
+    /**
+     * Picks up (deletes) any of the block's unpicked units that are no longer needed.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function wash(string $blockId): void
     {
         $this->pipeline->send(new BlockSimpleActionRequest($blockId, 'wash'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function setToOptional(
         string $blockId,
         string $optionalCutoff,
@@ -129,13 +170,21 @@ final readonly class BlockResource
         $this->pipeline->send(new SetBlockToOptionalRequest($blockId, $optionalCutoff, $isOptionalDeductingInventory, $optionalCutoffBehavior));
     }
 
-    /** For apaleo's own scheduler callbacks; see {@see CutoffOptionalBlockRequest}. */
+    /**
+     * For apaleo's own scheduler callbacks; see {@see CutoffOptionalBlockRequest}.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function cutoffOptional(string $blockId, \DateTimeImmutable $expectedOptionalCutoffUtc): void
     {
         $this->pipeline->send(new CutoffOptionalBlockRequest($blockId, $expectedOptionalCutoffUtc));
     }
 
-    /** For apaleo's own scheduler callbacks; see {@see StartOptionalBlockRequest}. */
+    /**
+     * For apaleo's own scheduler callbacks; see {@see StartOptionalBlockRequest}.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function startOptional(string $blockId, \DateTimeImmutable $expectedStartDateUtc): void
     {
         $this->pipeline->send(new StartOptionalBlockRequest($blockId, $expectedStartDateUtc));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Group;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Exception\ApaleoNotFoundException;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
@@ -29,7 +30,11 @@ final readonly class GroupResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'actions'|'blocks'> $expand */
+    /**
+     * @param list<'actions'|'blocks'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $groupId, array $expand = []): Group
     {
         $data = $this->pipeline->send(new GetGroupRequest($groupId, $expand));
@@ -37,6 +42,9 @@ final readonly class GroupResource
         return Group::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function exists(string $groupId): bool
     {
         try {
@@ -52,6 +60,8 @@ final readonly class GroupResource
      * @param list<'actions'|'blocks'> $expand
      *
      * @return PaginatedResult<Group>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         GroupFilter $filter = new GroupFilter(),
@@ -66,6 +76,9 @@ final readonly class GroupResource
         return PaginatedResult::fromResponse($data, 'groups', Group::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function count(GroupFilter $filter = new GroupFilter()): int
     {
         $data = $this->pipeline->send(new CountGroupsRequest($filter));
@@ -73,6 +86,9 @@ final readonly class GroupResource
         return ResponseData::int($data, 'count');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateGroup $group, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new CreateGroupRequest($group, $idempotencyKey));
@@ -80,17 +96,27 @@ final readonly class GroupResource
         return ResponseData::string($data, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $groupId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateGroupRequest($groupId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $groupId): void
     {
         $this->pipeline->send(new DeleteGroupRequest($groupId));
     }
 
-    /** @param list<PickUpReservation> $reservations */
+    /**
+     * @param list<PickUpReservation> $reservations
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function pickUpReservations(string $groupId, array $reservations, ?string $idempotencyKey = null): ReservationsCreated
     {
         $data = $this->pipeline->send(new PickUpReservationsRequest($groupId, $reservations, $idempotencyKey));

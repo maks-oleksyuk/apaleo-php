@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Settings\CapturePolicy;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Settings\CapturePolicy\DTO\CapturePolicy;
@@ -20,6 +21,9 @@ final readonly class CapturePolicyResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $capturePolicyId): CapturePolicy
     {
         $data = $this->pipeline->send(new GetCapturePolicyRequest($capturePolicyId));
@@ -27,7 +31,11 @@ final readonly class CapturePolicyResource
         return CapturePolicy::fromArray($data);
     }
 
-    /** @return PaginatedResult<CapturePolicyListItem> */
+    /**
+     * @return PaginatedResult<CapturePolicyListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(?string $propertyId = null, ?int $pageNumber = null, ?int $pageSize = null): PaginatedResult
     {
         Pagination::assertValidPageSize($pageSize);
@@ -37,6 +45,9 @@ final readonly class CapturePolicyResource
         return PaginatedResult::fromResponse($data, 'capturePolicies', CapturePolicyListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $capturePolicyId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateCapturePolicyRequest($capturePolicyId, $patch));

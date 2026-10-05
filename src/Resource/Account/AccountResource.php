@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Account;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Account\DTO\Account;
 use Oleksyuk\Apaleo\Resource\Account\DTO\AccountListItem;
@@ -24,6 +25,9 @@ final readonly class AccountResource
         private RequestPipeline $pipeline,
     ) {}
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function getCurrent(): Account
     {
         $data = $this->pipeline->send(new GetCurrentAccountRequest());
@@ -31,6 +35,9 @@ final readonly class AccountResource
         return Account::fromArray($data);
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function replaceCurrent(ReplaceAccount $account): void
     {
         $this->pipeline->send(new ReplaceCurrentAccountRequest($account));
@@ -40,6 +47,8 @@ final readonly class AccountResource
      * @param list<string> $accountCodes
      *
      * @return PaginatedResult<AccountListItem>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(array $accountCodes = []): PaginatedResult
     {
@@ -48,7 +57,11 @@ final readonly class AccountResource
         return PaginatedResult::fromResponse($data, 'accounts', AccountListItem::fromArray(...));
     }
 
-    /** @return string the code of the created account */
+    /**
+     * @return string the code of the created account
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateAccount $account, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateAccountRequest($account, $idempotencyKey));
@@ -56,11 +69,17 @@ final readonly class AccountResource
         return ResponseData::string($response, 'code');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function suspendCurrent(): void
     {
         $this->pipeline->send(new SuspendCurrentAccountRequest());
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function setCurrentLive(): void
     {
         $this->pipeline->send(new SetCurrentAccountLiveRequest());

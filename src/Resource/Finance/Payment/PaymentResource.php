@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Payment;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\Split;
 use Oleksyuk\Apaleo\Resource\Finance\Folio\DTO\SplitPaymentResult;
@@ -30,7 +31,11 @@ final readonly class PaymentResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'actions'> $expand */
+    /**
+     * @param list<'actions'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $folioId, string $paymentId, array $expand = []): Payment
     {
         $data = $this->pipeline->send(new GetPaymentRequest($folioId, $paymentId, $expand));
@@ -43,6 +48,8 @@ final readonly class PaymentResource
      * @param list<'actions'>     $expand
      *
      * @return PaginatedResult<Payment>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(string $folioId, array $statuses = [], ?int $pageNumber = null, ?int $pageSize = null, array $expand = []): PaginatedResult
     {
@@ -53,6 +60,9 @@ final readonly class PaymentResource
         return PaginatedResult::fromResponse($data, 'payments', Payment::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(
         string $folioId,
         CreateAccountPayment|CreateAuthorizationPayment|CreateCustomPayment|CreatePaymentLink|CreateTerminalPayment $payment,
@@ -63,12 +73,19 @@ final readonly class PaymentResource
         return ResponseData::string($data, 'id');
     }
 
-    /** Only for a pending payment link. */
+    /**
+     * Only for a pending payment link.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function cancel(string $folioId, string $paymentId): void
     {
         $this->pipeline->send(new CancelPaymentRequest($folioId, $paymentId));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function split(string $folioId, string $paymentId, Split $split, ?string $idempotencyKey = null): SplitPaymentResult
     {
         $data = $this->pipeline->send(new SplitPaymentRequest($folioId, $paymentId, $split, $idempotencyKey));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Authorization;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\Authorization;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\DTO\AuthorizationTarget;
@@ -26,7 +27,11 @@ final readonly class AuthorizationResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'actions'> $expand */
+    /**
+     * @param list<'actions'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $authorizationId, array $expand = []): Authorization
     {
         $data = $this->pipeline->send(new GetAuthorizationRequest($authorizationId, $expand));
@@ -39,6 +44,8 @@ final readonly class AuthorizationResource
      * @param list<'actions'|'remainingBalance'> $expand
      *
      * @return PaginatedResult<Authorization>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(
         AuthorizationFilter $filter = new AuthorizationFilter(),
@@ -54,6 +61,9 @@ final readonly class AuthorizationResource
         return PaginatedResult::fromResponse($data, 'authorizations', Authorization::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function createByAuthorization(AuthorizationTarget $target, MonetaryValue $amount, string $transactionReference, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new CreateAuthorizationByAuthorizationRequest($target, $amount, $transactionReference, $idempotencyKey));
@@ -61,7 +71,11 @@ final readonly class AuthorizationResource
         return ResponseData::string($data, 'id');
     }
 
-    /** Creates a hosted payment-link authorization; see the returned Authorization::$paymentLinkUrl once fetched. */
+    /**
+     * Creates a hosted payment-link authorization; see the returned Authorization::$paymentLinkUrl once fetched.
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function createByLink(
         AuthorizationTarget $target,
         MonetaryValue $amount,
@@ -77,6 +91,9 @@ final readonly class AuthorizationResource
         return ResponseData::string($data, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function createByPaymentAccount(AuthorizationTarget $target, MonetaryValue $amount, ?string $paymentAccountId = null, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new CreateAuthorizationByPaymentAccountRequest($target, $amount, $paymentAccountId, $idempotencyKey));
@@ -84,6 +101,9 @@ final readonly class AuthorizationResource
         return ResponseData::string($data, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function createByTerminal(AuthorizationTarget $target, MonetaryValue $amount, string $terminalId, ?string $idempotencyKey = null): string
     {
         $data = $this->pipeline->send(new CreateAuthorizationByTerminalRequest($target, $amount, $terminalId, $idempotencyKey));
@@ -91,16 +111,25 @@ final readonly class AuthorizationResource
         return ResponseData::string($data, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function cancel(string $authorizationId): void
     {
         $this->pipeline->send(new AuthorizationSimpleActionRequest($authorizationId, 'cancel'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function expirePaymentLink(string $authorizationId): void
     {
         $this->pipeline->send(new AuthorizationSimpleActionRequest($authorizationId, 'expire-payment-link'));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function refresh(string $authorizationId, MonetaryValue $amount): void
     {
         $this->pipeline->send(new RefreshAuthorizationRequest($authorizationId, $amount));

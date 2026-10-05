@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Finance\Routing;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Finance\Routing\DTO\CreateRouting;
@@ -24,7 +25,11 @@ final readonly class RoutingResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param list<'actions'> $expand */
+    /**
+     * @param list<'actions'> $expand
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $routingId, array $expand = []): Routing
     {
         $data = $this->pipeline->send(new GetRoutingRequest($routingId, $expand));
@@ -36,6 +41,8 @@ final readonly class RoutingResource
      * @param list<'actions'> $expand
      *
      * @return PaginatedResult<Routing>
+     *
+     * @throws ApaleoExceptionInterface
      */
     public function list(RoutingFilter $filter = new RoutingFilter(), ?int $pageNumber = null, ?int $pageSize = null, array $expand = []): PaginatedResult
     {
@@ -46,6 +53,9 @@ final readonly class RoutingResource
         return PaginatedResult::fromResponse($data, 'routings', Routing::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateRouting $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateRoutingRequest($data, $idempotencyKey));
@@ -53,11 +63,17 @@ final readonly class RoutingResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $routingId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateRoutingRequest($routingId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $routingId): void
     {
         $this->pipeline->send(new DeleteRoutingRequest($routingId));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory;
 
+use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\JsonPatch;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\RatePlan\AgeCategory\DTO\AgeCategory;
@@ -23,7 +24,11 @@ final readonly class AgeCategoryResource
         private RequestPipeline $pipeline,
     ) {}
 
-    /** @param ?list<string> $languages */
+    /**
+     * @param ?list<string> $languages
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function get(string $ageCategoryId, ?array $languages = null): AgeCategory
     {
         $data = $this->pipeline->send(new GetAgeCategoryRequest($ageCategoryId, $languages));
@@ -31,7 +36,11 @@ final readonly class AgeCategoryResource
         return AgeCategory::fromArray($data);
     }
 
-    /** @return PaginatedResult<AgeCategoryListItem> */
+    /**
+     * @return PaginatedResult<AgeCategoryListItem>
+     *
+     * @throws ApaleoExceptionInterface
+     */
     public function list(string $propertyId): PaginatedResult
     {
         $data = $this->pipeline->send(new ListAgeCategoriesRequest($propertyId));
@@ -39,6 +48,9 @@ final readonly class AgeCategoryResource
         return PaginatedResult::fromResponse($data, 'ageCategories', AgeCategoryListItem::fromArray(...));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function create(CreateAgeCategory $data, ?string $idempotencyKey = null): string
     {
         $response = $this->pipeline->send(new CreateAgeCategoryRequest($data, $idempotencyKey));
@@ -46,11 +58,17 @@ final readonly class AgeCategoryResource
         return ResponseData::string($response, 'id');
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function update(string $ageCategoryId, JsonPatch $patch): void
     {
         $this->pipeline->send(new UpdateAgeCategoryRequest($ageCategoryId, $patch));
     }
 
+    /**
+     * @throws ApaleoExceptionInterface
+     */
     public function delete(string $ageCategoryId): void
     {
         $this->pipeline->send(new DeleteAgeCategoryRequest($ageCategoryId));
