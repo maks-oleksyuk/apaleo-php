@@ -35,10 +35,11 @@
         "friendsofphp/php-cs-fixer": "^3.95.27",
         "nyholm/psr7": "^1.8.2",
         "php-http/mock-client": "^1.6.1",
-        "phpstan/phpstan": "^2.2.17",
+        "phpstan/phpstan": "^2.3",
+        "phpstan/phpstan-deprecation-rules": "^2.0.5",
         "phpunit/phpunit": "^13.4.1",
         "psr/simple-cache": "^3.0",
-        "rector/rector": "^2.6.7",
+        "rector/rector": "^2.7",
         "symfony/clock": "^8.0",
         "symfony/http-client": "^8.0"
     },
