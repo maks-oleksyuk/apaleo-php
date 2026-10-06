@@ -33,9 +33,9 @@ final readonly class OrderedService
             serviceDate: ResponseData::date($data, 'serviceDate'),
             count: ResponseData::int($data, 'count'),
             guest: [] !== $guest ? OrderedServiceGuest::fromArray($guest) : null,
-            reservation: OrderedServiceReservation::fromArray(ResponseData::nested($data, 'reservation')),
+            reservation: ResponseData::requiredNested($data, 'reservation', OrderedServiceReservation::fromArray(...)),
             unit: [] !== $unit ? OrderedServiceUnit::fromArray($unit) : null,
-            unitGroup: OrderedServiceUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
+            unitGroup: ResponseData::requiredNested($data, 'unitGroup', OrderedServiceUnitGroup::fromArray(...)),
         );
     }
 }

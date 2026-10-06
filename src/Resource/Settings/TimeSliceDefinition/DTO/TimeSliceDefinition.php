@@ -36,7 +36,7 @@ final readonly class TimeSliceDefinition
             checkInTime: ResponseData::string($data, 'checkInTime'),
             checkOutTime: ResponseData::string($data, 'checkOutTime'),
             isUsed: ResponseData::bool($data, 'isUsed'),
-            actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
+            actions: ResponseData::mapList($data, 'actions', Action::fromArray(...)),
         );
     }
 }

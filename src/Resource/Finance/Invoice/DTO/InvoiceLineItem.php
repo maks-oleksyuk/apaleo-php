@@ -31,13 +31,13 @@ final readonly class InvoiceLineItem
         return new self(
             date: ResponseData::date($data, 'date'),
             description: ResponseData::string($data, 'description'),
-            price: MonetaryValue::fromArray(ResponseData::nested($data, 'price')),
+            price: ResponseData::requiredNested($data, 'price', MonetaryValue::fromArray(...)),
             vatType: $vatType !== null ? VatType::fromApi($vatType) : null,
             vatPercent: ResponseData::nullableFloat($data, 'vatPercent'),
             isNoShowFee: ResponseData::bool($data, 'isNoShowFee'),
             quantity: ResponseData::nullableInt($data, 'quantity'),
             guest: ResponseData::nullableString($data, 'guest'),
-            includedLineItems: array_map(IncludedLineItem::fromArray(...), ResponseData::nestedList($data, 'includedLineItems')),
+            includedLineItems: ResponseData::mapList($data, 'includedLineItems', IncludedLineItem::fromArray(...)),
         );
     }
 }

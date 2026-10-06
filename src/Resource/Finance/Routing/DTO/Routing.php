@@ -34,7 +34,7 @@ final readonly class Routing
             destinationFolioId: ResponseData::string($destination, 'id'),
             destinationDebitorType: $debitorType !== null ? DebitorType::fromApi($debitorType) : null,
             filter: ResponseData::nullableNested($data, 'filter', RoutingChargeFilter::fromArray(...)),
-            actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
+            actions: ResponseData::mapList($data, 'actions', Action::fromArray(...)),
         );
     }
 }

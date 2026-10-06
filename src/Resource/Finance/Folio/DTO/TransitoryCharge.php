@@ -34,7 +34,7 @@ final readonly class TransitoryCharge
         return new self(
             id: ResponseData::string($data, 'id'),
             name: ResponseData::string($data, 'name'),
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
             serviceType: $serviceType !== null ? FinanceServiceType::fromApi($serviceType) : null,
             serviceDate: ResponseData::date($data, 'serviceDate'),
             created: ResponseData::dateTime($data, 'created'),

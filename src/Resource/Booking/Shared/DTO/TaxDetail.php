@@ -23,8 +23,8 @@ final readonly class TaxDetail
         return new self(
             vatType: VatType::fromApi(ResponseData::string($data, 'vatType')),
             vatPercent: ResponseData::float($data, 'vatPercent'),
-            net: MonetaryValue::fromArray(ResponseData::nested($data, 'net')),
-            tax: MonetaryValue::fromArray(ResponseData::nested($data, 'tax')),
+            net: ResponseData::requiredNested($data, 'net', MonetaryValue::fromArray(...)),
+            tax: ResponseData::requiredNested($data, 'tax', MonetaryValue::fromArray(...)),
         );
     }
 }

@@ -19,7 +19,7 @@ final readonly class PropertyPerformanceReport
     {
         return new self(
             metrics: PerformanceMetrics::fromArray($data),
-            businessDays: array_map(PropertyPerformanceReportItem::fromArray(...), ResponseData::nestedList($data, 'businessDays')),
+            businessDays: ResponseData::mapList($data, 'businessDays', PropertyPerformanceReportItem::fromArray(...)),
         );
     }
 }

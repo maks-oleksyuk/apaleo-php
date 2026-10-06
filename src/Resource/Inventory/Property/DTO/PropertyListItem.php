@@ -48,7 +48,7 @@ final readonly class PropertyListItem
             managingDirectors: ResponseData::nullableString($data, 'managingDirectors'),
             commercialRegisterEntry: ResponseData::string($data, 'commercialRegisterEntry'),
             taxId: ResponseData::string($data, 'taxId'),
-            location: Address::fromArray(ResponseData::nested($data, 'location')),
+            location: ResponseData::requiredNested($data, 'location', Address::fromArray(...)),
             bankAccount: ResponseData::nullableNested($data, 'bankAccount', BankAccount::fromArray(...)),
             paymentTerms: ResponseData::localizedText($data, 'paymentTerms'),
             timeZone: ResponseData::string($data, 'timeZone'),

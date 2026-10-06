@@ -48,8 +48,8 @@ final readonly class Group
             hasActivePaymentAccount: ResponseData::bool($data, 'hasActivePaymentAccount'),
             created: ResponseData::dateTime($data, 'created'),
             modified: ResponseData::dateTime($data, 'modified'),
-            blocks: array_map(GroupBlock::fromArray(...), ResponseData::nestedList($data, 'blocks')),
-            actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
+            blocks: ResponseData::mapList($data, 'blocks', GroupBlock::fromArray(...)),
+            actions: ResponseData::mapList($data, 'actions', Action::fromArray(...)),
             propertyIds: ResponseData::stringList($data, 'propertyIds'),
         );
     }

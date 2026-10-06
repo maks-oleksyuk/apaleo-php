@@ -29,11 +29,11 @@ final readonly class AvailableUnitItem
             id: ResponseData::string($data, 'id'),
             name: ResponseData::string($data, 'name'),
             description: ResponseData::string($data, 'description'),
-            property: EmbeddedProperty::fromArray(ResponseData::nested($data, 'property')),
+            property: ResponseData::requiredNested($data, 'property', EmbeddedProperty::fromArray(...)),
             unitGroup: ResponseData::nullableNested($data, 'unitGroup', EmbeddedUnitGroup::fromArray(...)),
-            status: AvailableUnitItemStatus::fromArray(ResponseData::nested($data, 'status')),
+            status: ResponseData::requiredNested($data, 'status', AvailableUnitItemStatus::fromArray(...)),
             maxPersons: ResponseData::int($data, 'maxPersons'),
-            attributes: array_map(UnitAttribute::fromArray(...), ResponseData::nestedList($data, 'attributes')),
+            attributes: ResponseData::mapList($data, 'attributes', UnitAttribute::fromArray(...)),
         );
     }
 }

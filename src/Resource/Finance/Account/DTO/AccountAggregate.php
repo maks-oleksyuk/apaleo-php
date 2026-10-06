@@ -22,9 +22,9 @@ final readonly class AccountAggregate
     {
         return new self(
             account: ResponseData::nullableNested($data, 'account', ExportAccount::fromArray(...)),
-            creditedAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'creditedAmount')),
-            debitedAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'debitedAmount')),
-            balance: MonetaryValue::fromArray(ResponseData::nested($data, 'balance')),
+            creditedAmount: ResponseData::requiredNested($data, 'creditedAmount', MonetaryValue::fromArray(...)),
+            debitedAmount: ResponseData::requiredNested($data, 'debitedAmount', MonetaryValue::fromArray(...)),
+            balance: ResponseData::requiredNested($data, 'balance', MonetaryValue::fromArray(...)),
         );
     }
 }

@@ -39,7 +39,7 @@ final readonly class BookingListItem
             bookerComment: ResponseData::nullableString($data, 'bookerComment'),
             created: ResponseData::dateTime($data, 'created'),
             modified: ResponseData::dateTime($data, 'modified'),
-            reservations: array_map(BookingReservation::fromArray(...), ResponseData::nestedList($data, 'reservations')),
+            reservations: ResponseData::mapList($data, 'reservations', BookingReservation::fromArray(...)),
         );
     }
 }

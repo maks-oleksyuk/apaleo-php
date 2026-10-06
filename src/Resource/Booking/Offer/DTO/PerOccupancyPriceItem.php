@@ -18,7 +18,7 @@ final readonly class PerOccupancyPriceItem
     {
         return new self(
             adults: ResponseData::int($data, 'adults'),
-            price: Price::fromArray(ResponseData::nested($data, 'price')),
+            price: ResponseData::requiredNested($data, 'price', Price::fromArray(...)),
         );
     }
 }

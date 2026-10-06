@@ -34,7 +34,7 @@ final readonly class PropertyResource
     ): array {
         $data = $this->pipeline->send(new GetHouseOverbookingRequest($propertyId, $from, $to, $timeSliceTemplate, $unitGroupType));
 
-        return array_map(HouseOverbookingTimeSlice::fromArray(...), ResponseData::nestedList($data, 'timeSlices'));
+        return ResponseData::mapList($data, 'timeSlices', HouseOverbookingTimeSlice::fromArray(...));
     }
 
     /**

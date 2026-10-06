@@ -25,8 +25,8 @@ final readonly class OfferCityTax
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
             name: ResponseData::string($data, 'name'),
-            totalGrossAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'totalGrossAmount')),
-            dates: array_map(OfferCityTaxItem::fromArray(...), ResponseData::nestedList($data, 'dates')),
+            totalGrossAmount: ResponseData::requiredNested($data, 'totalGrossAmount', MonetaryValue::fromArray(...)),
+            dates: ResponseData::mapList($data, 'dates', OfferCityTaxItem::fromArray(...)),
         );
     }
 }

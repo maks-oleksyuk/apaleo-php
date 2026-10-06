@@ -28,7 +28,7 @@ final readonly class Rate
             to: ResponseData::dateTime($data, 'to'),
             price: ResponseData::nullableNested($data, 'price', MonetaryValue::fromArray(...)),
             includedServicesPrice: ResponseData::nullableNested($data, 'includedServicesPrice', MonetaryValue::fromArray(...)),
-            calculatedPrices: array_map(CalculatedRate::fromArray(...), ResponseData::nestedList($data, 'calculatedPrices')),
+            calculatedPrices: ResponseData::mapList($data, 'calculatedPrices', CalculatedRate::fromArray(...)),
             restrictions: ResponseData::nullableNested($data, 'restrictions', RateRestrictions::fromArray(...)),
         );
     }

@@ -18,8 +18,8 @@ final readonly class TransactionAggregates
     public static function fromArray(array $data): self
     {
         return new self(
-            aggregations: array_map(AccountAggregate::fromArray(...), ResponseData::nestedList($data, 'aggregations')),
-            total: AccountAggregate::fromArray(ResponseData::nested($data, 'total')),
+            aggregations: ResponseData::mapList($data, 'aggregations', AccountAggregate::fromArray(...)),
+            total: ResponseData::requiredNested($data, 'total', AccountAggregate::fromArray(...)),
         );
     }
 }

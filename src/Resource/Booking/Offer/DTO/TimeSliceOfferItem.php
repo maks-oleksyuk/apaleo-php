@@ -28,14 +28,14 @@ final readonly class TimeSliceOfferItem
         $minGuaranteeType = ResponseData::nullableString($data, 'minGuaranteeType');
 
         return new self(
-            unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
+            unitGroup: ResponseData::requiredNested($data, 'unitGroup', EmbeddedUnitGroup::fromArray(...)),
             minGuaranteeType: $minGuaranteeType !== null ? GuaranteeType::fromApi($minGuaranteeType) : null,
             minAdvance: ResponseData::nullableNested($data, 'minAdvance', Period::fromArray(...)),
             maxAdvance: ResponseData::nullableNested($data, 'maxAdvance', Period::fromArray(...)),
             available: ResponseData::int($data, 'available'),
             availableUnits: ResponseData::int($data, 'availableUnits'),
             restrictions: ResponseData::nullableNested($data, 'restrictions', RateRestrictions::fromArray(...)),
-            prices: array_map(PerOccupancyPriceItem::fromArray(...), ResponseData::nestedList($data, 'prices')),
+            prices: ResponseData::mapList($data, 'prices', PerOccupancyPriceItem::fromArray(...)),
         );
     }
 }

@@ -21,9 +21,9 @@ final readonly class ReservationServiceItem
     public static function fromArray(array $data): self
     {
         return new self(
-            service: Service::fromArray(ResponseData::nested($data, 'service')),
-            totalAmount: Amount::fromArray(ResponseData::nested($data, 'totalAmount')),
-            dates: array_map(ServiceDateItem::fromArray(...), ResponseData::nestedList($data, 'dates')),
+            service: ResponseData::requiredNested($data, 'service', Service::fromArray(...)),
+            totalAmount: ResponseData::requiredNested($data, 'totalAmount', Amount::fromArray(...)),
+            dates: ResponseData::mapList($data, 'dates', ServiceDateItem::fromArray(...)),
         );
     }
 }

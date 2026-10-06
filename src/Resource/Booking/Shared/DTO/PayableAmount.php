@@ -17,7 +17,7 @@ final readonly class PayableAmount
     public static function fromArray(array $data): self
     {
         return new self(
-            guest: MonetaryValue::fromArray(ResponseData::nested($data, 'guest')),
+            guest: ResponseData::requiredNested($data, 'guest', MonetaryValue::fromArray(...)),
         );
     }
 }

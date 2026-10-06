@@ -19,7 +19,7 @@ final readonly class RatePlanAgeCategory
     {
         return new self(
             id: ResponseData::string($data, 'id'),
-            surcharges: array_map(AgeCategorySurcharge::fromArray(...), ResponseData::nestedList($data, 'surcharges')),
+            surcharges: ResponseData::mapList($data, 'surcharges', AgeCategorySurcharge::fromArray(...)),
         );
     }
 

@@ -21,7 +21,7 @@ final readonly class TimeSliceItem
         return new self(
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
-            offers: array_map(TimeSliceOfferItem::fromArray(...), ResponseData::nestedList($data, 'offers')),
+            offers: ResponseData::mapList($data, 'offers', TimeSliceOfferItem::fromArray(...)),
         );
     }
 }

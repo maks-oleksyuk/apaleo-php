@@ -103,7 +103,7 @@ final readonly class ReservationResource
     {
         $data = $this->pipeline->send(new GetReservationServicesRequest($reservationId));
 
-        return array_map(ReservationServiceItem::fromArray(...), ResponseData::nestedList($data, 'services'));
+        return ResponseData::mapList($data, 'services', ReservationServiceItem::fromArray(...));
     }
 
     /**
@@ -215,7 +215,7 @@ final readonly class ReservationResource
     {
         $data = $this->pipeline->send(new AssignUnitRequest($reservationId, $unitConditions));
 
-        return array_map(AutoAssignedUnitItem::fromArray(...), ResponseData::nestedList($data, 'timeSlices'));
+        return ResponseData::mapList($data, 'timeSlices', AutoAssignedUnitItem::fromArray(...));
     }
 
     /**
@@ -232,7 +232,7 @@ final readonly class ReservationResource
     ): EmbeddedUnit {
         $data = $this->pipeline->send(new AssignSpecificUnitRequest($reservationId, $unitId, $from, $to, $lockUnit));
 
-        return EmbeddedUnit::fromArray(ResponseData::nested($data, 'unit'));
+        return ResponseData::requiredNested($data, 'unit', EmbeddedUnit::fromArray(...));
     }
 
     /**

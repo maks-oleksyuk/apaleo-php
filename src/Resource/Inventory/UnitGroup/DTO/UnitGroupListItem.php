@@ -40,7 +40,7 @@ final readonly class UnitGroupListItem
             rank: ResponseData::nullableInt($data, 'rank'),
             type: UnitGroupType::fromApi($type),
             rawType: $type,
-            connectedUnitGroups: array_map(ConnectedUnitGroup::fromArray(...), ResponseData::nestedList($data, 'connectedUnitGroups')),
+            connectedUnitGroups: ResponseData::mapList($data, 'connectedUnitGroups', ConnectedUnitGroup::fromArray(...)),
         );
     }
 }

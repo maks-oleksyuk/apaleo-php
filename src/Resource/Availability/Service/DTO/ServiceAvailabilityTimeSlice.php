@@ -21,7 +21,7 @@ final readonly class ServiceAvailabilityTimeSlice
         return new self(
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
-            services: array_map(ServiceAvailabilityItem::fromArray(...), ResponseData::nestedList($data, 'services')),
+            services: ResponseData::mapList($data, 'services', ServiceAvailabilityItem::fromArray(...)),
         );
     }
 }

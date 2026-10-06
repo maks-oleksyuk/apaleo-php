@@ -27,9 +27,9 @@ final readonly class Invoice
         return new self(
             number: ResponseData::nullableString($data, 'number'),
             date: ResponseData::date($data, 'date'),
-            subTotal: MonetaryValue::fromArray(ResponseData::nested($data, 'subTotal')),
+            subTotal: ResponseData::requiredNested($data, 'subTotal', MonetaryValue::fromArray(...)),
             outstandingPayment: [] !== $outstandingPayment ? MonetaryValue::fromArray($outstandingPayment) : null,
-            taxDetails: array_map(TaxDetail::fromArray(...), ResponseData::nestedList($data, 'taxDetails')),
+            taxDetails: ResponseData::mapList($data, 'taxDetails', TaxDetail::fromArray(...)),
         );
     }
 }

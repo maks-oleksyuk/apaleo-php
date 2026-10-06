@@ -21,7 +21,7 @@ final readonly class Price
         return new self(
             beforeTax: ResponseData::float($data, 'beforeTax'),
             afterTax: ResponseData::float($data, 'afterTax'),
-            taxes: Taxes::fromArray(ResponseData::nested($data, 'taxes')),
+            taxes: ResponseData::requiredNested($data, 'taxes', Taxes::fromArray(...)),
             currency: ResponseData::string($data, 'currency'),
         );
     }

@@ -25,7 +25,7 @@ final readonly class Company
             code: ResponseData::string($data, 'code'),
             name: ResponseData::string($data, 'name'),
             taxId: ResponseData::nullableString($data, 'taxId'),
-            address: Address::fromArray(ResponseData::nested($data, 'address')),
+            address: ResponseData::requiredNested($data, 'address', Address::fromArray(...)),
         );
     }
 }

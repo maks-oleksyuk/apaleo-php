@@ -29,11 +29,11 @@ final readonly class ReservationStayOfferTimeSlice
         return new self(
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
-            ratePlan: EmbeddedRatePlan::fromArray(ResponseData::nested($data, 'ratePlan')),
-            unitGroup: OfferUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
-            baseAmount: Amount::fromArray(ResponseData::nested($data, 'baseAmount')),
-            totalGrossAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'totalGrossAmount')),
-            includedServices: array_map(ReservationStayOfferService::fromArray(...), ResponseData::nestedList($data, 'includedServices')),
+            ratePlan: ResponseData::requiredNested($data, 'ratePlan', EmbeddedRatePlan::fromArray(...)),
+            unitGroup: ResponseData::requiredNested($data, 'unitGroup', OfferUnitGroup::fromArray(...)),
+            baseAmount: ResponseData::requiredNested($data, 'baseAmount', Amount::fromArray(...)),
+            totalGrossAmount: ResponseData::requiredNested($data, 'totalGrossAmount', MonetaryValue::fromArray(...)),
+            includedServices: ResponseData::mapList($data, 'includedServices', ReservationStayOfferService::fromArray(...)),
         );
     }
 }

@@ -27,7 +27,7 @@ final readonly class NoShowPolicyListItem
             propertyId: ResponseData::string($data, 'propertyId'),
             name: ResponseData::string($data, 'name'),
             description: ResponseData::string($data, 'description'),
-            fee: FeeDetails::fromArray(ResponseData::nested($data, 'fee')),
+            fee: ResponseData::requiredNested($data, 'fee', FeeDetails::fromArray(...)),
         );
     }
 }

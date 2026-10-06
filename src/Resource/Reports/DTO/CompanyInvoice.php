@@ -17,8 +17,8 @@ final readonly class CompanyInvoice
     public static function fromArray(array $data): self
     {
         return new self(
-            company: Company::fromArray(ResponseData::nested($data, 'company')),
-            invoice: Invoice::fromArray(ResponseData::nested($data, 'invoice')),
+            company: ResponseData::requiredNested($data, 'company', Company::fromArray(...)),
+            invoice: ResponseData::requiredNested($data, 'invoice', Invoice::fromArray(...)),
         );
     }
 }

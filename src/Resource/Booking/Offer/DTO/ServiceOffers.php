@@ -17,7 +17,7 @@ final readonly class ServiceOffers
     public static function fromArray(array $data): self
     {
         return new self(
-            services: array_map(ServiceOffer::fromArray(...), ResponseData::nestedList($data, 'services')),
+            services: ResponseData::mapList($data, 'services', ServiceOffer::fromArray(...)),
         );
     }
 }

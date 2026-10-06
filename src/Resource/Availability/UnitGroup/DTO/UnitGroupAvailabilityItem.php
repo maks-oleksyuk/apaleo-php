@@ -28,7 +28,7 @@ final readonly class UnitGroupAvailabilityItem
     public static function fromArray(array $data): self
     {
         return new self(
-            unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
+            unitGroup: ResponseData::requiredNested($data, 'unitGroup', EmbeddedUnitGroup::fromArray(...)),
             physicalCount: ResponseData::int($data, 'physicalCount'),
             houseCount: ResponseData::int($data, 'houseCount'),
             soldCount: ResponseData::int($data, 'soldCount'),
@@ -36,8 +36,8 @@ final readonly class UnitGroupAvailabilityItem
             availableCount: ResponseData::int($data, 'availableCount'),
             sellableCount: ResponseData::int($data, 'sellableCount'),
             allowedOverbookingCount: ResponseData::int($data, 'allowedOverbookingCount'),
-            maintenance: Maintenance::fromArray(ResponseData::nested($data, 'maintenance')),
-            block: BlockCounts::fromArray(ResponseData::nested($data, 'block')),
+            maintenance: ResponseData::requiredNested($data, 'maintenance', Maintenance::fromArray(...)),
+            block: ResponseData::requiredNested($data, 'block', BlockCounts::fromArray(...)),
         );
     }
 }

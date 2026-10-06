@@ -33,7 +33,7 @@ final readonly class Company
             code: ResponseData::string($data, 'code'),
             propertyId: ResponseData::string($data, 'propertyId'),
             name: ResponseData::string($data, 'name'),
-            address: CompanyAddress::fromArray(ResponseData::nested($data, 'address')),
+            address: ResponseData::requiredNested($data, 'address', CompanyAddress::fromArray(...)),
             canCheckOutOnAr: ResponseData::bool($data, 'canCheckOutOnAr'),
             invoicingEmail: ResponseData::nullableString($data, 'invoicingEmail'),
             phone: ResponseData::nullableString($data, 'phone'),
@@ -41,7 +41,7 @@ final readonly class Company
             additionalTaxId: ResponseData::nullableString($data, 'additionalTaxId'),
             additionalTaxId2: ResponseData::nullableString($data, 'additionalTaxId2'),
             invoiceNetworkIdentity: ResponseData::nullableNested($data, 'invoiceNetworkIdentity', InvoiceNetworkIdentity::fromArray(...)),
-            ratePlans: array_map(CompanyRatePlan::fromArray(...), ResponseData::nestedList($data, 'ratePlans')),
+            ratePlans: ResponseData::mapList($data, 'ratePlans', CompanyRatePlan::fromArray(...)),
         );
     }
 }

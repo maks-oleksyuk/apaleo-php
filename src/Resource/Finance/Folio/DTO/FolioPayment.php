@@ -34,7 +34,7 @@ final readonly class FolioPayment
         return new self(
             id: ResponseData::string($data, 'id'),
             method: PaymentMethod::fromApi(ResponseData::string($data, 'method')),
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
             paymentDate: ResponseData::nullableDateTime($data, 'paymentDate'),
             businessDate: ResponseData::date($data, 'businessDate'),
             externalReference: ResponseData::nullableNested($data, 'externalReference', ExternalReference::fromArray(...)),

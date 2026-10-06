@@ -28,7 +28,7 @@ final readonly class IncludedService
 
         return new self(
             serviceId: $service !== [] ? ResponseData::string($service, 'id') : ResponseData::string($data, 'serviceId'),
-            grossPrice: MonetaryValue::fromArray(ResponseData::nested($data, 'grossPrice')),
+            grossPrice: ResponseData::requiredNested($data, 'grossPrice', MonetaryValue::fromArray(...)),
             pricingMode: $pricingMode !== null ? PricingMode::fromApi($pricingMode) : null,
         );
     }

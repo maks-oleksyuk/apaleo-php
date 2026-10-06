@@ -30,7 +30,7 @@ final readonly class FinanceAccount
             parentNumber: ResponseData::nullableString($data, 'parentNumber'),
             hasChildren: ResponseData::bool($data, 'hasChildren'),
             isArchived: ResponseData::bool($data, 'isArchived'),
-            transactions: array_map(AccountingTransaction::fromArray(...), ResponseData::nestedList($data, 'transactions')),
+            transactions: ResponseData::mapList($data, 'transactions', AccountingTransaction::fromArray(...)),
         );
     }
 }

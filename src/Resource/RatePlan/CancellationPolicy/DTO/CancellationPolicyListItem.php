@@ -34,9 +34,9 @@ final readonly class CancellationPolicyListItem
             propertyId: ResponseData::string($data, 'propertyId'),
             name: ResponseData::string($data, 'name'),
             description: ResponseData::string($data, 'description'),
-            periodFromReference: Period::fromArray(ResponseData::nested($data, 'periodFromReference')),
+            periodFromReference: ResponseData::requiredNested($data, 'periodFromReference', Period::fromArray(...)),
             reference: CancellationPolicyReference::fromApi(ResponseData::string($data, 'reference')),
-            fee: FeeDetails::fromArray(ResponseData::nested($data, 'fee')),
+            fee: ResponseData::requiredNested($data, 'fee', FeeDetails::fromArray(...)),
         );
     }
 }

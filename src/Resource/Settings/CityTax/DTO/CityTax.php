@@ -54,9 +54,9 @@ final readonly class CityTax
             priority: ResponseData::int($data, 'priority'),
             includeCityTaxInRateAmount: ResponseData::bool($data, 'includeCityTaxInRateAmount'),
             limit: ResponseData::nullableInt($data, 'limit'),
-            subcategories: array_map(CityTaxSubcategory::fromArray(...), ResponseData::nestedList($data, 'subcategories')),
-            pricingRules: array_map(CityTaxPricingRule::fromArray(...), ResponseData::nestedList($data, 'pricingRules')),
-            ignoredFor: array_map(CityTaxIgnoreRule::fromArray(...), ResponseData::nestedList($data, 'ignoredFor')),
+            subcategories: ResponseData::mapList($data, 'subcategories', CityTaxSubcategory::fromArray(...)),
+            pricingRules: ResponseData::mapList($data, 'pricingRules', CityTaxPricingRule::fromArray(...)),
+            ignoredFor: ResponseData::mapList($data, 'ignoredFor', CityTaxIgnoreRule::fromArray(...)),
         );
     }
 }

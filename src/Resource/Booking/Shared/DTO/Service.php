@@ -28,7 +28,7 @@ final readonly class Service
             name: ResponseData::string($data, 'name'),
             description: ResponseData::string($data, 'description'),
             pricingUnit: PricingUnit::fromApi(ResponseData::string($data, 'pricingUnit')),
-            defaultGrossPrice: MonetaryValue::fromArray(ResponseData::nested($data, 'defaultGrossPrice')),
+            defaultGrossPrice: ResponseData::requiredNested($data, 'defaultGrossPrice', MonetaryValue::fromArray(...)),
         );
     }
 }

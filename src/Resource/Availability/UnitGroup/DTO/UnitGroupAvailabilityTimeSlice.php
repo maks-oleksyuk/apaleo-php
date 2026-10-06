@@ -23,8 +23,8 @@ final readonly class UnitGroupAvailabilityTimeSlice
         return new self(
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
-            property: PropertyAvailability::fromArray(ResponseData::nested($data, 'property')),
-            unitGroups: array_map(UnitGroupAvailabilityItem::fromArray(...), ResponseData::nestedList($data, 'unitGroups')),
+            property: ResponseData::requiredNested($data, 'property', PropertyAvailability::fromArray(...)),
+            unitGroups: ResponseData::mapList($data, 'unitGroups', UnitGroupAvailabilityItem::fromArray(...)),
         );
     }
 }

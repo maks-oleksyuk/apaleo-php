@@ -20,9 +20,9 @@ final readonly class TransactionPair
     public static function fromArray(array $data): self
     {
         return new self(
-            debitedAccount: ExportAccount::fromArray(ResponseData::nested($data, 'debitedAccount')),
-            creditedAccount: ExportAccount::fromArray(ResponseData::nested($data, 'creditedAccount')),
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            debitedAccount: ResponseData::requiredNested($data, 'debitedAccount', ExportAccount::fromArray(...)),
+            creditedAccount: ResponseData::requiredNested($data, 'creditedAccount', ExportAccount::fromArray(...)),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
         );
     }
 }

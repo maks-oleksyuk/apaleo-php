@@ -19,8 +19,8 @@ final readonly class ReservationAssignedUnit
     public static function fromArray(array $data): self
     {
         return new self(
-            unit: EmbeddedUnit::fromArray(ResponseData::nested($data, 'unit')),
-            timeRanges: array_map(AssignedUnitTimeRange::fromArray(...), ResponseData::nestedList($data, 'timeRanges')),
+            unit: ResponseData::requiredNested($data, 'unit', EmbeddedUnit::fromArray(...)),
+            timeRanges: ResponseData::mapList($data, 'timeRanges', AssignedUnitTimeRange::fromArray(...)),
         );
     }
 }

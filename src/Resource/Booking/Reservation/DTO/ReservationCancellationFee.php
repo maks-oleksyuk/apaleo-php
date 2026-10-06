@@ -27,7 +27,7 @@ final readonly class ReservationCancellationFee
             name: ResponseData::string($data, 'name'),
             description: ResponseData::string($data, 'description'),
             dueDateTime: ResponseData::dateTime($data, 'dueDateTime'),
-            fee: MonetaryValue::fromArray(ResponseData::nested($data, 'fee')),
+            fee: ResponseData::requiredNested($data, 'fee', MonetaryValue::fromArray(...)),
         );
     }
 }

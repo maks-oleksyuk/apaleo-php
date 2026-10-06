@@ -27,9 +27,9 @@ final readonly class OfferTimeSlice
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
             availableUnits: ResponseData::int($data, 'availableUnits'),
-            baseAmount: Amount::fromArray(ResponseData::nested($data, 'baseAmount')),
-            totalGrossAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'totalGrossAmount')),
-            includedServices: array_map(OfferService::fromArray(...), ResponseData::nestedList($data, 'includedServices')),
+            baseAmount: ResponseData::requiredNested($data, 'baseAmount', Amount::fromArray(...)),
+            totalGrossAmount: ResponseData::requiredNested($data, 'totalGrossAmount', MonetaryValue::fromArray(...)),
+            includedServices: ResponseData::mapList($data, 'includedServices', OfferService::fromArray(...)),
         );
     }
 }

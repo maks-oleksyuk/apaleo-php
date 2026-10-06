@@ -29,9 +29,9 @@ final readonly class ArrivalsReport
             total: ResponseData::int($data, 'total'),
             totalAdults: ResponseData::int($data, 'totalAdults'),
             totalChildren: ResponseData::int($data, 'totalChildren'),
-            travelPurposeBreakdown: array_map(TravelPurposeEntry::fromArray(...), ResponseData::nestedList($data, 'travelPurposeBreakdown')),
-            nationalityBreakdown: array_map(CountryEntry::fromArray(...), ResponseData::nestedList($data, 'nationalityBreakdown')),
-            countryOfResidenceBreakdown: array_map(CountryEntry::fromArray(...), ResponseData::nestedList($data, 'countryOfResidenceBreakdown')),
+            travelPurposeBreakdown: ResponseData::mapList($data, 'travelPurposeBreakdown', TravelPurposeEntry::fromArray(...)),
+            nationalityBreakdown: ResponseData::mapList($data, 'nationalityBreakdown', CountryEntry::fromArray(...)),
+            countryOfResidenceBreakdown: ResponseData::mapList($data, 'countryOfResidenceBreakdown', CountryEntry::fromArray(...)),
         );
     }
 }

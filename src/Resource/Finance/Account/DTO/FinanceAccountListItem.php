@@ -33,7 +33,7 @@ final readonly class FinanceAccountListItem
             hasChildren: ResponseData::bool($data, 'hasChildren'),
             isArchived: ResponseData::bool($data, 'isArchived'),
             vat: ResponseData::nullableNested($data, 'vat', VatRate::fromArray(...)),
-            subAccounts: array_map(self::fromArray(...), ResponseData::nestedList($data, 'subAccounts')),
+            subAccounts: ResponseData::mapList($data, 'subAccounts', self::fromArray(...)),
         );
     }
 }

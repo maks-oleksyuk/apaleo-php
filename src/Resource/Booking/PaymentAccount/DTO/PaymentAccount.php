@@ -34,7 +34,7 @@ final readonly class PaymentAccount
 
         return new self(
             id: ResponseData::string($data, 'id'),
-            target: PaymentAccountTarget::fromArray(ResponseData::nested($data, 'target')),
+            target: ResponseData::requiredNested($data, 'target', PaymentAccountTarget::fromArray(...)),
             created: ResponseData::dateTime($data, 'created'),
             updated: ResponseData::dateTime($data, 'updated'),
             externalPaymentTransactionId: $externalReference !== [] ? ResponseData::nullableString($externalReference, 'paymentTransactionId') : null,
@@ -44,7 +44,7 @@ final readonly class PaymentAccount
             paymentLink: ResponseData::nullableNested($data, 'paymentLink', PaymentAccountLink::fromArray(...)),
             accountDetails: ResponseData::nullableNested($data, 'accountDetails', PaymentAccountDetails::fromArray(...)),
             isVirtual: ResponseData::bool($data, 'isVirtual'),
-            actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
+            actions: ResponseData::mapList($data, 'actions', Action::fromArray(...)),
         );
     }
 }

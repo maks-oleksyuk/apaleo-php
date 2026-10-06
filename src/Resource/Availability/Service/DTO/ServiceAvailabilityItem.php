@@ -23,12 +23,12 @@ final readonly class ServiceAvailabilityItem
     public static function fromArray(array $data): self
     {
         return new self(
-            service: EmbeddedService::fromArray(ResponseData::nested($data, 'service')),
+            service: ResponseData::requiredNested($data, 'service', EmbeddedService::fromArray(...)),
             quantity: ResponseData::int($data, 'quantity'),
             soldCount: ResponseData::int($data, 'soldCount'),
             availableCount: ResponseData::int($data, 'availableCount'),
             serviceDate: ResponseData::date($data, 'serviceDate'),
-            block: BlockCounts::fromArray(ResponseData::nested($data, 'block')),
+            block: ResponseData::requiredNested($data, 'block', BlockCounts::fromArray(...)),
         );
     }
 }

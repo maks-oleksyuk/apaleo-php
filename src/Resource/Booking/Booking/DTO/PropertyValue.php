@@ -20,9 +20,9 @@ final readonly class PropertyValue
     public static function fromArray(array $data): self
     {
         return new self(
-            property: EmbeddedProperty::fromArray(ResponseData::nested($data, 'property')),
-            totalGrossAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'totalGrossAmount')),
-            balance: MonetaryValue::fromArray(ResponseData::nested($data, 'balance')),
+            property: ResponseData::requiredNested($data, 'property', EmbeddedProperty::fromArray(...)),
+            totalGrossAmount: ResponseData::requiredNested($data, 'totalGrossAmount', MonetaryValue::fromArray(...)),
+            balance: ResponseData::requiredNested($data, 'balance', MonetaryValue::fromArray(...)),
         );
     }
 }

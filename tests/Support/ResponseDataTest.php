@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Tests\Support;
 
 use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedRatePlan;
 use Oleksyuk\Apaleo\Support\ResponseData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -71,6 +72,30 @@ final class ResponseDataTest extends TestCase
         self::assertNull(ResponseData::nullableNested($data, 'empty', $map));
         self::assertNull(ResponseData::nullableNested($data, 'null', $map));
         self::assertNull(ResponseData::nullableNested($data, 'missing', $map));
+    }
+
+    public function testNestedFailureReportsFieldPath(): void
+    {
+        $this->expectException(ApaleoUnexpectedResponseException::class);
+        $this->expectExceptionMessageIsOrContains('field "ratePlan.id"');
+
+        ResponseData::requiredNested(['ratePlan' => []], 'ratePlan', EmbeddedRatePlan::fromArray(...));
+    }
+
+    public function testMapListMapsEveryItem(): void
+    {
+        $plans = ResponseData::mapList(['items' => [['id' => 'a'], ['id' => 'b']]], 'items', EmbeddedRatePlan::fromArray(...));
+
+        self::assertSame(['a', 'b'], array_column($plans, 'id'));
+        self::assertSame([], ResponseData::mapList([], 'items', EmbeddedRatePlan::fromArray(...)));
+    }
+
+    public function testListFailureReportsItemIndex(): void
+    {
+        $this->expectException(ApaleoUnexpectedResponseException::class);
+        $this->expectExceptionMessageIsOrContains('field "items[1].id"');
+
+        ResponseData::mapList(['items' => [['id' => 'a'], []]], 'items', EmbeddedRatePlan::fromArray(...));
     }
 
     public function testStringsAreTrimmed(): void

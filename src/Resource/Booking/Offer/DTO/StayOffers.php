@@ -26,7 +26,7 @@ final readonly class StayOffers
     {
         return new self(
             property: ResponseData::nullableNested($data, 'property', EmbeddedProperty::fromArray(...)),
-            offers: array_map(Offer::fromArray(...), ResponseData::nestedList($data, 'offers')),
+            offers: ResponseData::mapList($data, 'offers', Offer::fromArray(...)),
         );
     }
 }

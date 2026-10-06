@@ -31,7 +31,7 @@ final readonly class NoShowPolicy
             propertyId: ResponseData::string($data, 'propertyId'),
             name: ResponseData::localizedText($data, 'name'),
             description: ResponseData::localizedText($data, 'description'),
-            fee: FeeDetails::fromArray(ResponseData::nested($data, 'fee')),
+            fee: ResponseData::requiredNested($data, 'fee', FeeDetails::fromArray(...)),
         );
     }
 }

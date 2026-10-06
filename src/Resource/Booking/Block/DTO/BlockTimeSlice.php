@@ -27,8 +27,8 @@ final readonly class BlockTimeSlice
             to: ResponseData::dateTime($data, 'to'),
             blockedUnits: ResponseData::int($data, 'blockedUnits'),
             pickedUnits: ResponseData::int($data, 'pickedUnits'),
-            baseAmount: Amount::fromArray(ResponseData::nested($data, 'baseAmount')),
-            totalGrossAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'totalGrossAmount')),
+            baseAmount: ResponseData::requiredNested($data, 'baseAmount', Amount::fromArray(...)),
+            totalGrossAmount: ResponseData::requiredNested($data, 'totalGrossAmount', MonetaryValue::fromArray(...)),
         );
     }
 }

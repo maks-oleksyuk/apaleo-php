@@ -64,6 +64,6 @@ final readonly class FinanceTypesResource
     {
         $data = $this->pipeline->send(new ListVatTypesRequest($isoCountryCode, $atDate));
 
-        return array_map(VatRate::fromArray(...), ResponseData::nestedList($data, 'vatTypes'));
+        return ResponseData::mapList($data, 'vatTypes', VatRate::fromArray(...));
     }
 }

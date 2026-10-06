@@ -49,7 +49,7 @@ final readonly class Charge
             isPosted: ResponseData::bool($data, 'isPosted'),
             serviceDate: ResponseData::date($data, 'serviceDate'),
             created: ResponseData::dateTime($data, 'created'),
-            amount: Amount::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', Amount::fromArray(...)),
             quantity: ResponseData::int($data, 'quantity'),
             receipt: ResponseData::nullableString($data, 'receipt'),
             groupId: ResponseData::nullableString($data, 'groupId'),

@@ -18,7 +18,7 @@ final readonly class PropertyPerformancePerUnitGroup
     public static function fromArray(array $data): self
     {
         return new self(
-            unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
+            unitGroup: ResponseData::requiredNested($data, 'unitGroup', EmbeddedUnitGroup::fromArray(...)),
             metrics: PerformanceMetrics::fromArray($data),
         );
     }

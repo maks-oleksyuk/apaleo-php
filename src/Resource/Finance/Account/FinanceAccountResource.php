@@ -172,7 +172,7 @@ final readonly class FinanceAccountResource
     {
         $data = $this->pipeline->send(new TransactionsRequest('export-gross-daily', $filter));
 
-        return array_map(GrossTransaction::fromArray(...), ResponseData::nestedList($data, 'transactions'));
+        return ResponseData::mapList($data, 'transactions', GrossTransaction::fromArray(...));
     }
 
     /**
@@ -200,7 +200,7 @@ final readonly class FinanceAccountResource
     {
         $data = $this->pipeline->send(new TransactionsRequest('aggregate-pairs-daily', $filter));
 
-        return array_map(TransactionPair::fromArray(...), ResponseData::nestedList($data, 'accountTransactionPairs'));
+        return ResponseData::mapList($data, 'accountTransactionPairs', TransactionPair::fromArray(...));
     }
 
     /**
@@ -212,7 +212,7 @@ final readonly class FinanceAccountResource
     {
         $data = $this->pipeline->send(new TransactionsRequest($operation, $filter));
 
-        return array_map(AccountingTransaction::fromArray(...), ResponseData::nestedList($data, 'transactions'));
+        return ResponseData::mapList($data, 'transactions', AccountingTransaction::fromArray(...));
     }
 
     /**

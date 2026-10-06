@@ -26,7 +26,7 @@ final readonly class Action
         return new self(
             action: ResponseData::string($data, 'action'),
             isAllowed: ResponseData::bool($data, 'isAllowed'),
-            reasons: array_map(ActionReason::fromArray(...), ResponseData::nestedList($data, 'reasons')),
+            reasons: ResponseData::mapList($data, 'reasons', ActionReason::fromArray(...)),
         );
     }
 }

@@ -33,8 +33,8 @@ final readonly class PropertyAvailability
             sellableCount: ResponseData::int($data, 'sellableCount'),
             allowedOverbookingCount: ResponseData::int($data, 'allowedOverbookingCount'),
             houseOverbookingLimit: ResponseData::nullableInt($data, 'houseOverbookingLimit'),
-            maintenance: Maintenance::fromArray(ResponseData::nested($data, 'maintenance')),
-            block: BlockCounts::fromArray(ResponseData::nested($data, 'block')),
+            maintenance: ResponseData::requiredNested($data, 'maintenance', Maintenance::fromArray(...)),
+            block: ResponseData::requiredNested($data, 'block', BlockCounts::fromArray(...)),
         );
     }
 }

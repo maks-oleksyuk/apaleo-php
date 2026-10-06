@@ -42,7 +42,7 @@ final readonly class Refund
             id: ResponseData::string($data, 'id'),
             status: PaymentStatus::fromApi(ResponseData::string($data, 'status')),
             method: PaymentMethod::fromApi(ResponseData::string($data, 'method')),
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
             refundDate: ResponseData::dateTime($data, 'refundDate'),
             businessDate: ResponseData::date($data, 'businessDate'),
             reason: ResponseData::nullableString($data, 'reason'),

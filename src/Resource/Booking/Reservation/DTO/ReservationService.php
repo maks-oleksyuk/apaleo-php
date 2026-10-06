@@ -23,10 +23,10 @@ final readonly class ReservationService
     public static function fromArray(array $data): self
     {
         return new self(
-            service: EmbeddedService::fromArray(ResponseData::nested($data, 'service')),
+            service: ResponseData::requiredNested($data, 'service', EmbeddedService::fromArray(...)),
             serviceDate: ResponseData::date($data, 'serviceDate'),
             count: ResponseData::int($data, 'count'),
-            amount: Amount::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', Amount::fromArray(...)),
             bookedAsExtra: ResponseData::bool($data, 'bookedAsExtra'),
         );
     }

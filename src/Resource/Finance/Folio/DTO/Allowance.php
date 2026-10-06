@@ -31,7 +31,7 @@ final readonly class Allowance
     {
         return new self(
             id: ResponseData::string($data, 'id'),
-            amount: Amount::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', Amount::fromArray(...)),
             reason: ResponseData::string($data, 'reason'),
             serviceType: FinanceServiceType::fromApi(ResponseData::string($data, 'serviceType')),
             serviceDate: ResponseData::date($data, 'serviceDate'),

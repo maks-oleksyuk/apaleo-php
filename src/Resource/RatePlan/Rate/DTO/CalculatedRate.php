@@ -21,7 +21,7 @@ final readonly class CalculatedRate
     {
         return new self(
             adults: ResponseData::int($data, 'adults'),
-            price: MonetaryValue::fromArray(ResponseData::nested($data, 'price')),
+            price: ResponseData::requiredNested($data, 'price', MonetaryValue::fromArray(...)),
             includedServicesPrice: ResponseData::nullableNested($data, 'includedServicesPrice', MonetaryValue::fromArray(...)),
         );
     }

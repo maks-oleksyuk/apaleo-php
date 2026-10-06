@@ -25,7 +25,7 @@ final readonly class IncludedLineItem
 
         return new self(
             description: ResponseData::nullableString($data, 'description'),
-            price: MonetaryValue::fromArray(ResponseData::nested($data, 'price')),
+            price: ResponseData::requiredNested($data, 'price', MonetaryValue::fromArray(...)),
             vatType: $vatType !== null ? VatType::fromApi($vatType) : null,
             vatPercent: ResponseData::nullableFloat($data, 'vatPercent'),
         );

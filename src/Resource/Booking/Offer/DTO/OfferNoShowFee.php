@@ -23,7 +23,7 @@ final readonly class OfferNoShowFee
             code: ResponseData::string($data, 'code'),
             name: ResponseData::string($data, 'name'),
             description: ResponseData::string($data, 'description'),
-            fee: MonetaryValue::fromArray(ResponseData::nested($data, 'fee')),
+            fee: ResponseData::requiredNested($data, 'fee', MonetaryValue::fromArray(...)),
         );
     }
 }

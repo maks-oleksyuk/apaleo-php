@@ -55,7 +55,7 @@ final readonly class Payment
             type: PaymentType::fromApi(ResponseData::string($data, 'type')),
             status: PaymentStatus::fromApi(ResponseData::string($data, 'status')),
             method: $method !== null ? PaymentMethod::fromApi($method) : null,
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
             paymentDate: ResponseData::dateTime($data, 'paymentDate'),
             businessDate: ResponseData::date($data, 'businessDate'),
             externalReference: ResponseData::nullableNested($data, 'externalReference', ExternalReference::fromArray(...)),
@@ -70,7 +70,7 @@ final readonly class Payment
             movedFrom: ResponseData::nullableNested($data, 'movedFrom', EmbeddedFolio::fromArray(...)),
             movedTo: ResponseData::nullableNested($data, 'movedTo', EmbeddedFolio::fromArray(...)),
             movedReason: ResponseData::nullableString($data, 'movedReason'),
-            actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
+            actions: ResponseData::mapList($data, 'actions', Action::fromArray(...)),
         );
     }
 }

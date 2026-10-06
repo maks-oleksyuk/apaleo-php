@@ -20,7 +20,7 @@ final readonly class PendingPayment
     {
         return new self(
             id: ResponseData::string($data, 'id'),
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
             terminalId: ResponseData::nullableString($data, 'terminalId'),
         );
     }

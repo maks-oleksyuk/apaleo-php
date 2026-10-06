@@ -24,7 +24,7 @@ final readonly class Maintenance
     {
         return new self(
             id: ResponseData::string($data, 'id'),
-            unit: EmbeddedUnit::fromArray(ResponseData::nested($data, 'unit')),
+            unit: ResponseData::requiredNested($data, 'unit', EmbeddedUnit::fromArray(...)),
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
             type: MaintenanceType::fromApi(ResponseData::string($data, 'type')),

@@ -19,7 +19,7 @@ final readonly class OfferCityTaxItem
     {
         return new self(
             serviceDate: ResponseData::date($data, 'serviceDate'),
-            amount: Amount::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', Amount::fromArray(...)),
         );
     }
 }

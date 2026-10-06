@@ -21,10 +21,10 @@ final readonly class RevenuesReportItem
     public static function fromArray(array $data): self
     {
         return new self(
-            account: ExportAccount::fromArray(ResponseData::nested($data, 'account')),
-            netAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'netAmount')),
-            grossAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'grossAmount')),
-            children: array_map(self::fromArray(...), ResponseData::nestedList($data, 'children')),
+            account: ResponseData::requiredNested($data, 'account', ExportAccount::fromArray(...)),
+            netAmount: ResponseData::requiredNested($data, 'netAmount', MonetaryValue::fromArray(...)),
+            grossAmount: ResponseData::requiredNested($data, 'grossAmount', MonetaryValue::fromArray(...)),
+            children: ResponseData::mapList($data, 'children', self::fromArray(...)),
         );
     }
 }

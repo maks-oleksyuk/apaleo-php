@@ -25,10 +25,10 @@ final readonly class ChartOfAccounts
     public static function fromArray(array $data): self
     {
         return new self(
-            globalAccounts: array_map(FinanceAccountListItem::fromArray(...), ResponseData::nestedList($data, 'globalAccounts')),
-            guestAccounts: array_map(FinanceAccountListItem::fromArray(...), ResponseData::nestedList($data, 'guestAccounts')),
-            externalAccounts: array_map(FinanceAccountListItem::fromArray(...), ResponseData::nestedList($data, 'externalAccounts')),
-            bookingAccounts: array_map(FinanceAccountListItem::fromArray(...), ResponseData::nestedList($data, 'bookingAccounts')),
+            globalAccounts: ResponseData::mapList($data, 'globalAccounts', FinanceAccountListItem::fromArray(...)),
+            guestAccounts: ResponseData::mapList($data, 'guestAccounts', FinanceAccountListItem::fromArray(...)),
+            externalAccounts: ResponseData::mapList($data, 'externalAccounts', FinanceAccountListItem::fromArray(...)),
+            bookingAccounts: ResponseData::mapList($data, 'bookingAccounts', FinanceAccountListItem::fromArray(...)),
         );
     }
 }

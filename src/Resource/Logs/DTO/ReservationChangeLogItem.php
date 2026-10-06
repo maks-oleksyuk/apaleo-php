@@ -26,7 +26,7 @@ final readonly class ReservationChangeLogItem
         return new self(
             reservationId: ResponseData::string($data, 'reservationId'),
             eventType: ReservationLogEventType::fromApi(ResponseData::string($data, 'eventType')),
-            changes: array_map(ReservationChange::fromArray(...), ResponseData::nestedList($data, 'changes')),
+            changes: ResponseData::mapList($data, 'changes', ReservationChange::fromArray(...)),
             clientId: ResponseData::string($data, 'clientId'),
             propertyId: ResponseData::string($data, 'propertyId'),
             created: ResponseData::dateTime($data, 'created'),

@@ -32,14 +32,14 @@ final readonly class ServiceOffer
     public static function fromArray(array $data): self
     {
         return new self(
-            service: Service::fromArray(ResponseData::nested($data, 'service')),
+            service: ResponseData::requiredNested($data, 'service', Service::fromArray(...)),
             count: ResponseData::int($data, 'count'),
             availableCount: ResponseData::nullableInt($data, 'availableCount'),
-            totalAmount: Amount::fromArray(ResponseData::nested($data, 'totalAmount')),
-            prePaymentAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'prePaymentAmount')),
-            fees: array_map(OfferFee::fromArray(...), ResponseData::nestedList($data, 'fees')),
-            dates: array_map(ServiceOfferItem::fromArray(...), ResponseData::nestedList($data, 'dates')),
-            validationMessages: array_map(OfferValidationMessage::fromArray(...), ResponseData::nestedList($data, 'validationMessages')),
+            totalAmount: ResponseData::requiredNested($data, 'totalAmount', Amount::fromArray(...)),
+            prePaymentAmount: ResponseData::requiredNested($data, 'prePaymentAmount', MonetaryValue::fromArray(...)),
+            fees: ResponseData::mapList($data, 'fees', OfferFee::fromArray(...)),
+            dates: ResponseData::mapList($data, 'dates', ServiceOfferItem::fromArray(...)),
+            validationMessages: ResponseData::mapList($data, 'validationMessages', OfferValidationMessage::fromArray(...)),
         );
     }
 }

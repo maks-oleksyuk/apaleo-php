@@ -57,7 +57,7 @@ final readonly class InvoiceListItem
             bookingId: ResponseData::nullableString($data, 'bookingId'),
             propertyId: ResponseData::string($data, 'propertyId'),
             languageCode: ResponseData::string($data, 'languageCode'),
-            subTotal: MonetaryValue::fromArray(ResponseData::nested($data, 'subTotal')),
+            subTotal: ResponseData::requiredNested($data, 'subTotal', MonetaryValue::fromArray(...)),
             outstandingPayment: ResponseData::nullableNested($data, 'outstandingPayment', MonetaryValue::fromArray(...)),
             guestName: ResponseData::nullableString($data, 'guestName'),
             guestCompany: ResponseData::nullableString($data, 'guestCompany'),

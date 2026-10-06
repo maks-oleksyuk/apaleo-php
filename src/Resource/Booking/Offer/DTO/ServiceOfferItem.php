@@ -22,7 +22,7 @@ final readonly class ServiceOfferItem
     {
         return new self(
             serviceDate: ResponseData::date($data, 'serviceDate'),
-            amount: Amount::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', Amount::fromArray(...)),
             isDefaultDate: ResponseData::bool($data, 'isDefaultDate'),
             isMandatory: ResponseData::bool($data, 'isMandatory'),
             availableCount: ResponseData::nullableInt($data, 'availableCount'),

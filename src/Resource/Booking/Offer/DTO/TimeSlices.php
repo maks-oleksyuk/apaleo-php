@@ -19,7 +19,7 @@ final readonly class TimeSlices
     public static function fromArray(array $data): self
     {
         return new self(
-            timeSlices: array_map(TimeSliceItem::fromArray(...), ResponseData::nestedList($data, 'timeSlices')),
+            timeSlices: ResponseData::mapList($data, 'timeSlices', TimeSliceItem::fromArray(...)),
             count: ResponseData::int($data, 'count'),
         );
     }

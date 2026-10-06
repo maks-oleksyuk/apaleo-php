@@ -27,7 +27,7 @@ final readonly class InvoicePayment
             id: ResponseData::string($data, 'id'),
             method: PaymentMethod::fromApi(ResponseData::string($data, 'method')),
             methodName: ResponseData::string($data, 'methodName'),
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
             paymentDate: ResponseData::nullableDateTime($data, 'paymentDate'),
             businessDate: ResponseData::nullableDate($data, 'businessDate'),
         );

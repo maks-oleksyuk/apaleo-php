@@ -21,7 +21,7 @@ final readonly class PropertyPerformanceReportItem
         return new self(
             businessDay: ResponseData::date($data, 'businessDay'),
             metrics: PerformanceMetrics::fromArray($data),
-            unitGroups: array_map(PropertyPerformancePerUnitGroup::fromArray(...), ResponseData::nestedList($data, 'unitGroups')),
+            unitGroups: ResponseData::mapList($data, 'unitGroups', PropertyPerformancePerUnitGroup::fromArray(...)),
         );
     }
 }

@@ -54,8 +54,8 @@ final readonly class UnitListItem
             maintenanceType: $maintenanceType !== null ? UnitMaintenanceType::fromApi($maintenanceType) : null,
             isArchived: ResponseData::bool($data, 'isArchived'),
             archived: ResponseData::nullableDateTime($data, 'archived'),
-            attributes: array_map(UnitAttribute::fromArray(...), ResponseData::nestedList($data, 'attributes')),
-            connectedUnits: array_map(ConnectedUnit::fromArray(...), ResponseData::nestedList($data, 'connectedUnits')),
+            attributes: ResponseData::mapList($data, 'attributes', UnitAttribute::fromArray(...)),
+            connectedUnits: ResponseData::mapList($data, 'connectedUnits', ConnectedUnit::fromArray(...)),
             created: ResponseData::dateTime($data, 'created'),
         );
     }

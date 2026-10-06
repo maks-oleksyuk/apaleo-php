@@ -38,13 +38,13 @@ final readonly class TimeSlice
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
             serviceDate: ResponseData::date($data, 'serviceDate'),
-            ratePlan: EmbeddedRatePlan::fromArray(ResponseData::nested($data, 'ratePlan')),
-            unitGroup: EmbeddedUnitGroup::fromArray(ResponseData::nested($data, 'unitGroup')),
+            ratePlan: ResponseData::requiredNested($data, 'ratePlan', EmbeddedRatePlan::fromArray(...)),
+            unitGroup: ResponseData::requiredNested($data, 'unitGroup', EmbeddedUnitGroup::fromArray(...)),
             unit: ResponseData::nullableNested($data, 'unit', EmbeddedUnit::fromArray(...)),
-            baseAmount: Amount::fromArray(ResponseData::nested($data, 'baseAmount')),
-            totalGrossAmount: MonetaryValue::fromArray(ResponseData::nested($data, 'totalGrossAmount')),
-            includedServices: array_map(ReservationService::fromArray(...), ResponseData::nestedList($data, 'includedServices')),
-            actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
+            baseAmount: ResponseData::requiredNested($data, 'baseAmount', Amount::fromArray(...)),
+            totalGrossAmount: ResponseData::requiredNested($data, 'totalGrossAmount', MonetaryValue::fromArray(...)),
+            includedServices: ResponseData::mapList($data, 'includedServices', ReservationService::fromArray(...)),
+            actions: ResponseData::mapList($data, 'actions', Action::fromArray(...)),
         );
     }
 }

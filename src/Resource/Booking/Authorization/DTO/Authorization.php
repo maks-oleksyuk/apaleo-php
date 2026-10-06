@@ -36,18 +36,18 @@ final readonly class Authorization
 
         return new self(
             id: ResponseData::string($data, 'id'),
-            target: AuthorizationTarget::fromArray(ResponseData::nested($data, 'target')),
+            target: ResponseData::requiredNested($data, 'target', AuthorizationTarget::fromArray(...)),
             created: ResponseData::dateTime($data, 'created'),
             updated: ResponseData::dateTime($data, 'updated'),
             externalPaymentTransactionId: $externalReference !== [] ? ResponseData::nullableString($externalReference, 'paymentTransactionId') : null,
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
             remainingBalance: ResponseData::nullableNested($data, 'remainingBalance', MonetaryValue::fromArray(...)),
             status: AuthorizationStatus::fromApi(ResponseData::string($data, 'status')),
             failureReason: ResponseData::nullableString($data, 'failureReason'),
             payerInteraction: PayerInteraction::fromApi(ResponseData::string($data, 'payerInteraction')),
             expiresAt: ResponseData::nullableDateTime($data, 'expiresAt'),
             paymentLinkUrl: ResponseData::nullableString($data, 'paymentLinkUrl'),
-            actions: array_map(Action::fromArray(...), ResponseData::nestedList($data, 'actions')),
+            actions: ResponseData::mapList($data, 'actions', Action::fromArray(...)),
         );
     }
 }

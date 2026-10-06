@@ -19,7 +19,7 @@ final readonly class AutoAssignedUnitItem
     public static function fromArray(array $data): self
     {
         return new self(
-            unit: EmbeddedUnit::fromArray(ResponseData::nested($data, 'unit')),
+            unit: ResponseData::requiredNested($data, 'unit', EmbeddedUnit::fromArray(...)),
             from: ResponseData::dateTime($data, 'from'),
             to: ResponseData::dateTime($data, 'to'),
         );

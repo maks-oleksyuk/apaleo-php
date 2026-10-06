@@ -28,7 +28,7 @@ final readonly class LanguageResource
     {
         $data = $this->pipeline->send(new GetLanguagesRequest());
 
-        return array_map(Language::fromArray(...), ResponseData::nestedList($data, 'languages'));
+        return ResponseData::mapList($data, 'languages', Language::fromArray(...));
     }
 
     /**

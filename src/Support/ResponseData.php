@@ -72,7 +72,7 @@ final class ResponseData
 
     /**
      * For `format: date` fields ("2026-09-22"): midnight UTC, so the value doesn't depend on
-     * date.timezone and a round trip through format('Y-m-d') gives back the same day.
+     * `date.timezone` and a round trip through format('Y-m-d') gives back the same day.
      *
      * @param array<string, mixed> $data
      */
@@ -204,8 +204,7 @@ final class ResponseData
     }
 
     /**
-     * Maps an optional nested object: missing, null or empty becomes null instead of a DTO
-     * built from nothing.
+     * Maps an optional nested object: missing, null, or empty becomes null instead of a DTO built from nothing.
      *
      * @template T
      *
@@ -218,11 +217,47 @@ final class ResponseData
     {
         $value = self::nested($data, $key);
 
-        return $value !== [] ? $map($value) : null;
+        return $value !== [] ? self::mapAt($key, $map, $value) : null;
     }
 
     /**
-     * Extracts a list field as an array of arrays; missing, malformed or non-array items are dropped.
+     * Maps a required to be nested object; a failure inside it is reported with the field path
+     * (e.g. `ratePlan.id`) instead of the bare inner field name.
+     *
+     * @template T
+     *
+     * @param array<string, mixed>                $data
+     * @param callable(array<string, mixed>): T $map e.g. EmbeddedRatePlan::fromArray(...)
+     *
+     * @return T
+     */
+    public static function requiredNested(array $data, string $key, callable $map): mixed
+    {
+        return self::mapAt($key, $map, self::nested($data, $key));
+    }
+
+    /**
+     * Maps every item of a list field; a failure is reported as `key[index].field`.
+     *
+     * @template T
+     *
+     * @param array<string, mixed>                $data
+     * @param callable(array<string, mixed>): T $map e.g. TimeSlice::fromArray(...)
+     *
+     * @return list<T>
+     */
+    public static function mapList(array $data, string $key, callable $map): array
+    {
+        $result = [];
+        foreach (self::nestedList($data, $key) as $index => $item) {
+            $result[] = self::mapAt("{$key}[{$index}]", $map, $item);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Extracts a list field as an array of arrays; missing, malformed, or non-array items are dropped.
      *
      * @param array<string, mixed> $data
      *
@@ -279,20 +314,32 @@ final class ResponseData
     }
 
     /**
+     * @template T
+     *
+     * @param callable(array<string, mixed>): T $map
+     * @param array<string, mixed>              $value
+     *
+     * @return T
+     */
+    private static function mapAt(string $path, callable $map, array $value): mixed
+    {
+        try {
+            return $map($value);
+        } catch (ApaleoUnexpectedResponseException $apaleoUnexpectedResponseException) {
+            $message = preg_replace('/ field "/', " field \"{$path}.", $apaleoUnexpectedResponseException->getMessage(), 1) ?? $apaleoUnexpectedResponseException->getMessage();
+
+            throw new ApaleoUnexpectedResponseException($message, $apaleoUnexpectedResponseException->getCode(), previous: $apaleoUnexpectedResponseException);
+        }
+    }
+
+    /**
      * @param array<mixed, mixed> $data
      *
      * @return array<string, mixed>
      */
     private static function onlyStringKeys(array $data): array
     {
-        $result = [];
-        foreach ($data as $key => $value) {
-            if (\is_string($key)) {
-                $result[$key] = $value;
-            }
-        }
-
-        return $result;
+        return array_filter($data, \is_string(...), ARRAY_FILTER_USE_KEY);
     }
 
     /**

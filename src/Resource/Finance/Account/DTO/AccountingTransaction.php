@@ -35,10 +35,10 @@ final readonly class AccountingTransaction
         return new self(
             timestamp: ResponseData::dateTime($data, 'timestamp'),
             date: ResponseData::date($data, 'date'),
-            debitedAccount: ExportAccount::fromArray(ResponseData::nested($data, 'debitedAccount')),
-            creditedAccount: ExportAccount::fromArray(ResponseData::nested($data, 'creditedAccount')),
+            debitedAccount: ResponseData::requiredNested($data, 'debitedAccount', ExportAccount::fromArray(...)),
+            creditedAccount: ResponseData::requiredNested($data, 'creditedAccount', ExportAccount::fromArray(...)),
             command: TransactionCommand::fromApi(ResponseData::string($data, 'command')),
-            amount: MonetaryValue::fromArray(ResponseData::nested($data, 'amount')),
+            amount: ResponseData::requiredNested($data, 'amount', MonetaryValue::fromArray(...)),
             receipt: ResponseData::nullableNested($data, 'receipt', Receipt::fromArray(...)),
             entryNumber: ResponseData::string($data, 'entryNumber'),
             entryGroupNumber: ResponseData::string($data, 'entryGroupNumber'),

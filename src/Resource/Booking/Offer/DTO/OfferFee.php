@@ -24,7 +24,7 @@ final readonly class OfferFee
             id: ResponseData::string($data, 'id'),
             code: ResponseData::string($data, 'code'),
             name: ResponseData::string($data, 'name'),
-            totalAmount: Amount::fromArray(ResponseData::nested($data, 'totalAmount')),
+            totalAmount: ResponseData::requiredNested($data, 'totalAmount', Amount::fromArray(...)),
         );
     }
 }
