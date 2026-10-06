@@ -19,6 +19,7 @@ final class PaginatorTest extends TestCase
 {
     public function testWalksAllPagesUntilTotalCountIsReached(): void
     {
+        /** @var array<int, PaginatedResult<string>> $pages */
         $pages = [
             1 => new PaginatedResult(items: ['a', 'b'], totalCount: 5),
             2 => new PaginatedResult(items: ['c', 'd'], totalCount: 5),

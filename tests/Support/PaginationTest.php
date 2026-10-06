@@ -18,15 +18,17 @@ final class PaginationTest extends TestCase
 {
     public function testNullIsAllowed(): void
     {
+        $this->expectNotToPerformAssertions();
+
         Pagination::assertValidPageSize(null);
-        $this->addToAssertionCount(1);
     }
 
     public function testValidRangeIsAllowed(): void
     {
+        $this->expectNotToPerformAssertions();
+
         Pagination::assertValidPageSize(1);
         Pagination::assertValidPageSize(500);
-        $this->addToAssertionCount(1);
     }
 
     public function testAboveMaxThrows(): void
