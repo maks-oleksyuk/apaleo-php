@@ -8,6 +8,7 @@ use Oleksyuk\Apaleo\Exception\ApaleoExceptionInterface;
 use Oleksyuk\Apaleo\Http\RequestPipeline;
 use Oleksyuk\Apaleo\Resource\Availability\Service\DTO\ServiceAvailabilityTimeSlice;
 use Oleksyuk\Apaleo\Resource\Availability\Service\Requests\ListServiceAvailabilityRequest;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Support\PaginatedResult;
 use Oleksyuk\Apaleo\Support\Pagination;
@@ -20,7 +21,7 @@ final readonly class ServiceResource
 
     /**
      * @param list<string> $timeSliceDefinitionIds
-     * @param list<string> $channelCodes
+     * @param list<ChannelCode> $channelCodes
      *
      * @return PaginatedResult<ServiceAvailabilityTimeSlice>
      *

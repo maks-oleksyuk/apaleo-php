@@ -40,7 +40,7 @@ final readonly class AuthorizationResource
     }
 
     /**
-     * @param list<string> $sort
+     * @param list<'created:asc'|'created:desc'|'expiresat:asc'|'expiresat:desc'|'updated:asc'|'updated:desc'> $sort
      * @param list<'actions'|'remainingBalance'> $expand
      *
      * @return PaginatedResult<Authorization>

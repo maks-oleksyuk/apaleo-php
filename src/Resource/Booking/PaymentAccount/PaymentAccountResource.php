@@ -39,7 +39,7 @@ final readonly class PaymentAccountResource
     }
 
     /**
-     * @param list<string> $sort
+     * @param list<'created:asc'|'created:desc'|'expiresat:asc'|'expiresat:desc'|'updated:asc'|'updated:desc'> $sort
      * @param list<'actions'> $expand
      *
      * @return PaginatedResult<PaymentAccount>

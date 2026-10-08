@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Booking\Reservation;
 
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\DateFilter;
 use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\ReservationStatus;
+use Oleksyuk\Apaleo\Resource\Booking\Reservation\Enum\ReservationValidationMessageCategory;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\UnitGroupType;
 use Oleksyuk\Apaleo\Support\Query;
@@ -24,7 +25,7 @@ final readonly class ReservationFilter
      * @param list<ReservationStatus> $status
      * @param list<ChannelCode>       $channelCode
      * @param list<string>            $sources
-     * @param list<string>            $validationMessageCategory
+     * @param list<ReservationValidationMessageCategory> $validationMessageCategory
      * @param list<string>            $balanceFilter
      * @param list<string>            $externalReferences
      */

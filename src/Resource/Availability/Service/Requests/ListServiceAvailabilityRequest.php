@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Availability\Service\Requests;
 
 use Oleksyuk\Apaleo\Http\Enum\Method;
 use Oleksyuk\Apaleo\Http\Request;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\ChannelCode;
 use Oleksyuk\Apaleo\Resource\Shared\Enum\TimeSliceTemplate;
 use Oleksyuk\Apaleo\Support\Query;
 
@@ -13,7 +14,7 @@ final readonly class ListServiceAvailabilityRequest extends Request
 {
     /**
      * @param list<string> $timeSliceDefinitionIds
-     * @param list<string> $channelCodes
+     * @param list<ChannelCode> $channelCodes
      */
     public function __construct(
         private string $propertyId,

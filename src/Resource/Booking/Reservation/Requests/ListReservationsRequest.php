@@ -12,7 +12,7 @@ use Oleksyuk\Apaleo\Support\Query;
 final readonly class ListReservationsRequest extends Request
 {
     /**
-     * @param list<string> $sort
+     * @param list<'arrival:asc'|'arrival:desc'|'balance:asc'|'balance:desc'|'created:asc'|'created:desc'|'departure:asc'|'departure:desc'|'firstname:asc'|'firstname:desc'|'id:asc'|'id:desc'|'lastname:asc'|'lastname:desc'|'unitname:asc'|'unitname:desc'|'updated:asc'|'updated:desc'> $sort
      * @param list<'actions'|'assignedUnits'|'booker'|'company'|'services'|'timeSlices'> $expand
      */
     public function __construct(

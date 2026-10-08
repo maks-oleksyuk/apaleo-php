@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Authorization;
 
+use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationDateField;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationStatus;
 use Oleksyuk\Apaleo\Resource\Booking\Authorization\Enum\AuthorizationTargetType;
 use Oleksyuk\Apaleo\Support\Query;
@@ -23,7 +24,7 @@ final readonly class AuthorizationFilter
         public array $reservationIds = [],
         public array $status = [],
         public array $targetTypes = [],
-        public ?string $dateField = null,
+        public ?AuthorizationDateField $dateField = null,
         public ?\DateTimeImmutable $from = null,
         public ?\DateTimeImmutable $to = null,
     ) {}
@@ -37,7 +38,7 @@ final readonly class AuthorizationFilter
             'reservationIds' => Query::csv($this->reservationIds),
             'status' => Query::csv($this->status),
             'targetTypes' => Query::csv($this->targetTypes),
-            'dateField' => $this->dateField,
+            'dateField' => $this->dateField?->value,
             'from' => $this->from?->format(\DateTimeInterface::ATOM),
             'to' => $this->to?->format(\DateTimeInterface::ATOM),
         ], static fn (mixed $value): bool => $value !== null);

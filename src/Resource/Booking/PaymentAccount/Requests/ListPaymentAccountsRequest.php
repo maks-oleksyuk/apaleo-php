@@ -12,7 +12,7 @@ use Oleksyuk\Apaleo\Support\Query;
 final readonly class ListPaymentAccountsRequest extends Request
 {
     /**
-     * @param list<string> $sort
+     * @param list<'created:asc'|'created:desc'|'expiresat:asc'|'expiresat:desc'|'updated:asc'|'updated:desc'> $sort
      * @param list<'actions'> $expand
      */
     public function __construct(

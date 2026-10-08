@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Offer\DTO;
 
+use Oleksyuk\Apaleo\Resource\Booking\Offer\Enum\OfferValidationMessageCode;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/** code is a raw API value (large enum; informational, not branched on). */
 final readonly class OfferValidationMessage
 {
     public function __construct(
-        public string $code,
+        public OfferValidationMessageCode $code,
         public string $message,
     ) {}
 
@@ -18,7 +18,7 @@ final readonly class OfferValidationMessage
     public static function fromArray(array $data): self
     {
         return new self(
-            code: ResponseData::string($data, 'code'),
+            code: OfferValidationMessageCode::fromApi(ResponseData::string($data, 'code')),
             message: ResponseData::string($data, 'message'),
         );
     }
