@@ -144,14 +144,14 @@ final class RoutingAccountAndTypesTest extends FinanceTestCase
     public function testTypes(): void
     {
         $this->respond(['paymentMethods' => ['Cash', 'SomethingNew']]);
-        self::assertSame([PaymentMethod::Cash, PaymentMethod::Unknown], $this->api->types()->paymentMethods());
+        self::assertSame([PaymentMethod::Cash, PaymentMethod::Unrecognized], $this->api->types()->paymentMethods());
 
         $this->respond(['isoCurrencies' => ['EUR', 'USD']]);
         self::assertSame(['EUR', 'USD'], $this->api->types()->currencies());
         self::assertStringEndsWith('/finance/v1/types/currencies', $this->lastUri());
 
         $this->respond(['serviceTypes' => ['Accommodation', 'SomethingNew']]);
-        self::assertSame([FinanceServiceType::Accommodation, FinanceServiceType::Unknown], $this->api->types()->serviceTypes());
+        self::assertSame([FinanceServiceType::Accommodation, FinanceServiceType::Unrecognized], $this->api->types()->serviceTypes());
         self::assertStringEndsWith('/finance/v1/types/service-types', $this->lastUri());
 
         $this->respond(['vatTypes' => [['type' => 'Normal', 'percent' => 19]]]);

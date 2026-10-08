@@ -72,7 +72,7 @@ final class UnitGroupResourceTest extends TestCase
 
         $unitGroup = $this->unitGroups->get('DBL');
 
-        self::assertSame(UnitGroupType::Unknown, $unitGroup->type);
+        self::assertSame(UnitGroupType::Unrecognized, $unitGroup->type);
         self::assertSame('SomeFutureType', $unitGroup->rawType);
     }
 
@@ -150,7 +150,7 @@ final class UnitGroupResourceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         try {
-            $this->unitGroups->list(new UnitGroupFilter(unitGroupTypes: [UnitGroupType::BedRoom, UnitGroupType::Unknown]));
+            $this->unitGroups->list(new UnitGroupFilter(unitGroupTypes: [UnitGroupType::BedRoom, UnitGroupType::Unrecognized]));
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }

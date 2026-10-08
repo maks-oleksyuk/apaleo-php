@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Reports\DTO;
 
-use Oleksyuk\Apaleo\Resource\Reports\Enum\Gender;
-use Oleksyuk\Apaleo\Resource\Reports\Enum\Title;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Gender;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Title;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 final readonly class OrderedServiceGuest

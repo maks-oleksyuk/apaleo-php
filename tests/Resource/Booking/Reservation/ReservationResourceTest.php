@@ -103,7 +103,7 @@ final class ReservationResourceTest extends TestCase
 
         $reservation = $this->reservations->get('XPGMSXGF-1');
 
-        self::assertSame(ReservationStatus::Unknown, $reservation->status);
+        self::assertSame(ReservationStatus::Unrecognized, $reservation->status);
     }
 
     public function testNotFoundMapsToApaleoNotFoundException(): void

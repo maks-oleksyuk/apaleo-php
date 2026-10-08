@@ -6,7 +6,7 @@ namespace Oleksyuk\Apaleo\Resource\Finance\Folio\DTO;
 
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\PersonAddress;
 use Oleksyuk\Apaleo\Resource\Finance\Shared\Enum\DebitorType;
-use Oleksyuk\Apaleo\Resource\Reports\Enum\Title;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Title;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /** Who a folio is billed to: a person (firstName/name) or a company. */

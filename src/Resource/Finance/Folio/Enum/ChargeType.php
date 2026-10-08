@@ -17,10 +17,10 @@ enum ChargeType: string
     case Tax = 'Tax';
     case SecondCityTax = 'SecondCityTax';
     case GuestLevy = 'GuestLevy';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

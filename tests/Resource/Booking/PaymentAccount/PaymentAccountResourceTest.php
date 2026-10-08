@@ -66,7 +66,7 @@ final class PaymentAccountResourceTest extends TestCase
         $fixture['status'] = 'SomeFutureStatus';
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode($fixture)));
 
-        self::assertSame(PaymentAccountStatus::Unknown, $this->paymentAccounts->get('PA1')->status);
+        self::assertSame(PaymentAccountStatus::Unrecognized, $this->paymentAccounts->get('PA1')->status);
     }
 
     public function testNotFoundMapsToApaleoNotFoundException(): void

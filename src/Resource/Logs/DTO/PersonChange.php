@@ -7,19 +7,21 @@ namespace Oleksyuk\Apaleo\Resource\Logs\DTO;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\PersonAddress;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\PersonCompany;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\VehicleRegistration;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\IdentificationType;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\RelationshipToPrimaryGuest;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Gender;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Title;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
 /**
  * A guest/company/address diff as it appears in a reservation change log entry — every field is
  * optional, unlike Booking\Shared\DTO\Guest (a full guest record, which requires lastName).
- * title/gender/identificationType/relationshipToPrimaryGuest are kept as raw strings, mirroring
- * Guest's own convention for these country-dependent lookups.
  */
 final readonly class PersonChange
 {
     public function __construct(
-        public ?string $title,
-        public ?string $gender,
+        public ?Title $title,
+        public ?Gender $gender,
         public ?string $firstName,
         public ?string $middleInitial,
         public ?string $lastName,
@@ -33,7 +35,7 @@ final readonly class PersonChange
         public ?\DateTimeImmutable $identificationIssueDate,
         public ?\DateTimeImmutable $identificationExpiryDate,
         public ?string $identificationIssuePlace,
-        public ?string $identificationType,
+        public ?IdentificationType $identificationType,
         public ?string $personalTaxId,
         public ?PersonCompany $company,
         public ?string $preferredLanguage,
@@ -46,7 +48,7 @@ final readonly class PersonChange
         public ?string $borderCrossingPlace,
         public ?\DateTimeImmutable $borderCrossingDate,
         public ?string $nextDestination,
-        public ?string $relationshipToPrimaryGuest,
+        public ?RelationshipToPrimaryGuest $relationshipToPrimaryGuest,
         public ?VehicleRegistration $vehicleRegistration,
     ) {}
 
@@ -58,8 +60,8 @@ final readonly class PersonChange
         $vehicleRegistration = ResponseData::nested($data, 'vehicleRegistration');
 
         return new self(
-            title: ResponseData::nullableString($data, 'title'),
-            gender: ResponseData::nullableString($data, 'gender'),
+            title: ResponseData::nullableEnum($data, 'title', Title::fromApi(...)),
+            gender: ResponseData::nullableEnum($data, 'gender', Gender::fromApi(...)),
             firstName: ResponseData::nullableString($data, 'firstName'),
             middleInitial: ResponseData::nullableString($data, 'middleInitial'),
             lastName: ResponseData::nullableString($data, 'lastName'),
@@ -73,7 +75,7 @@ final readonly class PersonChange
             identificationIssueDate: ResponseData::nullableDate($data, 'identificationIssueDate'),
             identificationExpiryDate: ResponseData::nullableDate($data, 'identificationExpiryDate'),
             identificationIssuePlace: ResponseData::nullableString($data, 'identificationIssuePlace'),
-            identificationType: ResponseData::nullableString($data, 'identificationType'),
+            identificationType: ResponseData::nullableEnum($data, 'identificationType', IdentificationType::fromApi(...)),
             personalTaxId: ResponseData::nullableString($data, 'personalTaxId'),
             company: [] !== $company ? PersonCompany::fromArray($company) : null,
             preferredLanguage: ResponseData::nullableString($data, 'preferredLanguage'),
@@ -86,7 +88,7 @@ final readonly class PersonChange
             borderCrossingPlace: ResponseData::nullableString($data, 'borderCrossingPlace'),
             borderCrossingDate: ResponseData::nullableDate($data, 'borderCrossingDate'),
             nextDestination: ResponseData::nullableString($data, 'nextDestination'),
-            relationshipToPrimaryGuest: ResponseData::nullableString($data, 'relationshipToPrimaryGuest'),
+            relationshipToPrimaryGuest: ResponseData::nullableEnum($data, 'relationshipToPrimaryGuest', RelationshipToPrimaryGuest::fromApi(...)),
             vehicleRegistration: [] !== $vehicleRegistration ? VehicleRegistration::fromArray($vehicleRegistration) : null,
         );
     }

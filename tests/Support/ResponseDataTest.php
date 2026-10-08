@@ -6,6 +6,7 @@ namespace Oleksyuk\Apaleo\Tests\Support;
 
 use Oleksyuk\Apaleo\Exception\ApaleoUnexpectedResponseException;
 use Oleksyuk\Apaleo\Resource\Booking\Shared\DTO\EmbeddedRatePlan;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Title;
 use Oleksyuk\Apaleo\Support\ResponseData;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -117,6 +118,14 @@ final class ResponseDataTest extends TestCase
         self::assertSame(['a', 'b'], ResponseData::stringListOrEmpty($data, 'list'));
         self::assertSame(['en' => 'Double Room', 'de' => 'Doppelzimmer'], ResponseData::localizedText($data, 'loc'));
         self::assertSame(['default' => 'Single'], ResponseData::localizedText($data, 'plain'));
+    }
+
+    public function testNullableEnumMapsThroughFromApiAndIsNullWhenAbsentOrBlank(): void
+    {
+        self::assertSame(Title::Mr, ResponseData::nullableEnum(['t' => 'Mr'], 't', Title::fromApi(...)));
+        self::assertSame(Title::Unrecognized, ResponseData::nullableEnum(['t' => 'Sir'], 't', Title::fromApi(...)));
+        self::assertNull(ResponseData::nullableEnum(['t' => ' '], 't', Title::fromApi(...)));
+        self::assertNull(ResponseData::nullableEnum([], 't', Title::fromApi(...)));
     }
 
     public function testStringRejectsMissingOrNonStringValues(): void

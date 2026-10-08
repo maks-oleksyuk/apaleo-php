@@ -265,7 +265,7 @@ final readonly class RequestPipeline
     private function query(Request $request): array
     {
         $query = array_map(static fn (mixed $value): mixed => \is_bool($value) ? ($value ? 'true' : 'false') : $value, $request->query());
-        $this->assertNoUnknownEnum($query);
+        $this->assertNoUnrecognizedEnum($query);
 
         return $query;
     }
@@ -301,24 +301,24 @@ final readonly class RequestPipeline
                     default => $value,
                 };
             });
-            $this->assertNoUnknownEnum($body);
+            $this->assertNoUnrecognizedEnum($body);
         }
 
         return $body;
     }
 
     /**
-     * Enums carry an Unknown/UnmappedValue case for values the API added after this SDK was
+     * Enums carry an Unrecognized case for values the API added after this SDK was
      * written. It's a read-side placeholder only: Apaleo would reject it, and silently dropping
      * it would widen a filter to "everything", so it's refused before anything is sent.
      *
      * @param array<array-key, mixed> $values
      */
-    private function assertNoUnknownEnum(array $values): void
+    private function assertNoUnrecognizedEnum(array $values): void
     {
         array_walk_recursive($values, static function (mixed $value, int|string $key): void {
-            if (\is_string($value) && preg_match('/(?:^|,)__(?:unknown|unmapped)__(?:,|$)/', $value) === 1) {
-                throw new \InvalidArgumentException("Cannot send an Unknown enum value for \"{$key}\": it stands for a value this SDK doesn't recognize, not one Apaleo accepts.");
+            if (\is_string($value) && preg_match('/(?:^|,)__unrecognized__(?:,|$)/', $value) === 1) {
+                throw new \InvalidArgumentException("Cannot send an Unrecognized enum value for \"{$key}\": it stands for a value this SDK doesn't recognize, not one Apaleo accepts.");
             }
         });
     }

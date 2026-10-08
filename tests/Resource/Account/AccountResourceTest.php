@@ -69,7 +69,7 @@ final class AccountResourceTest extends TestCase
 
         $account = $this->account->getCurrent();
 
-        self::assertSame(AccountType::Unknown, $account->type);
+        self::assertSame(AccountType::Unrecognized, $account->type);
     }
 
     public function testReplaceCurrentSendsBody(): void

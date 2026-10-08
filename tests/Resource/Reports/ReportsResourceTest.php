@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Oleksyuk\Apaleo\Tests\Resource\Reports;
 
 use Nyholm\Psr7\Response;
-use Oleksyuk\Apaleo\Resource\Reports\Enum\Gender;
-use Oleksyuk\Apaleo\Resource\Reports\Enum\Title;
 use Oleksyuk\Apaleo\Resource\Reports\ReportsResource;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Gender;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Title;
 use Oleksyuk\Apaleo\Tests\Support\MockPipeline;
 use PHPUnit\Framework\Attributes\CoversNamespace;
 use PHPUnit\Framework\Attributes\UsesNamespace;

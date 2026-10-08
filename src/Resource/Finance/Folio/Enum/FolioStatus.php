@@ -9,10 +9,10 @@ enum FolioStatus: string
     case Open = 'Open';
     case Closed = 'Closed';
     case ClosedWithInvoice = 'ClosedWithInvoice';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

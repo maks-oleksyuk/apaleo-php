@@ -128,6 +128,21 @@ final class ResponseData
     }
 
     /**
+     * @template T of \BackedEnum
+     *
+     * @param array<string, mixed> $data
+     * @param callable(string): T  $fromApi
+     *
+     * @return null|T
+     */
+    public static function nullableEnum(array $data, string $key, callable $fromApi): ?\BackedEnum
+    {
+        $value = self::nullableString($data, $key);
+
+        return $value !== null ? $fromApi($value) : null;
+    }
+
+    /**
      * @param array<string, mixed> $data
      */
     public static function nullableInt(array $data, string $key): ?int

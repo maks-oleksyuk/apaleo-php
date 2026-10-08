@@ -148,7 +148,7 @@ For a binary endpoint (PDF, CSV), use `sendRaw()`: it returns the body as-is, wh
 
 ### Good to know
 
-- **Unknown enum values.** Every response enum has an `Unknown` (or `UnmappedValue`) case, so a value Apaleo adds later doesn't break parsing. You can't send it back: filters reject it.
+- **Unrecognized enum values.** Every response enum has an `Unrecognized` case, so a value Apaleo adds later doesn't break parsing. You can't send it back: filters reject it.
 - **Shared types.** Types that are identical in every API that uses them (`MonetaryValue`, `EmbeddedProperty`, `ChannelCode`, `UnitGroupType`, ...) live once in `Oleksyuk\Apaleo\Resource\Shared`, so a value read from one API can be passed straight to another. Types whose shape differs per API (e.g. `GuaranteeType`) stay in that API's namespace.
 - **Strings are trimmed.** Many fields are typed in by hotel staff and carry stray whitespace. Optional strings that end up empty become `null`.
 - **Dates.** Date-only fields (`serviceDate`, `arrival` in offers, ...) are midnight UTC `DateTimeImmutable`s, so `format('Y-m-d')` gives back the same day in any `date.timezone`. Date-time fields keep Apaleo's offset.

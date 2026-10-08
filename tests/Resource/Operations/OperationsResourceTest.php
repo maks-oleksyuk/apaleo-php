@@ -67,7 +67,7 @@ final class OperationsResourceTest extends TestCase
 
         $maintenance = $this->operations->getMaintenance('MUC-JQI-SGHZD');
 
-        self::assertSame(MaintenanceType::Unknown, $maintenance->type);
+        self::assertSame(MaintenanceType::Unrecognized, $maintenance->type);
     }
 
     public function testMaintenanceExistsReturnsTrueOn200(): void

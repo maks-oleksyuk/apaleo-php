@@ -75,7 +75,7 @@ final class BlockResourceTest extends TestCase
         $fixture['status'] = 'SomeFutureStatus';
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode($fixture)));
 
-        self::assertSame(BlockStatus::Unknown, $this->blocks->get('MUC-HSGTDG')->status);
+        self::assertSame(BlockStatus::Unrecognized, $this->blocks->get('MUC-HSGTDG')->status);
     }
 
     public function testExistsReturnsTrueOn200(): void

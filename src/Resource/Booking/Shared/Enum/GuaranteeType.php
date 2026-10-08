@@ -13,10 +13,10 @@ enum GuaranteeType: string
 
     /** only ever returned on read; not accepted when creating/amending a reservation */
     case Ota = 'Ota';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

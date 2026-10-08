@@ -12,10 +12,10 @@ enum CityTaxType: string
     case PerPersonPerNight = 'PerPersonPerNight';
     case PerPersonPerNightBasedOnNetPrice = 'PerPersonPerNightBasedOnNetPrice';
     case PerPersonPerNightBasedOnGrossPrice = 'PerPersonPerNightBasedOnGrossPrice';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

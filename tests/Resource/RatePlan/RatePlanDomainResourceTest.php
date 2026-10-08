@@ -34,7 +34,7 @@ final class RatePlanDomainResourceTest extends RatePlanTestCase
         self::assertSame(GuaranteeType::Prepayment, $ratePlan->minGuaranteeType);
         self::assertSame(UnitGroupType::BedRoom, $ratePlan->unitGroup->type);
         self::assertSame(1, $ratePlan->cancellationPolicy->periodPriorToArrival?->days);
-        self::assertSame([ChannelCode::Direct, ChannelCode::Unknown], $ratePlan->channelCodes);
+        self::assertSame([ChannelCode::Direct, ChannelCode::Unrecognized], $ratePlan->channelCodes);
         self::assertSame('MUC-FLEX-SGL', $ratePlan->pricingRule?->baseRatePlanId);
         self::assertSame('MUC-BRKF', $ratePlan->includedServices[0]->serviceId);
         self::assertSame('2027-12-31', $ratePlan->ratesRange?->to->format('Y-m-d'));

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oleksyuk\Apaleo\Resource\Reports\Enum;
+namespace Oleksyuk\Apaleo\Resource\Shared\Enum;
 
 enum Title: string
 {
@@ -12,10 +12,10 @@ enum Title: string
     case Prof = 'Prof';
     case Mrs = 'Mrs';
     case Other = 'Other';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

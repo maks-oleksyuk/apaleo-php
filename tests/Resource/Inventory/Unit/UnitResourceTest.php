@@ -97,7 +97,7 @@ final class UnitResourceTest extends TestCase
 
         $unit = $this->units->get('U1');
 
-        self::assertSame(UnitCondition::Unknown, $unit->condition);
+        self::assertSame(UnitCondition::Unrecognized, $unit->condition);
         self::assertSame('SomeFutureCondition', $unit->rawCondition);
         self::assertNull($unit->maintenance);
     }
@@ -228,7 +228,7 @@ final class UnitResourceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         try {
-            $this->units->list(new UnitFilter(condition: UnitCondition::Unknown));
+            $this->units->list(new UnitFilter(condition: UnitCondition::Unrecognized));
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }

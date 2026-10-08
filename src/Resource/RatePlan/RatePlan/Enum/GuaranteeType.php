@@ -10,10 +10,10 @@ enum GuaranteeType: string
     case CreditCard = 'CreditCard';
     case Prepayment = 'Prepayment';
     case Company = 'Company';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

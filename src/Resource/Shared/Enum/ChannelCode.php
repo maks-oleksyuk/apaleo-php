@@ -18,10 +18,10 @@ enum ChannelCode: string
     case AltoVita = 'AltoVita';
     case DesVu = 'DesVu';
     case Gimsi = 'Gimsi';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

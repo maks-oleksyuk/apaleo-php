@@ -9,10 +9,10 @@ enum UnitMaintenanceType: string
     case OutOfService = 'OutOfService';
     case OutOfOrder = 'OutOfOrder';
     case OutOfInventory = 'OutOfInventory';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

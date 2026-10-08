@@ -68,7 +68,7 @@ final class AuthorizationResourceTest extends TestCase
         $fixture['status'] = 'SomeFutureStatus';
         $this->httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], (string) json_encode($fixture)));
 
-        self::assertSame(AuthorizationStatus::Unknown, $this->authorizations->get('AUTH1')->status);
+        self::assertSame(AuthorizationStatus::Unrecognized, $this->authorizations->get('AUTH1')->status);
     }
 
     public function testNotFoundMapsToApaleoNotFoundException(): void

@@ -11,10 +11,10 @@ enum UnitGroupType: string
     case EventSpace = 'EventSpace';
     case ParkingLot = 'ParkingLot';
     case Other = 'Other';
-    case Unknown = '__unknown__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::Unknown;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

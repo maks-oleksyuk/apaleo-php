@@ -10,15 +10,11 @@ enum NightAuditFailureCode: string
     case ProcessNoShowsFailed = 'ProcessNoShowsFailed';
     case ProcessFoliosFailed = 'ProcessFoliosFailed';
     case ProcessOccupiedUnitsFailed = 'ProcessOccupiedUnitsFailed';
-
-    /** A real apaleo API value, distinct from the UnmappedValue fallback below. */
     case Unknown = 'Unknown';
-
-    /** Fallback for a value apaleo added after this enum was written. */
-    case UnmappedValue = '__unmapped__';
+    case Unrecognized = '__unrecognized__';
 
     public static function fromApi(string $value): self
     {
-        return self::tryFrom($value) ?? self::UnmappedValue;
+        return self::tryFrom($value) ?? self::Unrecognized;
     }
 }

@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Oleksyuk\Apaleo\Resource\Booking\Shared\DTO;
 
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\IdentificationType;
+use Oleksyuk\Apaleo\Resource\Booking\Shared\Enum\RelationshipToPrimaryGuest;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Gender;
+use Oleksyuk\Apaleo\Resource\Shared\Enum\Title;
 use Oleksyuk\Apaleo\Support\ResponseData;
 
-/**
- * Fields whose allowed values apaleo published as a lookup (title, gender, identificationType,
- * relationshipToPrimaryGuest) are kept as raw strings rather than enums: gender/identificationType
- * are already country-dependent (see TypesResource::allowedValues()).
- */
 final readonly class Guest
 {
     public function __construct(
         public string $lastName,
-        public ?string $title = null,
-        public ?string $gender = null,
+        public ?Title $title = null,
+        public ?Gender $gender = null,
         public ?string $firstName = null,
         public ?string $middleInitial = null,
         public ?string $secondLastName = null,
@@ -29,7 +28,7 @@ final readonly class Guest
         public ?\DateTimeImmutable $identificationIssueDate = null,
         public ?\DateTimeImmutable $identificationExpiryDate = null,
         public ?string $identificationIssuePlace = null,
-        public ?string $identificationType = null,
+        public ?IdentificationType $identificationType = null,
         public ?string $personalTaxId = null,
         public ?PersonCompany $company = null,
         public ?string $preferredLanguage = null,
@@ -42,7 +41,7 @@ final readonly class Guest
         public ?string $borderCrossingPlace = null,
         public ?\DateTimeImmutable $borderCrossingDate = null,
         public ?string $nextDestination = null,
-        public ?string $relationshipToPrimaryGuest = null,
+        public ?RelationshipToPrimaryGuest $relationshipToPrimaryGuest = null,
         public ?VehicleRegistration $vehicleRegistration = null,
     ) {}
 
@@ -51,8 +50,8 @@ final readonly class Guest
     {
         return new self(
             lastName: ResponseData::string($data, 'lastName'),
-            title: ResponseData::nullableString($data, 'title'),
-            gender: ResponseData::nullableString($data, 'gender'),
+            title: ResponseData::nullableEnum($data, 'title', Title::fromApi(...)),
+            gender: ResponseData::nullableEnum($data, 'gender', Gender::fromApi(...)),
             firstName: ResponseData::nullableString($data, 'firstName'),
             middleInitial: ResponseData::nullableString($data, 'middleInitial'),
             secondLastName: ResponseData::nullableString($data, 'secondLastName'),
@@ -65,7 +64,7 @@ final readonly class Guest
             identificationIssueDate: ResponseData::nullableDate($data, 'identificationIssueDate'),
             identificationExpiryDate: ResponseData::nullableDate($data, 'identificationExpiryDate'),
             identificationIssuePlace: ResponseData::nullableString($data, 'identificationIssuePlace'),
-            identificationType: ResponseData::nullableString($data, 'identificationType'),
+            identificationType: ResponseData::nullableEnum($data, 'identificationType', IdentificationType::fromApi(...)),
             personalTaxId: ResponseData::nullableString($data, 'personalTaxId'),
             company: ResponseData::nullableNested($data, 'company', PersonCompany::fromArray(...)),
             preferredLanguage: ResponseData::nullableString($data, 'preferredLanguage'),
@@ -78,7 +77,7 @@ final readonly class Guest
             borderCrossingPlace: ResponseData::nullableString($data, 'borderCrossingPlace'),
             borderCrossingDate: ResponseData::nullableDate($data, 'borderCrossingDate'),
             nextDestination: ResponseData::nullableString($data, 'nextDestination'),
-            relationshipToPrimaryGuest: ResponseData::nullableString($data, 'relationshipToPrimaryGuest'),
+            relationshipToPrimaryGuest: ResponseData::nullableEnum($data, 'relationshipToPrimaryGuest', RelationshipToPrimaryGuest::fromApi(...)),
             vehicleRegistration: ResponseData::nullableNested($data, 'vehicleRegistration', VehicleRegistration::fromArray(...)),
         );
     }
@@ -88,8 +87,8 @@ final readonly class Guest
     {
         return array_filter([
             'lastName' => $this->lastName,
-            'title' => $this->title,
-            'gender' => $this->gender,
+            'title' => $this->title?->value,
+            'gender' => $this->gender?->value,
             'firstName' => $this->firstName,
             'middleInitial' => $this->middleInitial,
             'secondLastName' => $this->secondLastName,
@@ -102,7 +101,7 @@ final readonly class Guest
             'identificationIssueDate' => $this->identificationIssueDate?->format('Y-m-d'),
             'identificationExpiryDate' => $this->identificationExpiryDate?->format('Y-m-d'),
             'identificationIssuePlace' => $this->identificationIssuePlace,
-            'identificationType' => $this->identificationType,
+            'identificationType' => $this->identificationType?->value,
             'personalTaxId' => $this->personalTaxId,
             'company' => $this->company?->toArray(),
             'preferredLanguage' => $this->preferredLanguage,
@@ -115,7 +114,7 @@ final readonly class Guest
             'borderCrossingPlace' => $this->borderCrossingPlace,
             'borderCrossingDate' => $this->borderCrossingDate?->format('Y-m-d'),
             'nextDestination' => $this->nextDestination,
-            'relationshipToPrimaryGuest' => $this->relationshipToPrimaryGuest,
+            'relationshipToPrimaryGuest' => $this->relationshipToPrimaryGuest?->value,
             'vehicleRegistration' => $this->vehicleRegistration?->toArray(),
         ], static fn (mixed $value): bool => $value !== null);
     }

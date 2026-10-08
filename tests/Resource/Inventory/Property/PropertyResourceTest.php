@@ -109,7 +109,7 @@ final class PropertyResourceTest extends TestCase
 
         $property = $this->properties->get('BER');
 
-        self::assertSame(PropertyStatus::Unknown, $property->status);
+        self::assertSame(PropertyStatus::Unrecognized, $property->status);
         self::assertSame('SomeFutureStatus', $property->rawStatus);
     }
 
@@ -269,7 +269,7 @@ final class PropertyResourceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         try {
-            $this->properties->list(new PropertyFilter(status: [PropertyStatus::Unknown, PropertyStatus::Live]));
+            $this->properties->list(new PropertyFilter(status: [PropertyStatus::Unrecognized, PropertyStatus::Live]));
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }

@@ -155,18 +155,18 @@ final class RequestPipelineTest extends TestCase
         $this->pipeline->send($this->requestWithQuery([]));
     }
 
-    public function testUnknownEnumPlaceholderInQueryIsRejectedWithoutSendingARequest(): void
+    public function testUnrecognizedEnumPlaceholderInQueryIsRejectedWithoutSendingARequest(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
         try {
-            $this->pipeline->send($this->requestWithQuery(['status' => 'Confirmed,__unknown__']));
+            $this->pipeline->send($this->requestWithQuery(['status' => 'Confirmed,__unrecognized__']));
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }
     }
 
-    public function testUnmappedEnumPlaceholderNestedInBodyIsRejected(): void
+    public function testUnrecognizedEnumPlaceholderNestedInBodyIsRejected(): void
     {
         $request = new readonly class extends Request {
             public function method(): Method
@@ -181,7 +181,7 @@ final class RequestPipelineTest extends TestCase
 
             public function body(): array
             {
-                return ['guests' => [['gender' => '__unmapped__']]];
+                return ['guests' => [['gender' => '__unrecognized__']]];
             }
         };
 
@@ -304,7 +304,7 @@ final class RequestPipelineTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         try {
-            $this->pipeline->send(new UpdateReservationRequest('R1', new JsonPatch()->replace('/status', ReservationStatus::Unknown)));
+            $this->pipeline->send(new UpdateReservationRequest('R1', new JsonPatch()->replace('/status', ReservationStatus::Unrecognized)));
         } finally {
             self::assertFalse($this->httpClient->getLastRequest());
         }
