@@ -41,6 +41,23 @@ foreach ($properties as $property) {
 
 With Guzzle, pass `new GuzzleHttp\Client()` as the client and `new GuzzleHttp\Psr7\HttpFactory()` as both factories. Inside a DI container, wire the same services the container already has.
 
+### Covered APIs
+
+| Method           | Apaleo API                |
+|------------------|---------------------------|
+| `account()`      | Account                   |
+| `availability()` | Availability              |
+| `booking()`      | Booking                   |
+| `finance()`      | Finance                   |
+| `inventory()`    | Inventory                 |
+| `logs()`         | Logs                      |
+| `operations()`   | Operations                |
+| `ratePlan()`     | Rate Plan                 |
+| `reports()`      | Reports                   |
+| `settings()`     | Settings                  |
+
+Anything else goes through [`send()`](#requests-the-sdk-doesnt-cover).
+
 ### Timeouts and retries
 
 The SDK doesn't retry on its own: that's the HTTP client's job. With `symfony/http-client`, this matches what `apaleo-bundle` sets up: a 10 s timeout, and `5xx`/transport errors retried only for `GET`/`HEAD`, because a `502` after a `POST` may still have been applied. `429` is deliberately not retried there: the client would sleep for whatever `Retry-After` says, uncapped. Catch `ApaleoRateLimitException` and use its `retryAfterSeconds` to decide whether to wait.
@@ -67,16 +84,21 @@ $apaleo = new ApaleoClient($psr18, $psr18, $psr18, $tokenProvider, asyncHttpClie
 
 Passing `asyncHttpClient` also lets `sendMany()` run its requests concurrently. With Guzzle, use its `Middleware::retry()` with the same rules.
 
-See [`apaleo-bundle`](//github.com/maks-oleksyuk/apaleo-bundle) for a ready-made Symfony integration (autowired service, cached token, HTTP client with this timeout and retry policy).
-
 ### Token cache
 
-By default the access token is kept in memory, which under PHP-FPM means a new token request on every HTTP request. Share it through any PSR-16 cache (needs `psr/simple-cache`, which PSR-16 implementations such as `symfony/cache` don't always pull in):
+By default, the access token is kept in memory, which under PHP-FPM means a new token request on every HTTP request. Share it through any PSR-16 cache (needs `psr/simple-cache`, which PSR-16 implementations such as `symfony/cache` don't always pull in):
 
 ```php
 use Oleksyuk\Apaleo\Auth\Psr16TokenCache;
 
-$tokenProvider = new ClientCredentialsTokenProvider($http, $http, $http, 'your-client-id', 'your-client-secret', new Psr16TokenCache($psr16Cache));
+$tokenProvider = new ClientCredentialsTokenProvider(
+    $http,
+    $http,
+    $http,
+    'your-client-id',
+    'your-client-secret',
+    new Psr16TokenCache($psr16Cache)
+);
 ```
 
 Or implement `TokenCacheInterface` on top of your framework's own storage.
@@ -93,6 +115,7 @@ Everything the SDK throws implements `ApaleoExceptionInterface`, so one `catch` 
 | `ApaleoAuthException`               | `401` / `403`                                                                |
 | `ApaleoNotFoundException`           | `404`                                                                        |
 | `ApaleoRateLimitException`          | `429`, with `Retry-After`                                                    |
+| `ApaleoClientException`             | any other `4xx` (e.g. `409`); parent of the four above                       |
 | `ApaleoServerException`             | `5xx`, including HTML bodies from a proxy                                    |
 | `ApaleoTransportException`          | timeout, DNS, connection refused: no HTTP status, `statusCode` doesn't exist |
 | `ApaleoUnexpectedResponseException` | a `2xx` with a non-JSON or malformed body                                    |
@@ -136,7 +159,9 @@ final readonly class GetThingRequest extends Request
 
     public function method(): Method { return Method::GET; }
 
-    public function endpoint(): string { return '/some/v1/things/'.rawurlencode($this->id); }
+    public function endpoint(): string {
+        return '/some/v1/things/'.rawurlencode($this->id);
+    }
 }
 
 $data = $apaleo->send(new GetThingRequest('X'));
